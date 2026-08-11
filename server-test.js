@@ -1,17 +1,22 @@
 // ==========================================================================
-// JUMANNETOK TZ - CORE CUSTOM JSON DATABASE SYSTEM (VIDEODB.JS INTEGRATION)
+// JUMANNETOK TZ - CORE CUSTOM JSON DATABASE SYSTEM (ES MODULES ACTIVATED)
 // ==========================================================================
-const express = require("express");
-const multer = require("multer");
-const fs = require("fs");
-const path = require("path");
-const cors = require("cors");
+import express from "express";
+import multer from "multer";
+import fs from "fs";
+import path from "path";
+import cors from "cors";
+import { fileURLToPath } from "url";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 1. NGOME YA SIRI: NJIA RASMI YA DATABASE YETU YA NDANI YA VIDEODB.JS
+// 🔥 MANUVA YA KI-HARDWARE: Kwenye ES Modules "__dirname" haipo kiasili, lazima tuisuke hivi!
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// NGOME YA SIRI: NJIA RASMI YA DATABASE YETU YA NDANI YA VIDEODB.JS
 const PATH_VIDEODB = path.join(__dirname, "videodb.js");
 const FOLDER_VIDEO_UP = path.join(__dirname, "vipaji_ghafi_test");
 
@@ -66,10 +71,10 @@ app.post("/api/v1/videos/upload-test", uploadMtambo.single("videoFile"), (req, r
         // C. CHOMEKA KETE HII MPYA NDANI YA ARRAY YETU WENYEWE
         orodhaYaVideo.push(kadiMpyaYaVideo);
 
-        // D. PIGA CHAPA NA KUGANDISHA MZIGO DISKI KUU KWA MPIGO MMOJA WA CHUMA
-        fs.writeFileSync(PATH_VIDEODB, JSON.stringify(orodhaYaVideo, null, 4), "utf8");
+        // D. PIGA CHAPA NA KUGANDISHA MZIGO DISKI KUZUIA LAG KWA MPIGO MMOJA KUU
+        fs.writeFileSync(PATH_VIDEODB, JSON.stringify(orodhoYaVideo, null, 4), "utf8");
 
-        console.log(`🎉 USHINDI WA KIBILIONEA: Video '${req.file.originalname}' imetua na kete imelazwa ndani ya database yetu ya videodb.js!`);
+        console.log(`🎉 USHINDI WA KIBILIONEA: Video '${req.file.originalname}' imetua na kete imelazwa ndani ya database!`);
         return res.status(200).json({ success: true, msg: "Video written to custom videodb.js database successfully!" });
 
     } catch (errDb) {
@@ -78,8 +83,52 @@ app.post("/api/v1/videos/upload-test", uploadMtambo.single("videoFile"), (req, r
     }
 });
 
-// Washa mtambo wa JumanneDB Kernel Live Render kwenye PORT 3001 au 5000 kulingana na seva
+// 4. NJIA YA PILI (GET ROUTE): MTAMBO WA STREAMING UNAOCHOMA VIDEO MNYOFU ICHEZE KIONI
+app.get("/api/v1/videos/stream-test", (req, res) => {
+    let failiLaMwisho = "test_singeli.mp4"; 
+    try {
+        const maFiles = fs.readdirSync(FOLDER_VIDEO_UP).filter(f => f.endsWith(".mp4"));
+        if (maFiles.length > 0) {
+            maFiles.sort((a, b) => {
+                return fs.statSync(path.join(FOLDER_VIDEO_UP, b)).mtime.getTime() - 
+                       fs.statSync(path.join(FOLDER_VIDEO_UP, a)).mtime.getTime();
+            });
+            failiLaMwisho = maFiles[0];
+        }
+    } catch (eDir) {}
+
+    const njiaYaFaili = path.join(FOLDER_VIDEO_UP, failiLaMwisho);
+
+    if (!fs.existsSync(njiaYaFaili)) {
+        return res.status(404).send("❌ Video bado haijapandishwa kwenye database ya seva!");
+    }
+
+    const range = req.headers.range;
+    if (!range) {
+        return res.status(400).send("Requires Range header for video streaming pipeline");
+    }
+
+    const ukubwaWaFaili = fs.statSync(njiaYaFaili).size;
+    const CHUNK_SIZE = 1 * 1024 * 1024; // 1MB chunk size kwa ajili ya kuondoa lag ya bando
+    const mwanzo = Number(range.replace(/\D/g, ""));
+    const mwisho = Math.min(mwanzo + CHUNK_SIZE, ukubwaWaFaili - 1);
+
+    const urefuWaContent = mwisho - mwanzo + 1;
+    const vichwaVyaHabari = {
+        "Content-Range": `bytes ${mwanzo}-${mwisho}/${ukubwaWaFaili}`,
+        "Accept-Ranges": "bytes",
+        "Content-Length": urefuWaContent,
+        "Content-Type": "video/mp4"
+    };
+
+    res.writeHead(206, vichwaVyaHabari);
+    const mrijaWaKusoma = fs.createReadStream(njiaYaFaili, { start: mwanzo, end: mwisho });
+    mrijaWaKusoma.pipe(res);
+});
+
+// Washa mtambo wa JumanneDB Kernel Live Render kwenye port ya mazingira (Environment Port)
 const NDIWANI_PORT = process.env.PORT || 3001;
 app.listen(NDIWANI_PORT, () => {
-    console.log(`📡 JumanneDB Kernel active on PORT ${NDIWANI_PORT} with Custom videodb.js ...`);
+    console.log(`📡 JumanneDB Kernel active on PORT ${NDIWANI_PORT} with ES Modules...`);
 });
+    
