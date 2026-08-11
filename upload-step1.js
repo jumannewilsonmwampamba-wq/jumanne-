@@ -1,4 +1,4 @@
-// upload-step1.js - Core Upload Engine (Kazi Safi Isiyo na Wenge)
+// upload-step1.js - Injini Imara ya Kuzuia Kupoteza Video Hata Ikirefresh
 
 (function () {
     "use strict";
@@ -6,7 +6,7 @@
     let failiLaVideoGhafi = null;
     let dbIndexedAkiba = null;
 
-    // 1. ANZA KUFUNGUA DATABASE KWANZA KABISA KIVINJARI KIKIFUNGUKA
+    // 1. FUNGUA DATABASE MARA TU UKURASA UNAPOWAKA
     function amshaDukaLaUploadLocal() {
         const ombiDuka = indexedDB.open("JumanneTok_Local_Cache", 1);
 
@@ -21,9 +21,8 @@
             dbIndexedAkiba = e.target.result;
             console.log("✅ Database imefunguka salama!");
             
-            // Kagua na urejeshe video kama mtumiaji amerudi nyuma!
+            // 🚀 Kagua na urejeshe video mara moja (Hata ukirefresh au ukirudi nyuma!)
             rejeshaVideoKamaUserAmebofyaBack();
-            kaguaNaKusafishaDraftZilizochoka();
         };
 
         ombiDuka.onerror = function() {
@@ -31,7 +30,7 @@
         };
     }
 
-    // 2. INJINI YA PREVIEW YA SKRINI NZIMA
+    // 2. INJINI YA KUKAMATA VIDEO NA KUHIFADHI PAPO HAPO KWENYE DISKI (CHANGE EVENT)
     function amshaMtamboWaKupokeaVideo() {
         const videoInput = document.getElementById("jumanne-video-file-input");
         const dropzoneBox = document.getElementById("jumanne-upload-box-dashed");
@@ -55,68 +54,97 @@
 
             failiLaVideoGhafi = faili;
 
-            try {
-                const localPlayer = document.getElementById("jumanne-local-preview-player");
-                if (localPlayer && localPlayer.src) {
-                    URL.revokeObjectURL(localPlayer.src);
-                }
+            // 🔥 SULUHISHO KUU: Hifadhi video kwenye IndexedDB sasa hivi kabla kivinjari hakijamaliza refresh!
+            if (dbIndexedAkiba) {
+                const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readwrite");
+                const duka = muamala.objectStore("jumannetok_feed_cache");
 
-                const URLyaVideo = URL.createObjectURL(faili);
-                
-                if (localPlayer && previewContainer) {
-                    localPlayer.src = URLyaVideo;
-                    
-                    previewContainer.style.display = "flex";
-                    localPlayer.style.width = "100%";
-                    localPlayer.style.height = "440px"; 
-                    localPlayer.style.objectFit = "cover"; 
-                    localPlayer.play().catch(() => {});
+                const dataYaDraft = {
+                    id: "jumanne_current_upload_draft",
+                    jinaLaVideo: faili.name,
+                    ukubwaWaVideo: faili.size,
+                    videoBlobData: faili, // Faili ghafi linaingia diski papo hapo
+                    tareheYaKupandisha: Date.now()
+                };
 
-                    if (changeVideoBtn) changeVideoBtn.style.display = "flex"; 
-                    if (dropzoneBox) dropzoneBox.style.setProperty("display", "none", "important");
-                    if (bandoWarningBox) bandoWarningBox.style.display = "none";
-                }
-            } catch (err) {
-                console.error("Mkwamo wa kuwasha video:", err);
+                duka.put(dataYaDraft);
+                console.log("💾 Video imegandishwa kwenye diski kuzuia madhara ya refresh!");
             }
+
+            // Washa preview kioni
+            washaPreviewYaKioo(faili);
         });
     }
 
-    // 3. INJINI YA KUBONYEZA NEXT NA KUHAMIA UKURASA UNAOFATA SALAMA
-    function washaKitufeChaKuvukaHatuaYaPwanza() {
-        // 🔥 ID Sahihi ya HTML yako
-        const btnNext = document.getElementById("jumanne-btn-force-next-step2");
-        const videoInput = document.getElementById("jumanne-video-file-input");
+    // INJINI NDOGO YA KUONYESHA VIDEO KIONI
+    function washaPreviewYaKioo(failiBlob) {
+        const dropzoneBox = document.getElementById("jumanne-upload-box-dashed");
+        const bandoWarningBox = document.getElementById("jumanne-bando-warning");
+        const previewContainer = document.getElementById("jumanne-preview-container");
+        const localPlayer = document.getElementById("jumanne-local-preview-player");
+        const changeVideoBtn = document.getElementById("jumanne-change-video-btn");
 
-        if (!btnNext || !videoInput) return;
-
-        btnNext.addEventListener("click", () => {
-            const botInput = document.getElementById("jumanne-video-bot-input");
-            const honeyValue = botInput ? botInput.value : "";
-            if (honeyValue.length > 0) {
-                sessionStorage.clear();
-                window.location.reload();
-                return;
+        try {
+            if (localPlayer && localPlayer.src) {
+                URL.revokeObjectURL(localPlayer.src);
             }
 
-            // Kama mtumiaji amerudi nyuma na faili lipo tayari kwenye RAM
-            if (!videoInput.files || videoInput.files.length === 0) {
-                if (failiLaVideoGhafi) {
-                    window.location.href = "upload-step2.html";
-                    return;
-                }
+            const URLyaVideo = URL.createObjectURL(failiBlob);
+            
+            if (localPlayer && previewContainer) {
+                localPlayer.src = URLyaVideo;
+                previewContainer.style.display = "flex";
+                localPlayer.style.width = "100%";
+                localPlayer.style.height = "440px"; 
+                localPlayer.style.objectFit = "cover"; 
+                localPlayer.play().catch(() => {});
+
+                if (changeVideoBtn) changeVideoBtn.style.display = "flex"; 
+                if (dropzoneBox) dropzoneBox.style.setProperty("display", "none", "important");
+                if (bandoWarningBox) bandoWarningBox.style.display = "none";
+            }
+        } catch (err) {
+            console.error("Mkwamo wa kuwasha video:", err);
+        }
+    }
+
+    // 3. INJINI YA KUREJESHA VIDEO MTUMIAJI AKIREFRESH AU AKIRUDI NYUMA
+    function rejeshaVideoKamaUserAmebofyaBack() {
+        if (!dbIndexedAkiba) return;
+
+        const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readonly");
+        const duka = muamala.objectStore("jumannetok_feed_cache");
+        const ombiDaka = duka.get("jumanne_current_upload_draft");
+
+        ombiDaka.onsuccess = function(e) {
+            const data = e.target.result;
+            // 🚀 Ikikutwa video kwenye diski, irudishe kioni upesi bila kumuomba mtumiaji achague tena!
+            if (data && data.videoBlobData) {
+                console.log("♻️ Mfumo umerejesha video kutoka kwenye diski baada ya refresh!");
+                failiLaVideoGhafi = data.videoBlobData;
+                washaPreviewYaKioo(data.videoBlobData);
+            }
+        };
+    }
+
+    // 4. KITUFE CHA INAYOFUATA: Kazi yake sasa ni kukagua muda tu na kuvuka goli
+    function washaKitufeChaKuvukaHatuaYaPwanza() {
+        const btnNext = document.getElementById("jumanne-btn-force-next-step2");
+
+        if (!btnNext) return;
+
+        btnNext.addEventListener("click", () => {
+            if (!failiLaVideoGhafi) {
                 alert("Tafadhali chagua video yako ya kipaji kwanza!");
                 return;
             }
 
-            // 🔥 SULUHISHO: Tunachukua faili lenyewe la kwanza [0] badala ya listi nzima!
-            const failiKazi = videoInput.files[0];
-
             btnNext.disabled = true;
-            btnNext.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inahifadhi...';
+            btnNext.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inasonga mbele...';
 
+            // Pima sekunde za video kwa kutumia element ya siri
             const videoSiriElement = document.createElement("video");
-            videoSiriElement.src = URL.createObjectURL(failiKazi);
+            videoSiriElement.src = URL.createObjectURL(failiLaVideoGhafi);
             
             videoSiriElement.addEventListener("loadedmetadata", () => {
                 const urefuWaVideo = videoSiriElement.duration;
@@ -129,107 +157,39 @@
                     return;
                 }
 
-                if (!dbIndexedAkiba) {
-                    sessionStorage.setItem("jumannetok_upload_meta", JSON.stringify({ hasDraft: false, jina: failiKazi.name }));
-                    window.location.href = "upload-step2.html";
-                    return;
-                }
+                // Kila kitu safi, nenda Step 2 (Data tayari ipo kwenye diski tangu mwanzo!)
+                sessionStorage.setItem("jumannetok_upload_meta", JSON.stringify({ hasDraft: true, jina: failiLaVideoGhafi.name }));
+                window.location.href = "upload-step2.html";
+            });
 
-                const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readwrite");
-                const duka = muamala.objectStore("jumannetok_feed_cache");
-
-                const dataYaDraft = {
-                    id: "jumanne_current_upload_draft",
-                    jinaLaVideo: failiKazi.name,
-                    ukubwaWaVideo: failiKazi.size,
-                    videoBlobData: failiKazi, // Sasa inaandika faili safi ghafi
-                    tareheYaKupandisha: Date.now()
-                };
-
-                const ombiHifadhi = duka.put(dataYaDraft);
-
-                ombiHifadhi.onsuccess = function() {
-                    sessionStorage.setItem("jumannetok_upload_meta", JSON.stringify({ hasDraft: true, jina: failiKazi.name }));
-                    window.location.href = "upload-step2.html";
-                };
-
-                ombiHifadhi.onerror = function() {
-                    window.location.href = "upload-step2.html";
-                };
+            videoSiriElement.addEventListener("error", () => {
+                // Kama ikifeli kupima kwa dharura, mruhusu kupita kwa usalama
+                window.location.href = "upload-step2.html";
             });
 
             videoSiriElement.load();
         });
     }
 
-    // 4. INJINI YA RECOVERY (BACK BUTTON STATE RESTORE)
-    function rejeshaVideoKamaUserAmebofyaBack() {
-        if (!dbIndexedAkiba) return;
-
-        const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readonly");
-        const duka = muamala.objectStore("jumannetok_feed_cache");
-        const ombiDaka = duka.get("jumanne_current_upload_draft");
-
-        ombiDaka.onsuccess = function(e) {
-            const data = e.target.result;
-            if (data && data.videoBlobData) {
-                console.log("♻️ State Restored: Tunairudisha video kioni...");
-                
-                const dropzoneBox = document.getElementById("jumanne-upload-box-dashed");
-                const bandoWarningBox = document.getElementById("jumanne-bando-warning");
-                const previewContainer = document.getElementById("jumanne-preview-container");
-                const localPlayer = document.getElementById("jumanne-local-preview-player");
-                const changeVideoBtn = document.getElementById("jumanne-change-video-btn");
-
-                failiLaVideoGhafi = data.videoBlobData;
-
-                try {
-                    const URLyaVideoyazamani = URL.createObjectURL(data.videoBlobData);
-                    if (localPlayer && previewContainer) {
-                        localPlayer.src = URLyaVideoyazamani;
-                        previewContainer.style.display = "flex";
-                        localPlayer.style.width = "100%";
-                        localPlayer.style.height = "440px"; 
-                        localPlayer.style.objectFit = "cover"; 
-                        localPlayer.play().catch(() => {});
-
-                        if (changeVideoBtn) changeVideoBtn.style.display = "flex";
-                        if (dropzoneBox) dropzoneBox.style.setProperty("display", "none", "important");
-                        if (bandoWarningBox) bandoWarningBox.style.display = "none";
-                    }
-                } catch (err) {
-                    console.error("Mkwamo wa kurejesha video ya nyuma:", err);
-                }
+    // 5. KIFUNGO CHA KUFUTA VIDEO MWENYEWE (UKITAKA KUBADILISHA)
+    const changeVideoBtn = document.getElementById("jumanne-change-video-btn");
+    if (changeVideoBtn) {
+        changeVideoBtn.addEventListener("click", () => {
+            if (dbIndexedAkiba) {
+                const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readwrite");
+                muamala.objectStore("jumannetok_feed_cache").delete("jumanne_current_upload_draft");
+                sessionStorage.removeItem("jumannetok_upload_meta");
+                console.log("🗑️ Mtumiaji amefuta video kwenye diski mwenyewe.");
             }
-        };
+            // Fungua upya uchaguzi wa faili
+            document.getElementById("jumanne-video-file-input").click();
+        });
     }
 
-    // 5. MTAMBO WA KUSAFISHA DATA BAADA YA SAA 1
-    function kaguaNaKusafishaDraftZilizochoka() {
-        if (!dbIndexedAkiba) return;
-        const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readwrite");
-        const duka = muamala.objectStore("jumannetok_feed_cache");
-        const ombiDaka = duka.get("jumanne_current_upload_draft");
-
-        ombiDaka.onsuccess = function(e) {
-            const data = e.target.result;
-            if (data && data.tareheYaKupandisha) {
-                const mudaWaSasa = Date.now();
-                if (mudaWaSasa - data.tareheYaKupandisha > 60 * 60 * 1000) {
-                    duka.delete("jumanne_current_upload_draft");
-                    sessionStorage.removeItem("jumannetok_upload_meta");
-                    console.log("🛡️ Draft ya zamani imefutwa.");
-                }
-            }
-        };
-    }
-
-    // AWASHA MITUNGI YOTE MARA MOJA
-    document.addEventListener("DOMContentLoaded", () => {
-        amshaDukaLaUploadLocal();
-        amshaMtamboWaKupokeaVideo();
-        washaKitufeChaKuvukaHatuaYaPwanza();
-    });
+    // WASHA KILA KITU MARA MOJA
+    amshaDukaLaUploadLocal();
+    amshaMtamboWaKupokeaVideo();
+    washakitufeChaKuvukaHatuaYaPwanza();
 
 })();
-            
+    
