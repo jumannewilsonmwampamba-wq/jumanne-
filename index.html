@@ -7,19 +7,34 @@
     <!-- CSS NA FONTAWESOME VINAPACHIKWA HAPA MNYOFU -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="css/all.min.css">
+
+    <!-- 🔥 KUFULI LA SEKUNDE SIFURU: Mlinzi Mkuu wa Lango (Auth Gate Script) -->
+    <script>
+        (function () {
+            "use strict";
+            // Kagua token ya siri kwenye diski ya kudumu ya simu kabla HTML haijajengeka
+            const tokenSiri = localStorage.getItem("jumannetok_user_token");
+            
+            // Kama mtumiaji hana token, mtoe mnyofu kwenda register step 1 instantly!
+            if (!tokenSiri || tokenSiri.trim() === "") {
+                console.log("🚨 Auth Gate: Umegundulika kuwa mgeni! Unahamishwa kwenda usajili...");
+                window.location.href = "register-step1.html";
+            }
+        })();
+    </script>
 </head>
 <!-- 🔥 KUFULI LA SEVA: Zima refresh ya kuvuta kioo chini (Pull-to-Refresh) kwa CSS ili bando na server zilindwe -->
 <body class="jumanne-dark-mode" style="background-color: #000000; color: #ffffff; font-family: sans-serif; margin: 0; padding: 0; overscroll-behavior-y: contain; overflow: hidden;">
 
     <!-- ==========================================================================
-    1. FLOATING BACKGROUND UPLOAD BAR (MSTARI WA JUO WA PROGRESS WA NYUMA YA PAZIA) [A]
+    1. FLOATING BACKGROUND UPLOAD BAR (MSTARI WA JUU WA PROGRESS WA NYUMA YA PAZIA)
     ========================================================================== -->
     <div id="jumanne-top-upload-zone" style="display: none; position: fixed; top: 0; left: 0; width: 100%; z-index: 99999; background: rgba(20, 15, 15, 0.95); padding: 12px 15px; box-sizing: border-box; border-bottom: 2px solid #331111; backdrop-filter: blur(5px);">
         <!-- Mrija mwembamba wa kijani -->
         <div style="width: 100%; height: 5px; background: #222; border-radius: 4px; overflow: hidden; border: 1px solid #333;">
             <div id="jumanne-top-progress-bar" style="width: 0%; height: 100%; background: #00e676; transition: width 0.1s linear;"></div>
         </div>
-        <!-- Hesabu halisi ya namba na kitufe chekundu cha chuma [A] -->
+        <!-- Hesabu halisi ya namba na kitufe chekundu cha chuma -->
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; width: 100%; box-sizing: border-box;">
             <span id="jumanne-top-status-txt" style="font-size: 11px; color: #00e676; font-weight: bold; font-family: monospace;">⏳ Inapakia kipaji chako nyuma ya pazia: 0%</span>
             <button type="button" id="jumanne-top-abort-btn" style="background: #ff5252; color: #ffffff; border: none; padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 4px; box-shadow: 0 4px 12px rgba(255, 82, 82, 0.2);">
@@ -55,10 +70,10 @@
                 </a>
             </div>
 
-            <!-- 3B. 📱 SCROLL WRAPPER: Mlisho wa ma-video ambapo kadi ya upakiaji itatokea [A] -->
+            <!-- 3B. 📱 SCROLL WRAPPER: Mlisho wa ma-video ambapo kadi ya upakiaji itatokea -->
             <div id="jumanne-video-scroll-wrapper" style="width: 100%; height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; box-sizing: border-box; -webkit-overflow-scrolling: touch;">
                 
-                <!-- 🔥 PACHIKO LA KISANII: Sanduku linalowasha video mpya ya msanii hapo hapo nyoofu [A] -->
+                <!-- 🔥 PACHIKO LA KISANII: Sanduku linalowasha video mpya ya msanii hapo hapo nyoofu -->
                 <div id="jumanne-background-upload-card-holder"></div>
 
                 <!-- [Ma-kadi manne ya kawaida ya wasanii wengine yatamwagwa hapa mbeleni...] -->
@@ -77,14 +92,14 @@
             <i class="fas fa-compass" style="font-size: 20px;"></i>
             <span>Explore</span>
         </a>
-        <!-- Kitufe cha Uzalendo cha Upload chenye rangi za Taifa la Tanzania [A] -->
-                <a href="upload-step1.html" class="nav-item tz-upload-btn">
+        <!-- Kitufe cha Uzalendo cha Upload chenye rangi za Taifa la Tanzania -->
+        <a href="upload-step1.html" class="nav-item tz-upload-btn">
             <div class="tz-layer green-layer"></div>
             <div class="tz-layer blue-layer"></div>
             <div class="upload-icon-center">
                 <i class="fas fa-plus"></i>
             </div>
-                </a>
+        </a>
         <a href="weekchallenge.html" class="nav-item" style="text-decoration: none; text-align: center; color: #666666; font-size: 11px; display: flex; flex-direction: column; align-items: center; gap: 4px;">
             <i class="fas fa-trophy" style="font-size: 20px;"></i>
             <span>WeekChallenge</span>
@@ -94,14 +109,17 @@
             <span>Profile</span>
         </a>
     </nav>
-<!-- ==========================================================================
-    🔥 KIBANDIKO CHA DHAHABU CHA USHINDI WA UPLOAD (TOAST NOTIFICATION) [A]
+
+    <!-- ==========================================================================
+    5. KIBANDIKO CHA DHAHABU CHA USHINDI WA UPLOAD (TOAST NOTIFICATION)
     ========================================================================== -->
     <div id="jumanne-toast-victory" onclick="window.location.href='profile.html'" style="display: none; position: fixed; bottom: 85px; left: 15px; z-index: 99999; background: linear-gradient(45deg, #00e676, #00b0ff); color: #000000; padding: 12px 18px; border-radius: 12px; font-weight: bold; font-size: 13px; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 8px 24px rgba(0,230,118,0.4); transition: all 0.3s ease;">
         <i class="fas fa-check-circle" style="font-size: 18px;"></i>
         <span>Mdundo Umetua! Kipaji chako kipo mubashara mtaani. Gusa ukione!</span>
     </div>
-    <!-- 🔥 FUNGASHA INJINI YA JAVASCRIPT YA NYUMA YA PAZIA MAABARA [A] -->
+
+    <!-- 🔥 FUNGASHA INJINI YA JAVASCRIPT YA NYUMA YA PAZIA MAABARA -->
     <script src="i.js"></script>
 </body>
-</html>
+            </html>
+            
