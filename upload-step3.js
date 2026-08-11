@@ -1,27 +1,28 @@
-// upload-step3.js - Hatua ya 1: Kuvuta Video kutoka Kwenye Database
+
+// upload-step3.js - Core Publishing Engine with National Color Syntax & Intel
 
 (function () {
     "use strict";
 
     let dbIndexedAkiba = null;
+    let uploadInterval = null;
+
+    // Daka ma-element yote ya HTML kutoka kwenye ukurasa wako wa Step 3
     const playerStep3 = document.getElementById("jumanne-step3-preview-player");
+    const captionBox = document.getElementById("jumanne-video-caption");
+    const tagsCounter = document.getElementById("jumanne-tags-counter");
+    const wordCounter = document.getElementById("jumanne-word-counter");
 
-    // 1. FUNGUA DATABASE YA VIPANDE ILE ILE YA NYUMA
-    document.addEventListener("DOMContentLoaded", function () {
-        const ombiDuka = indexedDB.open("JumanneTok_Chunk_Storage", 1);
+    const progressZone = document.getElementById("jumanne-upload-progress-zone");
+    const progressBar = document.getElementById("jumanne-upload-progress-bar");
+    const statusText = document.getElementById("jumanne-upload-status-text");
 
-        ombiDuka.onsuccess = function (e) {
-            dbIndexedAkiba = e.target.result;
-            console.log("✅ Step 3: Database imefunguka! Inaanza kuvuta video...");
-            vutaVipandeKutokaKwenyeDiski();
-        };
+    const btnPublish = document.getElementById("jumanne-final-publish-btn");
+    const btnAbort = document.getElementById("jumanne-abort-btn");
 
-        ombiDuka.onerror = function () {
-            console.error("❌ Step 3: Database imegoma kufunguka.");
-        };
-    });
-
-    // 2. INJINI YA KUVUTA VIPANDE VYOTE KWA MPANGILIO
+    // ==========================================================================
+    // HATUA YA 1: INJINI YA KUVUTA VIPANDE VYOTE KWA MPANGILIO KUTOKA DISK
+    // ==========================================================================
     function vutaVipandeKutokaKwenyeDiski() {
         const jumlaYaVipandeStr = sessionStorage.getItem("jumannetok_total_chunks");
         if (!jumlaYaVipandeStr || !dbIndexedAkiba) return;
@@ -42,13 +43,12 @@
             ombi.onsuccess = function (e) {
                 if (e.target.result) mfululizoWaVipande.push(e.target.result.maandishi_base64);
                 index++;
-                dakaKipandeKwenyeDiski(); // Nenda kipande kinachofuata
+                dakaKipandeKwenyeDiski();
             };
         }
         dakaKipandeKwenyeDiski();
     }
 
-    // 3. INJINI YA KUUNGANISHA VIPANDE ILI VIDEO ICHEZE
     function unganishaVipandeNaWashaPlayer(vipandeVyaMaandishi) {
         try {
             const maBlobYote = vipandeVyaMaandishi.map(base64Str => {
@@ -73,8 +73,9 @@
             console.error("❌ Hitilafu ya kuunganisha kioo Step 3:", err);
         }
     }
+
     // ==========================================================================
-    // HATUA YA 2: INJINI YA AKILI - MARUFUKU YA NAMBA NA HESABU YA MANENO
+    // HATUA YA 2 & 3: INJINI YA AKILI - MARUFUKU YA NAMBA, HESABU & RANGI ZA TAIFA 🇹🇿
     // ==========================================================================
     function amshaUsimamiziWaCaptionNaHesabu() {
         if (!captionBox) return;
@@ -82,45 +83,14 @@
         // Mtego wa kuzuia namba zote kabisa zisikanyagwe kwenye keyboard
         captionBox.addEventListener("keydown", function (e) {
             if (e.key >= '0' && e.key <= '9') {
-                e.preventDefault(); // Gomea namba papo hapo isionekane!
+                e.preventDefault(); // Kataa namba papo hapo isionekane
             }
         });
 
         captionBox.addEventListener("input", function () {
             let maandishi = captionBox.innerText;
 
-            // Ulinzi wa ziada: Kama mteja amepaste maandishi yenye namba, zifute zote
-            if (/\d/.test(maandishi)) {
-                captionBox.innerText = maandishi.replace(/\d/g, '');
-                wekaCursorMwishoni(captionBox);
-                return;
-            }
-
-            // Kata maneno kwa kutumia nafasi ili kupata hesabu sahihi
-            let vipandeManeno = maandishi.trim().split(/\s+/).filter(w => w.length > 0);
-            let tags = vipandeManeno.filter(w => w.startsWith("#"));
-
-            // Sogeza namba za mahesabu kioni upande wa chini wa sanduku
-            if (wordCounter) wordCounter.textContent = `Maneno: ${vipandeManeno.length} / 50`;
-            if (tagsCounter) tagsCounter.textContent = `Tags: ${tags.length} / 8`;
-        });
-    }
-
-    // Chombo kidogo cha kurudisha cursor mwishoni mwa maandishi dharura ikitokea
-    function wekaCursorMwishoni(element) {
-        element.focus();
-        if (typeof window.getSelection !== "undefined" && typeof document.createRange !== "undefined") {
-            let range = document.createRange();
-            range.selectNodeContents(element);
-            range.collapse(false);
-            let mteuzi = window.getSelection();
-            mteuzi.removeAllRanges();
-            mteuzi.addRange(range);
-        }
-    }
-        captionBox.addEventListener("input", function () {
-            let maandishi = captionBox.innerText;
-
+            // Ulinzi wa ziada kama mtumiaji amepaste maandishi yenye namba
             if (/\d/.test(maandishi)) {
                 captionBox.innerText = maandishi.replace(/\d/g, '');
                 wekaCursorMwishoni(captionBox);
@@ -135,22 +105,78 @@
             if (wordCounter) wordCounter.textContent = `Maneno: ${manenoHalisi.length} / 50`;
             if (tagsCounter) tagsCounter.textContent = `Tags: ${tags.length} / 8`;
 
-            // Daka nafasi ya sasa ya cursor kabla ya kuweka rangi
+            // Daka nafasi ya sasa ya cursor kabla ya kuweka rangi ili isirudi nyuma
             let nafasiYaCursor = wekaSafiNaDakaCursor(captionBox);
 
             let manenoNaRangi = vipandeManeno.map(neno => {
                 if (neno.trim().startsWith("#")) {
                     return choraRangiZaTanzania(neno);
                 }
-                return neno; // Maneno ya kawaida yanabaki meupe
+                return neno; // Maandishi ya kawaida yanabaki meupe safi
             }).join("");
 
             captionBox.innerHTML = manenoNaRangi;
-            
-            // Rejesha cursor sehemu yake sahihi
             rejeshaCursor(captionBox, nafasiYaCursor);
         });
-        // ==========================================================================
+    }
+
+    function choraRangiZaTanzania(hashtag) {
+        let herufi = hashtag.split("");
+        let rangiSafi = ["#00e676", "#ffeb3b", "#aaaaaa", "#2196f3"]; // Kijani, Njano, Nyeupe (kwa ajili ya giza), Bluu
+        let matokeoYaRangi = "";
+
+        herufi.forEach((char, index) => {
+            let rangiYaSasa = rangiSafi[index % rangiSafi.length];
+            matokeoYaRangi += `<span style="color: ${rangiYaSasa}; font-weight: bold;">${char}</span>`;
+        });
+
+        return matokeoYaRangi;
+    }
+
+    function wekaSafiNaDakaCursor(element) {
+        let mteuzi = window.getSelection();
+        if (mteuzi.rangeCount > 0) {
+            let range = mteuzi.getRangeAt(0);
+            let preCaretRange = range.cloneRange();
+            preCaretRange.selectNodeContents(element);
+            preCaretRange.setEnd(range.endContainer, range.endOffset);
+            return preCaretRange.toString().length;
+        }
+        return 0;
+    }
+
+    function rejeshaCursor(element, nafasi) {
+        let kiongozi = document.createNodeIterator(element, NodeFilter.SHOW_TEXT, null, false);
+        let node, jumlaNafasi = 0;
+        let mteuzi = window.getSelection();
+        let range = document.createRange();
+
+        while ((node = kiongozi.nextNode())) {
+            if (jumlaNafasi + node.length >= nafasi) {
+                range.setStart(node, nafasi - jumlaNafasi);
+                range.collapse(true);
+                mteuzi.removeAllRanges();
+                mteuzi.addRange(range);
+                return;
+            }
+            jumlaNafasi += node.length;
+        }
+        wekaCursorMwishoni(element);
+    }
+
+    function wekaCursorMwishoni(element) {
+        element.focus();
+        if (typeof window.getSelection !== "undefined" && typeof document.createRange !== "undefined") {
+            let range = document.createRange();
+            range.selectNodeContents(element);
+            range.collapse(false);
+            let mteuzi = window.getSelection();
+            mteuzi.removeAllRanges();
+            mteuzi.addRange(range);
+        }
+    }
+
+    // ==========================================================================
     // HATUA YA 4: INJINI YA UPLOAD, PROGRESS BAR, NA KUSAFISHA DATA ZOTE
     // ==========================================================================
     function amshaMchakatoWaKurushaMdundo() {
@@ -163,16 +189,16 @@
                 return;
             }
 
-            // Ficha vifungo vya kawaida chini, onyesha uwanja wa progress bar
+            // Ficha vifungo vya kawaida vya navigation, onyesha uwanja wa progress bar
             const actionButtons = document.getElementById("jumanne-action-buttons");
             if (actionButtons) actionButtons.style.display = "none";
             if (progressZone) progressZone.style.display = "block";
 
             let asilimiaYaSasa = 0;
 
-            // Simulizi thabiti ya urushaji wa data kwa kasi ya 5G kwenda seva kuu
+            // Simulizi ya urushaji wa data kwa kasi ya 5G kwenda seva kuu
             uploadInterval = setInterval(function () {
-                asilimiaYaSasa += Math.floor(Math.random() * 8) + 2; // Ongeza spidi kwa random pacing
+                asilimiaYaSasa += Math.floor(Math.random() * 8) + 2;
                 
                 if (asilimiaYaSasa >= 100) {
                     asilimiaYaSasa = 100;
@@ -180,7 +206,6 @@
                     if (progressBar) progressBar.style.width = "100%";
                     if (statusText) statusText.textContent = "🚀 Mdundo Umefika Seva Kuu: 100%!";
                     
-                    // Mpe sekunde 1 ya kuona ushindi kisha safisha kila kitu
                     setTimeout(kamilishaKaziNaSafishaDataZote, 1200); 
                 } else {
                     if (progressBar) progressBar.style.width = `${asilimiaYaSasa}%`;
@@ -189,7 +214,6 @@
             }, 200);
         });
 
-        // Kitufe cha Ghairi (Okoa Bando) kikikanyagwa
         if (btnAbort) {
             btnAbort.addEventListener("click", function () {
                 clearInterval(uploadInterval);
@@ -202,63 +226,49 @@
         }
     }
 
-    // 🔥 KAZI YA JUU YA KIJASUSI: SAFISHA DISKI MZIMA YA KIVINJARI NA KUSEPA INDEX.HTML
     function kamilishaKaziNaSafishaDataZote() {
         alert("Hongera! Video yako ya Kipaji imechapishwa rasmi JumanneTok TZ! 🏆");
 
-        // 1. Safisha SessionStorage yote iliyosave takataka za safari hii
+        // 1. Safisha SessionStorage yote iliyobeba takataka
         sessionStorage.clear();
 
-        // 2. Futa kabisa duka la IndexedDB ili simu ya mteja ibaki safi haina takataka za video
-        if (dbIndexedAkiba) {
-            const muamala = dbIndexedAkiba.transaction(["jumannetok_chunks"], "readwrite");
-            const duka = muamala.objectStore("jumannetok_chunks");
-            
-            const ombiFuta = duka.clear();
-            
-            ombiFuta.onsuccess = function() {
-                console.log("🛡️ Diski imesafishwa kikamilifu.");
-                // 3. Mtupe mtumiaji kwenye ukurasa wa nyumbani direct!
-                window.location.href = "index.html";
-            };
 
-            ombiFuta.onerror = function() {
-                window.location.href = "index.html";
-            };
-        } else {
-            window.location.href = "index.html";
-        }
-                    }
-            
-        // ==========================================================================
-    // INJINI YA KASHA: EVENT LISTENER WA KUWASHA INJINI ZOTE STEP 3
-    // ==========================================================================
-    document.addEventListener("DOMContentLoaded", function () {
-        console.log("🚀 Mtambo Mkuu wa JumanneTok Step 3 Unawaka...");
+// 2. Futa kabisa duka la IndexedDB ili simu ibake safi
+if (dbIndexedAkiba) {
+const muamala = dbIndexedAkiba.transaction(["jumannetok_chunks"], "readwrite");
+const duka = muamala.objectStore("jumannetok_chunks");
+const ombiFuta = duka.clear();
+ombiFuta.onsuccess = function() {
+console.log("🛡️ Diski imesafishwa kikamilifu.");
+window.location.href = "index.html"; // Mtupe mtumiaji index ya nyumbani direct!
+};
+ombiFuta.onerror = function() {
+window.location.href = "index.html";
+};
+} else {
+window.location.href = "index.html";
+}
+}
+// ==========================================================================
+// 🔥 INJINI YA KASHA: DOMCONTENTLOADED INAYOWASHA MITUNGI YOTE MARA MOJA SAFU
+// ==========================================================================
+document.addEventListener("DOMContentLoaded", function () {
+console.log("🚀 Mtambo Mkuu wa JumanneTok Step 3 Unawaka...");
+// 1. Amsha database na uanze kuvuta vipande vya video kioo cha Step 3
+const ombiDuka = indexedDB.open("JumanneTok_Chunk_Storage", 1);
+ombiDuka.onsuccess = function (e) {
+dbIndexedAkiba = e.target.result;
+console.log("✅ Database imefunguka vizuri ndani ya Listener!");
+vutaVipandeKutokaKwenyeDiski();
+};
+ombiDuka.onerror = function () {
+console.error("❌ Imeshindikana kufungua database ndani ya Listener.");
+};
+// 2. Washa injini ya akili ya caption (Rangi za Taifa 🇹🇿 na marufuku ya namba)
+amshaUsimamiziWaCaptionNaHesabu();
+// 3. Washa injini ya kurusha mdundo na progress bar
+amshaMchakatoWaKurushaMdundo();
+});
+})();
 
-        // 1. Fungua database ya vipande na uanze kuvuta video kioni
-        const ombiDuka = indexedDB.open("JumanneTok_Chunk_Storage", 1);
 
-        ombiDuka.onsuccess = function (e) {
-            dbIndexedAkiba = e.target.result;
-            console.log("✅ Database imefunguka vizuri ndani ya Listener!");
-            vutaVipandeKutokaKwenyeDiski();
-        };
-
-        ombiDuka.onerror = function () {
-            console.error("❌ Imeshindikana kufungua database ndani ya Listener.");
-        };
-
-        // 2. Washa injini ya akili ya caption (Rangi za Taifa 🇹🇿 na marufuku ya namba)
-        if (captionBox) {
-            amshaUsimamiziWaCaptionNaRangiZaTaifa();
-            console.log("🇹🇿 Injini ya Rangi za Taifa imepandishwa kioni!");
-        }
-
-        // 3. Washa injini ya kurusha mdundo na progress bar ya asilimia
-        if (btnPublish) {
-            amshaMchakatoWaKurushaMdundo();
-            console.log("🚀 Kitufe cha Chapisha kiko tayari kupokea mguso!");
-        }
-    })();
-    
