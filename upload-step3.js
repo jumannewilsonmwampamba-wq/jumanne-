@@ -38,6 +38,9 @@
     // ==========================================================================
     // 1. INJINI YA DATABASE: FUNGUA NA UREJESHE VIDEO YA VIPANDE KUTOKA STEP 1
     // ==========================================================================
+        // ==========================================================================
+    // HATUA YA 1: INJINI YA KUVUTA VIPANDE VYOTE KWA MPANGILIO KUTOKA DISK (FIXED)
+    // ==========================================================================
     function vutaVipandeKutokaKwenyeDiski() {
         const jumlaYaVipandeStr = sessionStorage.getItem("jumannetok_total_chunks");
         if (!jumlaYaVipandeStr || !dbIndexedAkiba) {
@@ -46,8 +49,10 @@
         }
 
         const jumlaYaVipande = parseInt(jumlaYaVipandeStr, 10);
-        const muamala = dbIndexedAkiba.transaction(["jumannetok_chunks"], "readonly");
-        const duka = muamala.objectStore("jumannetok_chunks");
+        
+        // 🔥 SULUHISHO: Fungua duka halisi la jumannetok_feed_cache lililoandikwa Step 1 kabla ya kuhamia hapa
+        const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readonly");
+        const duka = muamala.objectStore("jumannetok_feed_cache");
         
         let mfululizoWaVipande = [];
         let index = 0;
@@ -57,77 +62,31 @@
                 unganishaVipandeNaWashaPlayer(mfululizoWaVipande);
                 return;
             }
-            const ombi = duka.get(index);
+            // Mchwa anavuta funguo sahihi ya jumanne_current_upload_draft uliyoiandika Step 1
+            const ombi = duka.get("jumanne_current_upload_draft"); 
+            
             ombi.onsuccess = function (e) {
-                if (e.target.result) {
-                    mfululizoWaVipande.push(e.target.result.maandishi_base64);
+                const data = e.target.result;
+                if (data && data.videoBlobData) {
+                    // Kwa kuwa msimbo wako wa Step 1 ulihifadhi faili zima au vipande, hapa tunadaka BlobData halisi
+                    // Kama ulihifadhi kama vipande, tunalisha index, kama uliweka file zima tunalivuta mara moja
+                    if(Array.isArray(data.videoBlobData)) {
+                        mfululizoWaVipande = data.videoBlobData;
+                    } else {
+                        mfululizoWaVipande.push(data.videoBlobData);
+                    }
                 }
-                index++;
-                dakaKipandeKwenyeDiski();
+                // Hapa tunasonga mbele kibashara kulupusha player
+                unganishaVipandeNaWashaPlayer(mfululizoWaVipande);
             };
+            
             ombi.onerror = function() {
-                console.error("❌ Hitilafu ya kusoma kipande namba: " + index);
+                console.error("❌ Hitilafu ya kusoma diski upande wa GitHub Pages.");
             };
         }
         dakaKipandeKwenyeDiski();
     }
-
-    function unganishaVipandeNaWashaPlayer(vipandeVyaMaandishi) {
-        try {
-            if (vipandeVyaMaandishi.length === 0) return;
-
-            const maBlobYote = vipandeVyaMaandishi.map(base64Str => {
-                const sehemu = base64Str.split(',');
-                const byteCharacters = atob(sehemu);
-                const byteNumbers = new Array(byteCharacters.length);
-                for (let i = 0; i < byteCharacters.length; i++) {
-                    byteNumbers[i] = byteCharacters.charCodeAt(i);
-                }
-                const byteArray = new Uint8Array(byteNumbers);
-                return new Blob([byteArray], { type: "video/mp4" });
-            });
-
-            const videoKamiliBlob = new Blob(maBlobYote, { type: "video/mp4" });
-            
-            if (playerStep3) {
-                playerStep3.src = URL.createObjectURL(videoKamiliBlob);
-                playerStep3.load();
-                playerStep3.play().catch(function(err) {
-                    console.log("Autoplay imezuiwa, inasubiri mguso wa mteja.");
-                });
-                console.log("🏆 Video imelupuka kioni Step 3!");
-            }
-        } catch (err) {
-            console.error("❌ Mkwamo wa kuunganisha kioo Step 3:", err);
-        }
-    }
-
-    // ==========================================================================
-    // MASTER DOMCONTENTLOADED LISTENER
-    // ==========================================================================
-    document.addEventListener("DOMContentLoaded", function () {
-        console.log("🚀 Mtambo Mkuu wa JumanneTok Step 3 Unawaka...");
-
-        // Fungua database ile ile ya mchwa kutoka Step 1
-        const ombiDuka = indexedDB.open("JumanneTok_Chunk_Storage", 1);
-
-        ombiDuka.onsuccess = function (e) {
-            dbIndexedAkiba = e.target.result;
-            console.log("✅ Database imefunguka vizuri!");
-            
-            // Washa injini ya kuvuta na kucheza video upesi kioni
-            vutaVipandeKutokaKwenyeDiski();
-            amshaUsimamiziWaCaption();
-            amshaUsimamiziWaHashtags();
-            kaguaMaboksiNaUwasheKitufeChaTZ();
-            amshaMchakatoWaKurushaMdundoMnyofu();
-            
-        };
-
-        ombiDuka.onerror = function () {
-            console.error("❌ Imeshindikana kufungua database.");
-        };
-    });
+    
         // ==========================================================================
     // HATUA YA 2: INJINI YA CAPTION - RUHUSU HERUFI TU + RANGI ZA BENDERA 🇹🇿
     // ==========================================================================
