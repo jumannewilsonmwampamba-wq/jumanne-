@@ -30,6 +30,7 @@
     }
 
     // DAKA MA-ELEMENT YOTE KUTOKA KWENYE HTML YAKO HALISI
+    // 🔥 ZIBIKO LA ID: Imebadilishwa kutoka picker-input kwenda file-input kufanana na HTML yako verbatim!
     const videoInput = document.getElementById("jumanne-video-file-input");
     const uploadDropzone = document.getElementById("jumanne-upload-box-dashed");
     const previewContainer = document.getElementById("jumanne-preview-container");
@@ -53,7 +54,7 @@
 
             // Kikomo cha uzani wa MB 45 kulingana na onyo la bando la fomu yako
             const kikomoChaMb45 = 45 * 1024 * 1024;
-            if (faili.size > kikomoChaMb40) {
+            if (faili.size > kikomoChaMb45) {
                 alert("Video yako ni nzito mno! Mfumo unaruhusu mwisho wa video ya MB 45 pekee.");
                 e.target.value = "";
                 return;
@@ -69,18 +70,17 @@
                     localPlayer.src = urlYaPreview;
                     localPlayer.load();
                     
-                    // Washa video icheze yenyewe kiotomatiki
                     localPlayer.play().catch(() => {
                         console.log("Autoplay imezuiwa na kivinjari, inasubiri mtumiaji aguse play.");
                     });
 
-                    // Sikiliza sekunde za uchezaji ili kuendesha progress bar ya kijani
+                    // Sikiliza sekunde za uchezaji ka ajili ya kuendesha progress bar ya kijani
                     localPlayer.addEventListener("timeupdate", () => {
                         if (localPlayer.duration) {
                             const asilimia = (localPlayer.currentTime / localPlayer.duration) * 100;
                             if (progressBar) progressBar.style.width = `${asilimia}%`;
                             
-                            // Sasisha kibandiko cha muda (Time Badge overlay)
+                            // Sasisha kibandIKO cha muda (Time Badge overlay)
                             let sasaMin = Math.floor(localPlayer.currentTime / 60);
                             let sasaSec = Math.floor(localPlayer.currentTime % 60).toString().padStart(2, '0');
                             let jumlaMin = Math.floor(localPlayer.duration / 60);
@@ -100,12 +100,14 @@
                 console.error("Mkwamo wa kuwasha preview ya video:", errPreview);
             }
         });
+    } else {
+        console.error("❌ Hitilafu: Input element 'jumanne-video-file-input' haijapatikana kioni!");
     }
 
     // 3. INJINI INAYOGANDISHA BLOB NA KUMSWAGA USER KWENYE HATUA YA PILI (`upload-step2.html`)
     if (btnNext) {
         btnNext.addEventListener("click", () => {
-            // Mtego wa usalama wa ma-robot (Honeypot Shield)
+            // Mtego wa siri wa ma-robot (Honeypot Shield)
             const botInput = document.getElementById("jumanne-video-bot-input");
             if (botInput && botInput.value.length > 0) {
                 sessionStorage.clear();
@@ -132,7 +134,7 @@
                 jinaLaVideo: failiLaVideoAsili.name || "singeli_kipaji.mp4",
                 ukubwaWaVideo: failiLaVideoAsili.size,
                 videoBlobData: failiLaVideoAsili, // Hifadhi ya Blob asili ghafi (0 TZS Bando)
-                haliYaUploadNyuma: "isomeke", // Alama ya siri kwa ajili ya kurun nyuma ya pazia
+                haliYaUploadNyuma: "isomeke", 
                 tareheSajili: Date.now()
             };
 
@@ -148,7 +150,7 @@
                     localPlayer.src = "";
                 }
                 
-                // Amri kali inayovuta reli kwenda Hatua ya 2 ya uchaguzi wa category
+                // Amri kali inayovuta reli kwenda Hatua ya 2 of uchaguzi wa category
                 window.location.href = "upload-step2.html";
             };
 
@@ -162,3 +164,4 @@
     // Amsha duka la local upose kioo kinapofunguka macho kitaifa
     amshaDukaLaUploadLocal();
 })();
+                
