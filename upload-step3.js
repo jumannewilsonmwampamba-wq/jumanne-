@@ -16,7 +16,7 @@
     // 1. FUNGUA DATABASE YA CHUNKS KIVINJARI KIKIMALIZA KUSOMA UKURASA
     document.addEventListener("DOMContentLoaded", function () {
         // Tunafungua database ile ile ya mchwa kutoka Step 1
-        const ombiDuka = indexedDB.open("JumanneTok_Chunk_Storage", 1);
+        const ombiDuka = indexedDB.open("JumanneTok_Local_Cache", 1);
 
         ombiDuka.onsuccess = function (e) {
             dbIndexedAkiba = e.target.result;
