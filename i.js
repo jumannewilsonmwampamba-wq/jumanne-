@@ -575,7 +575,7 @@ function ombaNaUchezeVideoKutokaSevaYaRender() {
     }
 
     // A. WEKA BASE URL KULINGANA NA MAZINGIRA YA SEVA YETU YA RENDER
-    const BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:3001' : 'https://onrender.com';
+    const BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:3001' : 'https://jumannedb-video-kernel.onrender.com';
     const streamEndpointUrl = `${BASE_URL}/api/v1/videos/stream-test`;
 
     // B. MTAMBO MKUU WA BARE-METAL XHR VIDEO Persistance
