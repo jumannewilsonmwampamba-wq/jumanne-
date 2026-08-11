@@ -21,7 +21,7 @@
             <h2 class="jumanne-upload-title" style="margin: 0; font-size: 20px; font-weight: bold;">Kamilisha Kazi Yako</h2>
         </div>
 
-        <!-- 2. VIDEO PREVIEW YA HATUA YA 3: ID Imesawazishwa kuwa jumanne-step3-preview-player -->
+        <!-- 2. VIDEO PREVIEW YA HATUA YA 3 -->
         <div id="jumanne-step3-preview-container" style="width: 100%; display: flex; justify-content: center; box-sizing: border-box; margin-bottom: 20px;">
             <video id="jumanne-step3-preview-player" controls autoplay muted playsinline 
                    style="width: 100%; max-height: 240px; aspect-ratio: 16/9; border-radius: 10px; border: 2px solid #00e676; background: #000; object-fit: cover;">
@@ -31,42 +31,27 @@
         <!-- FOMU KUU YA MAPINDUZI YA UPLOAD (HATUA YA 3) -->
         <form id="jumanne-upload-form-step3" novalidate>
 
-            <!-- MTEGO WA SIRI WA MA-ROBOT (HONEYPOT STEP 3 SHIELD) -->
+            <!-- MTEGO WA SIRI WA MA-ROBOT -->
             <div class="jumanne-video-pot-gate" style="display: none !important; visibility: hidden !important;">
                 <input type="text" id="jumanne-video-bot-input-step3" name="video_bot_security_step3" tabindex="-1" autocomplete="off">
             </div>
 
-            <!-- 🔥 BOKSI LA KUANDIKA MAELEZO CHENYE NDIMI NNE ZA BENDERA YA TAIFA -->
-            <div class="jumanne-input-group" style="margin-bottom: 25px; display: flex; flex-direction: column; gap: 8px;">
-                <label style="font-size: 14px; font-weight: bold; color: #00e676; text-align: left;">Maelezo ya Video Yako</label>
-                
-                <!-- MAREKEBISHO: Div ya uandishi wa kisasa ikiwa na ID moja tu thabiti -->
-                <div id="jumanne-video-caption" contenteditable="true" style="width: 100%; min-height: 110px; max-height: 150px; padding: 12px; background: #111; border: 1px solid #222; border-radius: 8px; color: #fff; font-size: 14px; box-sizing: border-box; overflow-y: auto; font-family: sans-serif; line-height: 1.4; outline: none; text-align: left; white-space: pre-wrap; word-break: break-word;"></div>
-                
-                <!-- MIFUMO YA KISANII YA HESABU CHINI YA SANDUKU -->
-                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; box-sizing: border-box;">
-                    <span id="jumanne-tags-counter" style="font-size: 12px; color: #666; font-weight: bold;">Tags: 0 / 8</span>
+            <!-- 🔥 BOKSI LA 1: MAELEZO YA KAWAIDA (CAPTION) - RUHUSU HERUFI NA SPACE TU -->
+            <div class="jumanne-input-group" style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 8px;">
+                <label for="jumanne-video-caption" style="font-size: 14px; font-weight: bold; color: #00e676; text-align: left;">Maelezo ya Video (Caption)</label>
+                <div id="jumanne-video-caption" contenteditable="true" style="width: 100%; min-height: 70px; max-height: 100px; padding: 12px; background: #111; border: 1px solid #222; border-radius: 8px; color: #fff; font-size: 14px; box-sizing: border-box; overflow-y: auto; font-family: sans-serif; line-height: 1.4; outline: none; text-align: left; white-space: pre-wrap; word-break: break-word;"></div>
+                <div style="display: flex; justify-content: flex-end; width: 100%;">
                     <span id="jumanne-word-counter" style="font-size: 12px; color: #00e676; font-weight: bold;">Maneno: 0 / 50</span>
                 </div>
             </div>
 
-            <!-- 🔥 MSTARI WA PROGRESS: Unawaka wakati wa kurusha data mtaani -->
-            <div id="jumanne-upload-progress-zone" style="display: none; width: 100%; margin-bottom: 25px; box-sizing: border-box; background: #1a1111; padding: 15px; border-radius: 8px; border: 1px solid #331111;">
-                
-                <div style="width: 100%; height: 6px; background: #222; border-radius: 4px; overflow: hidden; border: 1px solid #333;">
-                    <div id="jumanne-upload-progress-bar" style="width: 0%; height: 100%; background: #00e676; transition: width 0.1s linear;"></div>
+            <!-- 🔥 BOKSI LA 2: SANDUKU LA HASHTAGS PeKee - RUHUSU # NA HERUFI TU + RANGI ZA TAIFA 🇹🇿 -->
+            <div class="jumanne-input-group" style="margin-bottom: 25px; display: flex; flex-direction: column; gap: 8px;">
+                <label for="jumanne-video-tags" style="font-size: 14px; font-weight: bold; color: #00e676; text-align: left;">Alama za Reli (Hashtags Pekee)</label>
+                <div id="jumanne-video-tags" contenteditable="true" style="width: 100%; min-height: 60px; max-height: 90px; padding: 12px; background: #111; border: 1px solid #222; border-radius: 8px; color: #fff; font-size: 14px; box-sizing: border-box; overflow-y: auto; font-family: sans-serif; line-height: 1.4; outline: none; text-align: left; white-space: pre-wrap; word-break: break-word;"></div>
+                <div style="display: flex; justify-content: flex-end; width: 100%;">
+                    <span id="jumanne-tags-counter" style="font-size: 12px; color: #666; font-weight: bold;">Tags: 0 / 8</span>
                 </div>
-                
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 15px; width: 100%;">
-                    <!-- Namba za asilimia za upakiaji -->
-                    <span id="jumanne-upload-status-text" style="font-size: 13px; color: #00e676; font-weight: bold; font-family: monospace;">⏳ Inarusha mdundo: 0%</span>
-                    
-                    <!-- 🔥 KITUFE KIPYA CHA GHAIRI: Rangi nyekundu ya usalama -->
-                    <button type="button" id="jumanne-abort-btn" style="width: 100%; padding: 10px; background: #ff5252; color: #ffffff; border: none; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 12px rgba(255, 82, 82, 0.2); transition: background 0.2s ease;">
-                        <i class="fas fa-times-circle"></i> Ghairi Kupakia (Okoa Bando)
-                    </button>
-                </div>
-
             </div>
 
             <!-- VIFUNGO VYA NAVIGATION ZA CHINI -->
@@ -82,7 +67,7 @@
         </form>
     </div> <!-- CONTAINER KUU END -->
     
-    <!-- UNGANISHA INJINI YA JAVASCRIPT YA HATUA YA TATU NYUMA YAKE -->
     <script src="upload-step3.js"></script>
 </body>
 </html>
+    
