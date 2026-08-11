@@ -4,9 +4,9 @@
     "use strict";
 
     let dbIndexedAkiba = null;
-    let failiLaVideoAsili = null; // Inashikilia faili ghafi la binary la mteja
+    let failiLaVideoAsili = null; 
 
-    // 1. INJINI YA KI-HARDWARE: FUNGUA DATABASE YA NDANI MARA TU KIOO KINAPOFUNGUKA
+    // 1. FUNGUA DATABASE YA NDANI MARA TU KIOO KINAPOFUNGUKA
     function amshaDukaLaUploadLocal() {
         const ombiDuka = indexedDB.open("JumanneTok_Local_Cache", 1);
 
@@ -27,10 +27,8 @@
         };
     }
 
-    // Washa database wakati script inapoingia kwenye kivinjari
     amshaDukaLaUploadLocal();
 
-    // DAKA MA-ELEMENT YOTE KUTOKA KWENYE HTML YAKO VERBATIM
     const videoInput = document.getElementById("jumanne-video-file-input");
     const uploadDropzone = document.getElementById("jumanne-upload-box-dashed");
     const previewContainer = document.getElementById("jumanne-preview-container");
@@ -45,7 +43,7 @@
         videoInput.addEventListener("change", function (e) {
             e.stopPropagation();
 
-            // SULUHISHO: Tunachukua faili lenyewe [0] badala ya listi nzima ili IndexedDB isikwame
+            // SULUHISHO KUU: Tunadaka faili la kwanza kabisa [0] ghafi ili IndexedDB isikwame
             const faili = e.target.files && e.target.files.length > 0 ? e.target.files[0] : null;
             if (!faili) return;
 
@@ -55,7 +53,7 @@
                 return;
             }
 
-            // Kikomo cha MB 45
+            // Kupima ukubwa sasa inasoma kwa usahihi kwa kuwa tumeshika faili lenyewe
             const kikomoChaMb45 = 45 * 1024 * 1024;
             if (faili.size > kikomoChaMb45) {
                 alert("Video yako ni nzito mno! Mfumo unaruhusu mwisho wa video ya MB 45 pekee.");
@@ -72,9 +70,8 @@
                     localPlayer.src = urlYaPreview;
                     localPlayer.load();
                     
-                    // Kupata na kupima urefu wa muda wa video (Duration)
                     localPlayer.onloadedmetadata = function() {
-                        const kikomoChaMuda = 90; // Sekunde 90 (Dakika 1 na Sekunde 30)
+                        const kikomoChaMuda = 90; 
                         if (localPlayer.duration > kikomoChaMuda) {
                             alert("Video imezidi urefu! Tafadhali weka video isiyozidi dakika 1 na sekunde 30.");
                             localPlayer.src = "";
@@ -114,7 +111,7 @@
         });
     }
 
-    // 3. INJINI INAYOGANDISHA BLOB NDANI YA INDEXEDDB NA KUMSWAGA USER HATUA YA PILI
+    // 3. INJINI YA KUHIFADHI KWENYE INDEXEDDB NA KUENDA MBELE
     if (btnNext) {
         btnNext.addEventListener("click", function (event) {
             event.preventDefault();
@@ -125,49 +122,47 @@
                 return;
             }
 
-            // Mfumo wa dharura (Fallback 1): Kama database haijafunguka kabisa, songa mbele kulinda UX
             if (!dbIndexedAkiba) {
-                console.warn("⚠️ Database haiko tayari kabisa, tunasonga mbele kwa dharura...");
-                window.location.href = "upload-step2.html";
+                alert("Mfumo wa kuhifadhi wa ndani bado haujakaa sawa, tafadhali jaribu tena.");
                 return;
             }
 
-            // Badilisha kitufe kuonesha mzigo unashughulikiwa
             btnNext.disabled = true;
             btnNext.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inahifadhi...';
 
             try {
-                // Fungua muamala (transaction) wa IndexedDB kuhifadhi faili
                 const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readwrite");
                 const duka = muamala.objectStore("jumannetok_feed_cache");
 
                 const dataYaKuweka = {
                     id: "current_draft_video",
-                    video_blob: failiLaVideoAsili,
+                    video_blob: failiLaVideoAsili, // Hapa sasa inapokelewa kama Faili safi la Binary
                     jina: failiLaVideoAsili.name,
                     tarehe: new Date().getTime()
                 };
 
-                duka.put(dataYaKuweka);
+                const ombiKuhifadhi = duka.put(dataYaKuweka);
 
-                // Hapa ndio suluhisho kuu: Tunasubiri muamala ukamilike kabisa 100% ndipo tunahama ukurasa
-                muamala.oncomplete = function () {
-                    console.log("✅ Video imehifadhiwa kikamilifu kwenye IndexedDB!");
+                // Muhimu: Hatuhami ukurasa mpaka data iwe imeandikwa kwenye diski kikamilifu!
+                ombiKuhifadhi.onsuccess = function () {
+                    console.log("✅ Video imehifadhiwa kikamilifu!");
                     window.location.href = "upload-step2.html";
                 };
 
-                // Mfumo wa dharura (Fallback 2): Kama kuna makosa kwenye kuandika, mpe mtumiaji njia ya kupita
-                muamala.onerror = function (e) {
-                    console.error("❌ Muamala umefeli wakati wa kuhifadhi:", e);
-                    window.location.href = "upload-step2.html";
+                ombiKuhifadhi.onerror = function (e) {
+                    console.error("❌ Imeshindikana kuandika faili:", e);
+                    alert("Kuna shida imejitokeza kwenye diski ya simu yako. Jaribu tena.");
+                    btnNext.disabled = false;
+                    btnNext.innerHTML = 'Inayofuata <i class="fas fa-chevron-right"></i>';
                 };
 
             } catch (err) {
-                console.error("Mkwamo wa IndexedDB umezuiwa kwa dharura:", err);
-                window.location.href = "upload-step2.html";
+                console.error("Mkwamo umezuiwa:", err);
+                btnNext.disabled = false;
+                btnNext.innerHTML = 'Inayofuata <i class="fas fa-chevron-right"></i>';
             }
-        });
+        })();
     }
 
 })();
-                
+            
