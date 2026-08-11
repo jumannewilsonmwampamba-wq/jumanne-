@@ -6,13 +6,11 @@
   "type": "module",
   "scripts": {
     "start": "node server-test.js",
-    "dev": "nodemon server-test.js",
-    "test-db": "node test-video-db.js"
+    "dev": "nodemon server-test.js"
   },
   "keywords": [
     "singeli",
     "jumannetok",
-    "tanzania",
     "bare-metal",
     "xhr-stream"
   ],
