@@ -21,7 +21,7 @@
             <h2 class="jumanne-upload-title" style="margin: 0; font-size: 20px; font-weight: bold;">Kamilisha Kazi Yako</h2>
         </div>
 
-        <!-- 2. VIDEO PREVIEW YA HATUA YA 3 -->
+        <!-- 2. VIDEO PREVIEW YA HATUA YA 3: Inasoma kutoka kwenye Database halisi -->
         <div id="jumanne-step3-preview-container" style="width: 100%; display: flex; justify-content: center; box-sizing: border-box; margin-bottom: 20px;">
             <video id="jumanne-step3-preview-player" controls autoplay muted playsinline 
                    style="width: 100%; max-height: 240px; aspect-ratio: 16/9; border-radius: 10px; border: 2px solid #00e676; background: #000; object-fit: cover;">
@@ -36,30 +36,41 @@
                 <input type="text" id="jumanne-video-bot-input-step3" name="video_bot_security_step3" tabindex="-1" autocomplete="off">
             </div>
 
-            <!-- 🔥 BOKSI LA 1: MAELEZO YA KAWAIDA (CAPTION) - RUHUSU HERUFI NA SPACE TU -->
+            <!-- 🔥 BOKSI LA 1: MAELEZO YA KAWAIDA (CAPTION) -->
             <div class="jumanne-input-group" style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 8px;">
                 <label for="jumanne-video-caption" style="font-size: 14px; font-weight: bold; color: #00e676; text-align: left;">Maelezo ya Video (Caption)</label>
                 <div id="jumanne-video-caption" contenteditable="true" style="width: 100%; min-height: 70px; max-height: 100px; padding: 12px; background: #111; border: 1px solid #222; border-radius: 8px; color: #fff; font-size: 14px; box-sizing: border-box; overflow-y: auto; font-family: sans-serif; line-height: 1.4; outline: none; text-align: left; white-space: pre-wrap; word-break: break-word;"></div>
-                <div style="display: flex; justify-content: flex-end; width: 100%;">
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; box-sizing: border-box;">
+                    <!-- Ujumbe wa dharura wa Caption unaopotea wenyewe -->
+                    <span id="jumanne-caption-error-toast" style="font-size: 12px; color: #ff5252; font-weight: bold; display: none; transition: opacity 0.5s ease;"></span>
                     <span id="jumanne-word-counter" style="font-size: 12px; color: #00e676; font-weight: bold;">Maneno: 0 / 50</span>
                 </div>
             </div>
 
-            <!-- 🔥 BOKSI LA 2: SANDUKU LA HASHTAGS PeKee - RUHUSU # NA HERUFI TU + RANGI ZA TAIFA 🇹🇿 -->
+            <!-- 🔥 BOKSI LA 2: SANDUKU LA HASHTAGS PEKEE -->
             <div class="jumanne-input-group" style="margin-bottom: 25px; display: flex; flex-direction: column; gap: 8px;">
                 <label for="jumanne-video-tags" style="font-size: 14px; font-weight: bold; color: #00e676; text-align: left;">Alama za Reli (Hashtags Pekee)</label>
                 <div id="jumanne-video-tags" contenteditable="true" style="width: 100%; min-height: 60px; max-height: 90px; padding: 12px; background: #111; border: 1px solid #222; border-radius: 8px; color: #fff; font-size: 14px; box-sizing: border-box; overflow-y: auto; font-family: sans-serif; line-height: 1.4; outline: none; text-align: left; white-space: pre-wrap; word-break: break-word;"></div>
-                <div style="display: flex; justify-content: flex-end; width: 100%;">
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; box-sizing: border-box;">
+                    <!-- Ujumbe wa dharura wa Hashtags unaopotea wenyewe -->
+                    <span id="jumanne-tags-error-toast" style="font-size: 12px; color: #ff5252; font-weight: bold; display: none; transition: opacity 0.5s ease;"></span>
                     <span id="jumanne-tags-counter" style="font-size: 12px; color: #666; font-weight: bold;">Tags: 0 / 8</span>
                 </div>
             </div>
 
+            <!-- 🔥 ENEO LA TAARIFA YA MWISHO YA POST (TOAST CHINI YA FOMU) -->
+            <div style="width: 100%; text-align: center; margin-bottom: 15px;">
+                <span id="jumanne-final-error-toast" style="font-size: 13px; color: #ff5252; font-weight: bold; display: none; transition: opacity 0.5s ease;"></span>
+            </div>
+
             <!-- VIFUNGO VYA NAVIGATION ZA CHINI -->
-            <div class="jumanne-upload-btn-group" id="jumanne-action-buttons" style="margin-top: 25px; display: flex; gap: 12px; width: 100%; box-sizing: border-box;">
+            <div class="jumanne-upload-btn-group" id="jumanne-action-buttons" style="display: flex; gap: 12px; width: 100%; box-sizing: border-box;">
                 <button type="button" onclick="window.location.href='upload-step2.html'" style="width: 40%; padding: 12px; background: #222; color: #fff; border: 1px solid #333; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;">
                     <i class="fas fa-chevron-left"></i> Nyuma
                 </button>
-                <button type="button" id="jumanne-final-publish-btn" style="flex: 1; padding: 12px; background: #00e676; color: #000; border: none; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                <button type="button" id="jumanne-final-publish-btn" style="flex: 1; padding: 12px; background: #00e676; color: #000; border: none; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background 0.3s ease;">
                     <i class="fas fa-rocket"></i> Chapisha Kipaji
                 </button>
             </div>
@@ -67,7 +78,8 @@
         </form>
     </div> <!-- CONTAINER KUU END -->
     
+    <!-- INJINI YA JAVASCRIPT YA HATUA YA TATU NYUMA YAKE -->
     <script src="upload-step3.js"></script>
 </body>
-</html>
-    
+                    </html>
+                    
