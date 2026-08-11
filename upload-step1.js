@@ -43,7 +43,6 @@
     // 2. MTAMBO WA KUKAMATA VIDEO NA KULUPUSHA PREVIEW
     if (videoInput) {
         videoInput.addEventListener("change", function (e) {
-            // Zuia kivinjari kisipige fujo ya event propagation
             e.stopPropagation();
 
             const faili = e.target.files && e.target.files.length > 0 ? e.target.files[0] : null;
@@ -102,8 +101,8 @@
 
     // 3. INJINI INAYOGANDISHA BLOB NA KUMSWAGA USER KWENYE HATUA YA PILI
     if (btnNext) {
+        // 🔥 MAREKEBISHO YA KI-HARDWARE: Weka mtego thabiti wa kusikiliza mibofyo ya dharura
         btnNext.addEventListener("click", function (event) {
-            // 🔥 PIGO LA USHINDI: Zuia kabisa fomu isithubutu kufanya auto-submit wala page refresh!
             event.preventDefault(); 
             event.stopPropagation();
 
@@ -125,6 +124,7 @@
                 return;
             }
 
+            console.log("🚀 Inafungua transaction ya kuandika Blob...");
             const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readwrite");
             const duka = muamala.objectStore("jumannetok_feed_cache");
 
@@ -139,6 +139,7 @@
 
             const ombiHifadhi = duka.put(dataYaVideoDraft);
 
+            // GOLI LA USHINDI: Lazimisha browser isisite, ikimaliza kuandika inahamisha ukurasa direct!
             ombiHifadhi.onsuccess = function () {
                 console.log("💾 Disk Lock: Video Blob imelazwa IndexedDB salama kabisa!");
                 
