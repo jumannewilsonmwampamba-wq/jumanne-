@@ -9,8 +9,20 @@ import cors from "cors";
 import { fileURLToPath } from "url";
 
 const app = express();
-app.use(cors());
 app.use(express.json());
+// 🔥 ZIBIKO LA CORS LA KI-HARDWARE: Ruhusu domain yoyote (pamoja na github.io) ivute video stream bila lag!
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Jumanne-Edge-Lock");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    
+    // Kama kivinjari kinarusha ombi la uthibitisho (Preflight request), kiruhusu kiruke sekunde 0
+    if (req.method === "OPTIONS") {
+        return res.sendStatus(200);
+    }
+    next();
+});
 
 // 🔥 MANUVA YA KI-HARDWARE: Kwenye ES Modules "__dirname" haipo kiasili, lazima tuisuke hivi!
 const __filename = fileURLToPath(import.meta.url);
