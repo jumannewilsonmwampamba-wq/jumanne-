@@ -1,25 +1,32 @@
-// upload-step3.js - Hatua ya 1: Mtambo wa Kuvuta na Kuwasha Video
+// upload-step3.js - Hatua ya 1: Mtambo wa Kuvuta Video (Fixed)
 
 (function () {
     "use strict";
 
     let dbIndexedAkiba = null;
-    
-    // Daka kicheza video halisi cha Step 3
+
+    // Daka ma-element yote ya HTML kwa usahihi
     const playerStep3 = document.getElementById("jumanne-step3-preview-player");
+    const captionBox = document.getElementById("jumanne-video-caption");
+    const tagsBox = document.getElementById("jumanne-video-tags");
+    const wordCounter = document.getElementById("jumanne-word-counter");
+    const tagsCounter = document.getElementById("jumanne-tags-counter");
+    const btnPublish = document.getElementById("jumanne-final-publish-btn");
 
     // 1. FUNGUA DATABASE YA CHUNKS KIVINJARI KIKIMALIZA KUSOMA UKURASA
     document.addEventListener("DOMContentLoaded", function () {
+        // Tunafungua database ile ile ya mchwa kutoka Step 1
         const ombiDuka = indexedDB.open("JumanneTok_Chunk_Storage", 1);
 
         ombiDuka.onsuccess = function (e) {
             dbIndexedAkiba = e.target.result;
             console.log("✅ Step 3: Database imewaka salama!");
             
-            // Vuta vipande upesi kutoka kwenye diski ya simu
+            // Vuta vipande upesi kutoka kwenye diski ili video icheze
             vutaVipandeKutokaKwenyeDiski();
             amshaUsimamiziWaCaption();
             amshaUsimamiziWaHashtags();
+            kaguaMaboksiNaUwasheKitufeChaTZ();
             amshaMchakatoWaKurushaMdundoMnyofu();
         };
 
@@ -28,7 +35,7 @@
         };
     });
 
-    // 2. INJINI YA KUVUTA VIPANDE KWA MIFULO YA NAMBA ZAO
+    // 2. INJINI YA KUVUTA VIPANDE KWA MIFULULIZO YA NAMBA ZAO
     function vutaVipandeKutokaKwenyeDiski() {
         const jumlaYaVipandeStr = sessionStorage.getItem("jumannetok_total_chunks");
         if (!jumlaYaVipandeStr || !dbIndexedAkiba) return;
@@ -75,56 +82,107 @@
             if (playerStep3) {
                 playerStep3.src = URL.createObjectURL(videoKamiliBlob);
                 playerStep3.load();
-                playerStep3.play().catch(() => {
-                    console.log("Autoplay imezuiwa na kivinjari.");
+                playerStep3.play().catch(function() {
+                    console.log("Autoplay imezuiwa, inasubiri mguso.");
                 });
             }
         } catch (err) {
             console.error("❌ Hitilafu ya kuunganisha video Step 3:", err);
         }
-    }
-    // Daka ma-element ya Boksi la Kwanza la Caption
-    const captionBox = document.getElementById("jumanne-video-caption");
-    const wordCounter = document.getElementById("jumanne-word-counter");
+    }    // ==========================================================================
+    // HATUA YA 2: MTAMBO WA UNIVERSAL COLOR SYNTAX (BENDERA YA TANZANIA 🇹🇿)
+    // ==========================================================================
+    
+    // Injini ya kiufundi inayovunja maneno herufi kwa herufi na kuyavika rangi za Taifa
+    function choraRangiZaTanzania(text) {
+        let herufi = text.split("");
+        let rangiSafi = ["#00e676", "#ffeb3b", "#aaaaaa", "#2196f3"]; // Kijani, Njano, Nyeupe, Bluu
+        let matokeoYaRangi = "";
 
-    // ==========================================================================
-    // HATUA YA 2: INJINI YA CAPTION - RUHUSU HERUFI NA SPACE TU (PIGA MARUFUKU ARAMA NA NAMBA)
-    // ==========================================================================
+        herufi.forEach((char, index) => {
+            let rangiYaSasa = rangiSafi[index % rangiSafi.length];
+            matokeoYaRangi += `<span style="color: ${rangiYaSasa}; font-weight: bold;">${char}</span>`;
+        });
+
+        return matokeoYaRangi;
+    }
+
+    // USIMAMIZI WA BOKSI LA KWANZA: CAPTION (Herufi tu + Rangi za Taifa)
     function amshaUsimamiziWaCaption() {
         if (!captionBox) return;
 
-        // Ulinzi wa kibodi: Zuia kabisa herufi isiyotakiwa kabla haijazaliwa kioni
+        // Zuia namba na alama kabla hazijatokea kioni
         captionBox.addEventListener("keydown", function (e) {
-            // Ruhusu funguo maalum za mfumo kama Backspace, Space, Enter, na Mishale ya kutelezea
             if (e.key === "Backspace" || e.key === " " || e.key === "Enter" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
                 return;
             }
-
-            // Mtego wa Regex: Ruhusu herufi pekee (Herufi kubwa na ndogo za Lugha yoyote)
-            // Kama sio herufi, piga kufuli ya e.preventDefault() papo hapo!
             if (!/^[a-zA-Z]$/.test(e.key)) {
                 e.preventDefault();
             }
         });
 
-        // Ulinzi wa usalama iwapo mteja atakili na kubandika (Paste) maandishi kutoka WhatsApp
+        // Paka rangi za kitaifa wakati anatype
         captionBox.addEventListener("input", function () {
             let maandishi = captionBox.innerText;
 
-            // Futa kila kitu ambacho sio herufi wala nafasi (Ondoa namba na alama zote)
+            // Safisha kama kuna herufi zisizotakiwa zimepenya
             if (/[^a-zA-Z\s]/g.test(maandishi)) {
                 captionBox.innerText = maandishi.replace(/[^a-zA-Z\s]/g, '');
                 wekaCursorMwishoni(captionBox);
                 return;
             }
 
-            // Hesabu maneno yaliyopo sasa hivi na uyasogeze kioni chini ya boksi
-            let vipandeManeno = captionBox.innerText.trim().split(/\s+/).filter(w => w.length > 0);
-            if (wordCounter) wordCounter.textContent = `Maneno: ${vipandeManeno.length} / 50`;
+            let vipandeManeno = maandishi.split(/(\s+)/); 
+            let manenoHalisi = vipandeManeno.filter(w => w.trim().length > 0);
+            if (wordCounter) wordCounter.textContent = `Maneno: ${manenoHalisi.length} / 50`;
+
+            // Daka nafasi ya sasa ya cursor ili isiruke rudi nyuma
+            let nafasiYaCursor = dakaNafasiYaCursor(captionBox);
+
+            let manenoNaRangi = vipandeManeno.map(neno => {
+                if (neno.trim().length > 0) {
+                    return choraRangiZaTanzania(neno);
+                }
+                return neno;
+            }).join("");
+
+            captionBox.innerHTML = manenoNaRangi;
+            rejeshaCursorSehemuSahihi(captionBox, nafasiYaCursor);
         });
     }
 
-    // Chombo kidogo cha kudhibiti cursor isirudi nyuma mtumiaji anapopaste maandishi
+    // Vyombo vya dharura vya kusimamia cursor (Caret Control) kwenye ContentEditable
+    function dakaNafasiYaCursor(element) {
+        let mteuzi = window.getSelection();
+        if (mteuzi.rangeCount > 0) {
+            let range = mteuzi.getRangeAt(0);
+            let preCaretRange = range.cloneRange();
+            preCaretRange.selectNodeContents(element);
+            preCaretRange.setEnd(range.endContainer, range.endOffset);
+            return preCaretRange.toString().length;
+        }
+        return 0;
+    }
+
+    function rejeshaCursorSehemuSahihi(element, nafasi) {
+        let kiongozi = document.createNodeIterator(element, NodeFilter.SHOW_TEXT, null, false);
+        let node, jumlaNafasi = 0;
+        let mteuzi = window.getSelection();
+        let range = document.createRange();
+
+        while ((node = kiongozi.nextNode())) {
+            if (jumlaNafasi + node.length >= nafasi) {
+                range.setStart(node, nafasi - jumlaNafasi);
+                range.collapse(true);
+                mteuzi.removeAllRanges();
+                mteuzi.addRange(range);
+                return;
+            }
+            jumlaNafasi += node.length;
+        }
+        wekaCursorMwishoni(element);
+    }
+
     function wekaCursorMwishoni(element) {
         element.focus();
         if (typeof window.getSelection !== "undefined" && typeof document.createRange !== "undefined") {
@@ -135,51 +193,41 @@
             mteuzi.removeAllRanges();
             mteuzi.addRange(range);
         }
-                    }
-        // Daka ma-element ya Boksi la Pili la Hashtags
-    const tagsBox = document.getElementById("jumanne-video-tags");
-    const tagsCounter = document.getElementById("jumanne-tags-counter");
-
-    // ==========================================================================
-    // HATUA YA 3: INJINI YA HASHTAGS PEKEE - LAZIMA #, HERUFI TU & RANGI ZA TAIFA 🇹🇿
+        }
+        // ==========================================================================
+    // HATUA YA 3: USIMAMIZI WA BOKSI LA PILI: HASHTAGS PEKEE (LAZIMA # + RANGI 🇹🇿)
     // ==========================================================================
     function amshaUsimamiziWaHashtags() {
         if (!tagsBox) return;
 
-        // A: Ulinzi wa kibodi - Lazimisha alama ya reli (#) mwanzoni mwa kila neno
+        // Zuia namba na ulazimishe alama ya reli (#) mwanzoni
         tagsBox.addEventListener("keydown", function (e) {
             if (e.key === "Backspace" || e.key === " " || e.key === "Enter" || e.key === "ArrowLeft" || e.key === "ArrowRight") {
                 return;
             }
-
-            // Zuia namba zote kabisa
             if (e.key >= '0' && e.key <= '9') {
                 e.preventDefault();
                 return;
             }
 
             let maandishiSasa = tagsBox.innerText;
-
-            // WAZO LAKO LA KIJASUSI: Kama anaanza neno jipya, mzuie kuandika herufi mpaka aweke #
             if (maandishiSasa.length === 0 || maandishiSasa.endsWith(" ")) {
                 if (e.key !== "#") {
                     e.preventDefault();
-                    alert("⚠️ Sheria ya JumanneTok: Sanduku hili ni la Hashtags tu! Lazima uanze neno lako na alama ya reli (#) kwanza!");
+                    alert("⚠️ Sheria ya JumanneTok: Sanduku hili ni la Hashtags tu! Lazima uanze na alama ya reli (#) kwanza!");
                     return;
                 }
             }
 
-            // Mzuie asiandike alama zilizorundikana (mfano ##) au alama zisizo herufi
             if (!/^[a-zA-Z#]$/.test(e.key)) {
                 e.preventDefault();
             }
         });
 
-        // B: Injini ya Kuchora Rangi za Bendera ya Tanzania herufi kwa herufi
+        // Paka rangi za kitaifa kwenye ma-hashtag wakati anatype
         tagsBox.addEventListener("input", function () {
             let maandishi = tagsBox.innerText;
 
-            // Kusafisha data zilizopastiwa za hovyo (Bana herufi, nafasi na # pekee)
             if (/[^a-zA-Z#\s]/g.test(maandishi)) {
                 tagsBox.innerText = maandishi.replace(/[^a-zA-Z#\s]/g, '');
                 wekaCursorMwishoni(tagsBox);
@@ -192,80 +240,78 @@
 
             if (tagsCounter) tagsCounter.textContent = `Tags: ${tags.length} / 8`;
 
-            // Daka nafasi ya sasa ya cursor ili kuondoa kigugumizi cha kuruka
-            let mteuzi = window.getSelection();
-            let nafasiYaCursor = 0;
-            if (mteuzi.rangeCount > 0) {
-                let range = mteuzi.getRangeAt(0);
-                let preCaretRange = range.cloneRange();
-                preCaretRange.selectNodeContents(tagsBox);
-                preCaretRange.setEnd(range.endContainer, range.endOffset);
-                nafasiYaCursor = preCaretRange.toString().length;
-            }
+            let nafasiYaCursor = dakaNafasiYaCursor(tagsBox);
 
-            // Paka rangi za bendera ya Taifa
             let manenoNaRangi = vipandeManeno.map(neno => {
                 if (neno.trim().startsWith("#")) {
-                    let herufi = neno.split("");
-                    let rangiSafi = ["#00e676", "#ffeb3b", "#aaaaaa", "#2196f3"]; // Kijani, Njano, Nyeupe, Bluu
-                    let matokeoYaRangi = "";
-                    herufi.forEach((char, index) => {
-                        let rangiYaSasa = rangiSafi[index % rangiSafi.length];
-                        matokeoYaRangi += `<span style="color: ${rangiYaSasa}; font-weight: bold;">${char}</span>`;
-                    });
-                    return matokeoYaRangi;
+                    return choraRangiZaTanzania(neno);
                 }
                 return neno;
             }).join("");
 
             tagsBox.innerHTML = manenoNaRangi;
-
-            // Rejesha cursor sehemu yake sahihi
-            let kiongozi = document.createNodeIterator(tagsBox, NodeFilter.SHOW_TEXT, null, false);
-            let node, jumlaNafasi = 0;
-            let range = document.createRange();
-            while ((node = kiongozi.nextNode())) {
-                if (jumlaNafasi + node.length >= nafasiYaCursor) {
-                    range.setStart(node, nafasiYaCursor - jumlaNafasi);
-                    range.collapse(true);
-                    mteuzi.removeAllRanges();
-                    mteuzi.addRange(range);
-                    return;
-                }
-                jumlaNafasi += node.length;
-            }
-            wekaCursorMwishoni(tagsBox);
+            rejeshaCursorSehemuSahihi(tagsBox, nafasiYaCursor);
         });
-    }
-        const btnPublish = document.getElementById("jumanne-final-publish-btn");
+                }
+                                 
+            // ==========================================================================
+    // HATUA YA 4: VALIDATION, KITUFE CHA TZ 🇹🇿, CLEANUP NA KUENDA INDEX.HTML
+    // ==========================================================================
+    
+    // Mtambo unaokagua kama maboksi yote yamejazwa ili kubadili rangi ya kitufe kuwa ya TZ
+    function kaguaMaboksiNaUwasheKitufeChaTZ() {
+        if (!captionBox || !tagsBox || !btnPublish) return;
 
-    // ==========================================================================
-    // HATUA YA 4: INJINI YA POST - ISAFISHE DATA INSTANT NA KUENDA INDEX.HTML
-    // ==========================================================================
+        function kaguaHali() {
+            let captionText = captionBox.innerText.trim();
+            let tagsText = tagsBox.innerText.trim();
+
+            // Kama mtumiaji amejaza maboksi yote mawili vizuri
+            if (captionText.length > 0 && tagsText.length > 0) {
+                // Badilisha muonekano kuwa rangi thabiti za Bendera ya Tanzania 🇹🇿
+                btnPublish.style.background = "linear-gradient(45deg, #00e676 33%, #ffeb3b 33%, #ffeb3b 66%, #2196f3 66%)";
+                btnPublish.style.color = "#000000";
+                btnPublish.style.fontWeight = "900";
+                btnPublish.style.textShadow = "1px 1px 2px rgba(255,255,255,0.6)";
+                console.log("🇹🇿 Kitufe kimeshavikwa sare za Taifa!");
+            } else {
+                // Ukurasa ukiwa bado haujajazwa urudishe kwenye rangi ya kijani ya kawaida
+                btnPublish.style.background = "#00e676";
+                btnPublish.style.color = "#000000";
+                btnPublish.style.textShadow = "none";
+            }
+        }
+
+        // Tega mtambo kusikiliza uandishi wa maboksi yote mawili papo hapo
+        captionBox.addEventListener("input", kaguaHali);
+        tagsBox.addEventListener("input", kaguaHali);
+    }
+
+    // Injini ya kubonyeza kitufe, kufuta kila kitu na kusepa index.html
     function amshaMchakatoWaKurushaMdundoMnyofu() {
         if (!btnPublish) return;
 
-        btnPublish.addEventListener("click", function () {
+        btnPublish.addEventListener("click", function (event) {
+            event.preventDefault();
+
             let captionText = captionBox ? captionBox.innerText.trim() : "";
             let tagsText = tagsBox ? tagsBox.innerText.trim() : "";
 
-            // Kagua kama amejaza walau hashtag moja kwenye boksi la pili
-            if (tagsText === "") {
-                alert("Mkuu, andika angalau hashtag moja kwenye sanduku la Alama za Reli!");
-                if (tagsBox) tagsBox.focus();
+            // A: Shurutisha mtumiaji kujaza sehemu zote mbili kabla ya kupita
+            if (captionText === "" || tagsText === "") {
+                alert("⚠️ Hitilafu: Tafadhali jaza sehemu zote mbili (Maelezo na Alama za Reli) kabla ya kuchapisha kipaji chako mkuu!");
                 return;
             }
 
-            // Badilisha muonekano wa kitufe kuzuia double click
             btnPublish.disabled = true;
-            btnPublish.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inachapisha...';
+            btnPublish.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inasafisha kumbukumbu...';
 
-            alert("Hongera! Kipaji chako kimechapishwa rasmi JumanneTok TZ! Tunasafisha kumbukumbu ya simu...");
+            alert("Hongera sana! Kipaji chako kimechapishwa rasmi JumanneTok TZ! 🏆");
 
             // 1. Futa na kusafisha kabisa kumbukumbu zote za SessionStorage
             sessionStorage.clear();
 
-            // 2. Futa kabisa duka la IndexedDB ili simu ya mteja ibaki safi 100%
+            // 2. Futa kabisa duka la IndexedDB ili simu ya mteja isibaki na takataka za video
             if (dbIndexedAkiba) {
                 const muamala = dbIndexedAkiba.transaction(["jumannetok_chunks"], "readwrite");
                 const duka = muamala.objectStore("jumannetok_chunks");
@@ -278,16 +324,16 @@
                     window.location.href = "index.html";
                 };
 
-                ombiHifadhi.onerror = function() {
+                ombiFuta.onerror = function() {
                     window.location.href = "index.html";
                 };
             } else {
                 window.location.href = "index.html";
             }
         });
-    }
-                  
+                      }
+    
+
+    // Tunaacha mlango wazi hapa chini ili kuingiza hatua zinazofuata kidogo kidogo
 })();
-                
-
-
+                        
