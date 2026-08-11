@@ -4,8 +4,9 @@
     "use strict";
 
     let failiLaVideoAsili = null;
+    let videoIpoTayariKwenyeMemori = false; // Alama ya kulinda kitufe
 
-    // Daka ma-element ya HTML yaliyopo kwenye fomu yako
+    // Daka ma-element yako ya HTML kwa kutumia ID zako halisi
     const videoInput = document.getElementById("jumanne-video-file-input");
     const uploadDropzone = document.getElementById("jumanne-upload-box-dashed");
     const previewContainer = document.getElementById("jumanne-preview-container");
@@ -13,17 +14,19 @@
     const timeBadge = document.getElementById("jumanne-time-badge");
     const progressBar = document.getElementById("jumanne-video-progress");
     const changeVideoBtn = document.getElementById("jumanne-change-video-btn");
+    
+    // 🔥 ID HALISI KUTOKA KWENYE HTML YAKO VERBATIM
     const btnNext = document.getElementById("jumanne-btn-force-next-step2");
 
-    // KAGUA KAMA KUNA VIDEO ILIYOHIFADHIWA TAYARI (Kudhibiti kivinjari kikijirefresh chenyewe)
+    // KAGUA KAMA KUNA VIDEO ILIYOHIFADHIWA TAYARI (Kama kivinjari kilijirefresh kisa RAM)
     function kaguaMizigoYaZamani() {
         const videoYaZamani = sessionStorage.getItem("jumannetok_draft_base64");
         if (videoYaZamani) {
             console.log("🔄 Kivinjari kilijirefresh! Tunairudisha video kutoka sessionStorage...");
             
-            // Tengeneza muundo wa faili bandia ili kitufe cha 'Inayofuata' kisimzuie mtumiaji
             failiLaVideoAsili = { name: sessionStorage.getItem("jumannetok_draft_name") || "video.mp4" };
-            
+            videoIpoTayariKwenyeMemori = true;
+
             if (localPlayer) {
                 localPlayer.src = videoYaZamani;
                 localPlayer.load();
@@ -36,7 +39,6 @@
         }
     }
 
-    // Washa ukaguzi huu mara tu script inapoingia kwenye kivinjari
     kaguaMizigoYaZamani();
 
     // MTAMBO WA KUKAMATA VIDEO MPYA KUTOKA KWENYE NYALAKA AU KAMERA
@@ -53,7 +55,6 @@
                 return;
             }
 
-            // Kikomo cha ukubwa wa video: MB 45
             const kikomoChaMb45 = 45 * 1024 * 1024;
             if (faili.size > kikomoChaMb45) {
                 alert("Video yako ni nzito mno! Mfumo unaruhusu mwisho wa video ya MB 45 pekee.");
@@ -62,6 +63,12 @@
             }
 
             failiLaVideoAsili = faili;
+            videoIpoTayariKwenyeMemori = false; // Zima mpaka FileReader imalize
+
+            if (btnNext) {
+                btnNext.disabled = true;
+                btnNext.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inapakia video...';
+            }
 
             // KUBADILISHA VIDEO KUWA TEXT (BASE64) ILI ILINDEKE KWENYE MEMORI YA RAM
             const msomaji = new FileReader();
@@ -70,8 +77,19 @@
                     sessionStorage.setItem("jumannetok_draft_base64", event.target.result);
                     sessionStorage.setItem("jumannetok_draft_name", faili.name);
                     console.log("✅ Video imehifadhiwa salama kwenye sessionStorage!");
+                    
+                    videoIpoTayariKwenyeMemori = true;
+                    if (btnNext) {
+                        btnNext.disabled = false;
+                        btnNext.innerHTML = 'Inayofuata <i class="fas fa-chevron-right"></i>';
+                    }
                 } catch (errStorage) {
                     console.error("Ukomo wa kumbukumbu ya sessionStorage umefikiwa:", errStorage);
+                    videoIpoTayariKwenyeMemori = true; // Ruhusu kupita hata ikifeli kulinda UX
+                    if (btnNext) {
+                        btnNext.disabled = false;
+                        btnNext.innerHTML = 'Inayofuata <i class="fas fa-chevron-right"></i>';
+                    }
                 }
             };
             msomaji.readAsDataURL(faili);
@@ -125,8 +143,13 @@
             event.preventDefault();
             event.stopPropagation();
 
-            if (!failiLaVideoAsili && !sessionStorage.getItem("jumannetok_draft_base64")) {
+            if (!failiLaVideoAsili) {
                 alert("Tafadhali chagua video kwanza kabla ya kwenda hatua inayofuata!");
+                return;
+            }
+
+            if (!videoIpoTayariKwenyeMemori) {
+                alert("Video bado inaandaliwa kwenye kumbukumbu ya simu. Subiri sekunde moja kisha ubonyeze tena.");
                 return;
             }
 
@@ -142,12 +165,17 @@
         if (localPlayer) localPlayer.src = "";
         if (videoInput) videoInput.value = "";
         failiLaVideoAsili = null;
+        videoIpoTayariKwenyeMemori = false;
         sessionStorage.removeItem("jumannetok_draft_base64");
         sessionStorage.removeItem("jumannetok_draft_name");
         if (uploadDropzone) uploadDropzone.style.setProperty("display", "block", "important");
         if (previewContainer) previewContainer.style.setProperty("display", "none", "important");
         if (changeVideoBtn) changeVideoBtn.style.setProperty("display", "none", "important");
+        if (btnNext) {
+            btnNext.disabled = false;
+            btnNext.innerHTML = 'Inayofuata <i class="fas fa-chevron-right"></i>';
+        }
     }
 
 })();
-                                  
+                    
