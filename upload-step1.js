@@ -1,7 +1,5 @@
 // upload-step1.js - Unique Button ID Binding Framework
 
-// ==========================================================================// JUMANNETOK TZ - CORE UPLOAD ENGINE (STEP 1: PREVIEW & UNIQUE REDIRECT)// ==========================================================================
-
 (function () {
     "use strict";
 
@@ -17,7 +15,6 @@
             if (!db.objectStoreNames.contains("jumannetok_feed_cache")) {
                 db.createObjectStore("jumannetok_feed_cache", { keyPath: "id" });
             }
-
         };
 
         ombiDuka.onsuccess = function (e) {
@@ -30,6 +27,9 @@
         };
     }
 
+    // Washa database wakati script inapoingia kwenye kivinjari
+    amshaDukaLaUploadLocal();
+
     // DAKA MA-ELEMENT YOTE KUTOKA KWENYE HTML YAKO VERBATIM
     const videoInput = document.getElementById("jumanne-video-file-input");
     const uploadDropzone = document.getElementById("jumanne-upload-box-dashed");
@@ -37,14 +37,10 @@
     const localPlayer = document.getElementById("jumanne-local-preview-player");
     const timeBadge = document.getElementById("jumanne-time-badge");
     const progressBar = document.getElementById("jumanne-video-progress");
-
     const changeVideoBtn = document.getElementById("jumanne-change-video-btn");
-    
-    // 🔥 ID MPYA YA CHUMA: Imebadilishwa kuwa ya kipekee kabisa ili kivinjari kisipate kigugumizi cha ki-scope!
     const btnNext = document.getElementById("jumanne-btn-force-next-step2");
-    const formStep1 = document.getElementById("jumanne-upload-form-step1");
 
-    // 2. MTAMBO WA KUKAMATA VIDEO NA KULUPUSHA PREVIEW SKRINI NZIMA BILA LAG
+    // 2. MTAMBO WA KUKAMATA VIDEO NA KULUPUSHA PREVIEW
     if (videoInput) {
         videoInput.addEventListener("change", function (e) {
             e.stopPropagation();
@@ -58,7 +54,7 @@
                 return;
             }
 
-
+            // Kikomo cha MB 45
             const kikomoChaMb45 = 45 * 1024 * 1024;
             if (faili.size > kikomoChaMb45) {
                 alert("Video yako ni nzito mno! Mfumo unaruhusu mwisho wa video ya MB 45 pekee.");
@@ -74,11 +70,26 @@
                 if (localPlayer) {
                     localPlayer.src = urlYaPreview;
                     localPlayer.load();
+                    
+                    // Kupata na kupima urefu wa muda wa video (Duration)
+                    localPlayer.onloadedmetadata = function() {
+                        const kikomoChaMuda = 90; // Sekunde 90 (Dakika 1 na Sekunde 30)
+                        if (localPlayer.duration > kikomoChaMuda) {
+                            alert("Video imezidi urefu! Tafadhali weka video isiyozidi dakika 1 na sekunde 30.");
+                            localPlayer.src = "";
+                            videoInput.value = "";
+                            failiLaVideoAsili = null;
+                            if (uploadDropzone) uploadDropzone.style.setProperty("display", "block", "important");
+                            if (previewContainer) previewContainer.style.setProperty("display", "none", "important");
+                            if (changeVideoBtn) changeVideoBtn.style.setProperty("display", "none", "important");
+                            return;
+                        }
+                    };
+
                     localPlayer.play().catch(function () {});
 
                     localPlayer.addEventListener("timeupdate", function () {
                         if (localPlayer.duration) {
-
                             const asilimia = (localPlayer.currentTime / localPlayer.duration) * 100;
                             if (progressBar) progressBar.style.width = `${asilimia}%`;
                             
@@ -98,30 +109,57 @@
 
             } catch (errPreview) {
                 console.error("Mkwamo wa kuwasha preview ya video:", errPreview);
-
             }
         });
     }
 
-    // 3. INJINI INAYOGANDISHA BLOB NDANI YA INDEXEDDB NA KUMSWAGA USER KIBASHARA MBELE
-    (function () {
-    "use strict";
-
-    // Tafuta kitufe kwa ID mpya kabisa nchi nzima
-    const btnNext = document.getElementById("jumanne-btn-force-next-step2");
-
+    // 3. INJINI INAYOGANDISHA BLOB NDANI YA INDEXEDDB NA KUMSWAGA USER HATUA YA PILI
     if (btnNext) {
-        const matukioYaMguso = ["click", "touchstart"];
-        
-        matukioYaMguso.forEach(function (tukio) {
-            btnNext.addEventListener(tukio, function (event) {
-                event.preventDefault(); 
-                event.stopPropagation();
-                
-                // Amri ya haraka inayovuta reli kwenda Hatua ya 2 direct
+        btnNext.addEventListener("click", function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (!failiLaVideoAsili) {
+                alert("Tafadhali chagua video kwanza kabla ya kwenda hatua inayofuata!");
+                return;
+            }
+
+            if (!dbIndexedAkiba) {
+                alert("Mfumo wa kuhifadhi wa ndani bado haujakaa sawa, tafadhali jaribu tena baada ya sekunde moja.");
+                return;
+            }
+
+            // Badilisha kitufe kuonesha mzigo unashughulikiwa
+            btnNext.disabled = true;
+            btnNext.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inahifadhi...';
+
+            // Fungua muamala (transaction) wa IndexedDB kuhifadhi faili
+            const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readwrite");
+            const duka = muamala.objectStore("jumannetok_feed_cache");
+
+            const dataYaKuweka = {
+                id: "current_draft_video",
+                video_blob: failiLaVideoAsili,
+                jina: failiLaVideoAsili.name,
+                tarehe: new Date().getTime()
+            };
+
+            const ombiKuhifadhi = duka.put(dataYaKuweka);
+
+            ombiKuhifadhi.onsuccess = function () {
+                console.log("✅ Video imehifadhiwa salama kwenye IndexedDB!");
+                // Sasa mswage mtumiaji kwenda Step 2 kwa usalama kabisa
                 window.location.href = "upload-step2.html";
-            }, { passive: false });
+            };
+
+            ombiKuhifadhi.onerror = function (e) {
+                console.error("❌ Imeshindikana kuhifadhi video kwenye cache:", e);
+                alert("Kuna shida imejitokeza wakati wa kuandaa video yako. Jaribu tena.");
+                btnNext.disabled = false;
+                btnNext.innerHTML = 'Inayofuata <i class="fas fa-chevron-right"></i>';
+            };
         });
     }
+
 })();
-    
+                
