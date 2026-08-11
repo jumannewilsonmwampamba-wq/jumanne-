@@ -1,164 +1,208 @@
-// ==========================================================================
-// JUMANNETOK TZ - CORE UPLOAD ENGINE (STEP 2: CATEGORY & TYPE SELECTION)
-// ==========================================================================
+// upload-step2.js - Core Receiver & Transition Framework (Ushindi 100%)
 
 (function () {
     "use strict";
 
     let dbIndexedAkiba = null;
-    let dataYaVideoDraftGlobal = null; // Inashikilia kete tuliyoivuta kutoka IndexedDB
-    let videoTypeSelected = "challenge"; // Hali chanya ya asili (Default)
+    let haliYaVideoIliyochaguliwa = "challenge"; // Thamani ya dharura (Default)
 
-    // 1. FUNGUA DATABASE YA NDANI MARA TU USER ANAPOTUA STEP 2
-    function amshaDukaLaUploadLocal() {
-        const ombiDuka = indexedDB.open("JumanneTok_Local_Cache", 1);
+    // ==========================================================================
+    // 1. FUNGUA DATABASE ILE ILE YA VIPANDE KUTOKA STEP 1
+    // ==========================================================================
+    document.addEventListener("DOMContentLoaded", function () {
+        const ombiDuka = indexedDB.open("JumanneTok_Chunk_Storage", 1);
 
         ombiDuka.onsuccess = function (e) {
             dbIndexedAkiba = e.target.result;
-            console.log("✅ Step 2: Database ya IndexedDB imefunguka salama!");
+            console.log("✅ Step 2: Database ya vipande imefunguka vizuri!");
             
-            // Database ikishafunguka tu, vuta ile Blob ya video iliyosaviwa Step 1
-            vutaNaUchezeVideoYaPreview();
+            // Amsha mtambo wa kuvuta vipande na kuwasha video kioni upande huu
+            vutaVipandeKutokaKwenyeDiski();
         };
 
         ombiDuka.onerror = function () {
-            console.error("❌ Mkwamo! Kivinjari kimegoma kufunguka IndexedDB Step 2.");
+            console.error("❌ Step 2: Imeshindikana kufungua database.");
+            alert("Mfumo umepata hitilafu ya diski. Tafadhali rudi nyuma.");
         };
-    }
 
-    // 2. INJINI YA KUVUTA VIDEO BLOB KUTOKA STEP 1 NA KUICHEZA PREVIEW JUU
-    function vutaNaUchezeVideoYaPreview() {
-        if (!dbIndexedAkiba) return;
+        // Washa usimamizi wa kadi za Challenge vs Freestyle
+        amshaUsimamiziWaKadiZaAina();
+        // Washa kitufe cha kusonga mbele Hatua ya 3
+        washaKitufeChaKuvukaHatuaYaPili();
+    });
 
-        const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readonly");
-        const duka = muamala.objectStore("jumannetok_feed_cache");
+    // ==========================================================================
+    // 2. MTAMBO WA KUVUTA VIPANDE KUTOKA INDEXEDDB (MCHWA CONTROLLER)
+    // ==========================================================================
+    function vutaVipandeKutokaKwenyeDiski() {
+        const jumlaYaVipandeStr = sessionStorage.getItem("jumannetok_total_chunks");
         
-        // Piga hodi kwa kutumia ufunguo ule ule thabiti wa herufi ndogo
-        const ombiDaka = duka.get("jumanne_current_upload_draft");
+        if (!jumlaYaVipandeStr || !dbIndexedAkiba) {
+            alert("Hitilafu: Mfumo haujapata video kutoka Hatua ya 1. Tafadhali rudi nyuma uichague upya!");
+            window.location.href = "upload-step1.html";
+            return;
+        }
 
-        ombiDaka.onsuccess = function (e) {
-            const data = e.target.result;
-            
-            if (data && data.videoBlobData) {
-                dataYaVideoDraftGlobal = data; // Iweke kwenye memory ya RAM kwa ajili ya mbele
-                
-                const playerStep2 = document.getElementById("jumanne-local-preview-player-step2");
-                try {
-                    const URLyaVideoStep2 = URL.createObjectURL(data.videoBlobData);
-                    if (playerStep2) {
-                        playerStep2.src = URLyaVideoStep2;
-                        playerStep2.load();
-                        playerStep2.play().catch(() => {
-                            console.log("Autoplay imezuiwa Step 2, inasubiri user.");
-                        });
-                    }
-                } catch (err) {
-                    console.error("Mkwamo wa kuwasha mrija wa preview Step 2:", err);
-                }
-            } else {
-                console.warn("⚠️ Hakuna draft ya video iliyopatikana kwenye diski! Rudisha Step 1.");
-                alert("Hitilafu: Tafadhali rudi nyuma ukachague video upya haijapatikana diski ya simu!");
-                window.location.href = "upload-step1.html";
+        const jumlaYaVipande = parseInt(jumlaYaVipandeStr, 10);
+        console.log(`🎬 Step 2: Mfumo unavuta vipande ${jumlaYaVipande} kutoka kwenye diski...`);
+
+        const muamala = dbIndexedAkiba.transaction(["jumannetok_chunks"], "readonly");
+        const duka = muamala.objectStore("jumannetok_chunks");
+        
+        let mfululizoWaVipande = [];
+        let index = 0;
+
+        function dakaKipandeKwenyeDiski() {
+            if (index >= jumlaYaVipande) {
+                // Tumeshavuta vipande vyote salama! Sasa tunaviunganisha kuwa video moja
+                unganishaVipandeNaWashaPlayer(mfululizoWaVipande);
+                return;
             }
-        };
+
+            const ombi = duka.get(index);
+            ombi.onsuccess = function (e) {
+                if (e.target.result) {
+                    mfululizoWaVipande.push(e.target.result.maandishi_base64);
+                }
+                index++;
+                dakaKipandeKwenyeDiski();
+            };
+
+            ombi.onerror = function () {
+                console.error(`❌ Mkwamo wa kusoma kipande namba ${index}`);
+                window.location.href = "upload-step1.html";
+            };
+        }
+
+        dakaKipandeKwenyeDiski();
     }
 
-    // 3. INJINI YA MANUVA YA KADI ZA REDIO (CHALLENGE VS FREESTYLE SELECTION)
-    // Inafanya kazi direct mtumiaji akikanyaga ma-card ya kioo giza
-    window.chaguaHaliYaVideo = function (ainaKete) {
-        videoTypeSelected = ainaKete;
+    // ==========================================================================
+    // 3. INJINI YA GEUZA MAANDISHI KUWA VIDEO GHAFI (BLOB CONCATENATION)
+    // ==========================================================================
+    function unganishaVipandeNaWashaPlayer(vipandeVyaMaandishi) {
+        try {
+            const maBlobYote = vipandeVyaMaandishi.map(base64Str => {
+                const sehemu = base64Str.split(',');
+                const byteCharacters = atob(sehemu[1]); 
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                return new Blob([byteArray], { type: "video/mp4" });
+            });
 
+            const videoKamiliBlob = new Blob(maBlobYote, { type: "video/mp4" });
+            
+            // Daka kicheza video cha ID yetu mpya niliyoisawazisha kwenye HTML yako
+            const playerStep2 = document.getElementById("jumanne-step2-preview-player");
+            
+            if (playerStep2) {
+                playerStep2.src = URL.createObjectURL(videoKamiliBlob);
+                playerStep2.load();
+                playerStep2.play().catch(function() {
+                    console.log("Autoplay imezuiwa na kivinjari.");
+                });
+                console.log("🏆 Ushindi! Video ipo kioni sasa hivi Hatua ya Pili.");
+            }
+
+        } catch (err) {
+            console.error("Mkwamo wa kuunganisha vipande Step 2:", err);
+            alert("Hitilafu ya kumbukumbu. Tafadhali jaribu tena.");
+            window.location.href = "upload-step1.html";
+        }
+    }
+
+    // ==========================================================================
+    // 4. USIMAMIZI WA KADI (CHALLENGE VS FREESTYLE) KUGUSA NA KUBADILI COLOR
+    // ==========================================================================
+    function amshaUsimamiziWaKadiZaAina() {
+        const kadiChallenge = document.getElementById("jumanne-card-challenge");
+        const kadiFreestyle = document.getElementById("jumanne-card-freestyle");
         const radioChallenge = document.getElementById("jumanne-radio-challenge");
         const radioFreestyle = document.getElementById("jumanne-radio-freestyle");
-        const cardChallenge = document.getElementById("jumanne-card-challenge");
-        const cardFreestyle = document.getElementById("jumanne-card-freestyle");
 
-        if (!radioChallenge || !radioFreestyle || !cardChallenge || !cardFreestyle) return;
+        if (kadiChallenge && kadiFreestyle) {
+            
+            // Mtumiaji akigusa Kadi ya Challenge
+            kadiChallenge.addEventListener("click", () => {
+                haliYaVideoIliyochaguliwa = "challenge";
+                if (radioChallenge) radioChallenge.checked = true;
+                
+                kadiChallenge.style.border = "2px solid #00e676";
+                kadiChallenge.classList.add("jumanne-card-active");
+                
+                kadiFreestyle.style.border = "1px solid #222";
+                kadiFreestyle.classList.remove("jumanne-card-active");
+                
+                // Badilisha rangi ya icon ya mbele ya Challenge kuwa ya kijani
+                kadiChallenge.querySelector("i").style.color = "#00e676";
+                kadiFreestyle.querySelector("i").style.color = "#888";
+            });
 
-        if (ainaKete === "challenge") {
-            // Washa Challenge: Kaza border ya kijani, zima Freestyle
-            radioChallenge.checked = true;
-            radioFreestyle.checked = false;
-            
-            cardChallenge.style.border = "2px solid #00e676";
-            cardChallenge.style.background = "#111";
-            
-            cardFreestyle.style.border = "1px solid #222";
-            cardFreestyle.style.background = "#111";
-            
-            // Geuza rangi ya icon ya Trophy kuwa ya dhahabu/kijani
-            cardChallenge.querySelector("i").style.color = "#00e676";
-            cardFreestyle.querySelector("i").style.color = "#888";
-            
-        } else if (ainaKete === "freestyle") {
-            // Washa Freestyle: Kaza border ya kijani, zima Challenge
-            radioChallenge.checked = false;
-            radioFreestyle.checked = true;
-            
-            cardFreestyle.style.border = "2px solid #00e676";
-            cardFreestyle.style.background = "#111";
-            
-            cardChallenge.style.border = "1px solid #222";
-            cardChallenge.style.background = "#111";
-            
-            // Geuza rangi ya icon ya Microphone kuwa ya kijani
-            cardFreestyle.querySelector("i").style.color = "#00e676";
-            cardChallenge.querySelector("i").style.color = "#888";
+            // Mtumiaji akigusa Kadi ya Freestyle
+            kadiFreestyle.addEventListener("click", () => {
+                haliYaVideoIliyochaguliwa = "freestyle";
+                if (radioFreestyle) radioFreestyle.checked = true;
+                
+                kadiFreestyle.style.border = "2px solid #00e676";
+                kadiFreestyle.classList.add("jumanne-card-active");
+                
+                kadiChallenge.style.border = "1px solid #222";
+                kadiChallenge.classList.remove("jumanne-card-active");
+                
+                kadiFreestyle.querySelector("i").style.color = "#00e676";
+                kadiChallenge.querySelector("i").style.color = "#888";
+            });
         }
-        
-        console.log(`🎯 Utaratibu umebadilika kuwa: ${videoTypeSelected.toUpperCase()}`);
-    };
+    }
 
-    // 4. INJINI INAYOFUNGASHWA DATA MBELE KUELEKEA HATUA YA TATU (`upload-step3.html`)
-    const btnNext = document.getElementById("jumanne-to-step3");
+    // ==========================================================================
+    // 5. INJINI YA KITUFE CHA INAYOFUATA (KUKUSANYA DATA NA KUVUKA STEP 3)
+    // ==========================================================================
+    function washaKitufeChaKuvukaHatuaYaPili() {
+        const btnNextStep3 = document.getElementById("jumanne-to-step3");
+        const selectKipaji = document.getElementById("jumanne-video-category");
 
-    if (btnNext) {
-        btnNext.addEventListener("click", () => {
-            // Mtego wa siri wa ma-robot (Honeypot Enforcement)
-            const botInputStep2 = document.getElementById("jumanne-video-bot-input-step2");
-            if (botInputStep2 && botInputStep2.value.length > 0) {
+        if (!btnNextStep3) return;
+
+        btnNextStep3.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            // Mtego wa robot (Honeypot)
+            const botInput = document.getElementById("jumanne-video-bot-input-step2");
+            if (botInput && botInput.value.length > 0) {
                 sessionStorage.clear();
                 window.location.reload();
                 return;
             }
 
-            const categorySelect = document.getElementById("jumanne-video-category");
-            if (!categorySelect || !categorySelect.value) {
-                alert("Mkwamo! Tafadhali chagua aina ya Kipaji Chako kwanza kabla ya kwenda hatua inayofuata!");
+            // Kagua kama amechagua aina ya kipaji
+            if (selectKipaji && selectKipaji.value === "") {
+                alert("Tafadhali chagua aina ya Kipaji chako kwanza mkuu!");
+                selectKipaji.focus();
                 return;
             }
 
-            const ainaYaKipajiSafi = categorySelect.value;
+            // Badilisha muonekano wa kitufe kuonyesha kazi inafanyika
+            btnNextStep3.disabled = true;
+            btnNextStep3.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inasonga mbele...';
 
-            // FUNGASHA DATA NDANI YA SESSIONSTORAGE ILI HATUA YA 3 IZIKUTE KULE MBELE
-            const keteYaUpakiajiStep2 = {
-                ainaYaKipaji: ainaYaKipajiSafi,
-                utaratibuWaVideo: videoTypeSelected,
-                tareheMabadiliko: Date.now()
+            // 🔥 DAKA NA KUTUNZA TAARIFA ZOTE KWENYE SESSIONSTORAGE KWA AJILI YA STEP 3
+            const dataZaHatuaYaPili = {
+                ainaYaKipaji: selectKipaji ? selectKipaji.value : "",
+                utaratibuWaVideo: haliYaVideoIliyochaguliwa,
+                tareheYaKuhifadhi: Date.now()
             };
 
-            try {
-                sessionStorage.setItem("jumannetok_upload_step2", JSON.stringify(keteYaUpakiajiStep2));
-                console.log("📦 Cache Persistence Locked: Data za Step 2 zimehifadhiwa RAM!");
-                
-                // Zima player ya video kwanza ili isilemee RAM ya simu wakati wa kuhama ukurasa
-                const playerStep2 = document.getElementById("jumanne-local-preview-player-step2");
-                if (playerStep2) {
-                    playerStep2.pause();
-                    playerStep2.src = "";
-                }
+            sessionStorage.setItem("jumannetok_step2_data", JSON.stringify(dataZaHatuaYaPili));
+            console.log("💾 Data za Step 2 zimehifadhiwa salama:", dataZaHatuaYaPili);
 
-                // MFYATUE USER MNYOFU KUELEKEA HATUA YA TATU YA HITIMISHO
-                window.location.href = "upload-step3.html";
-
-            } catch (errSession) {
-                console.error("❌ Mkwamo wa kuandika kwenye sessionStorage:", errSession);
-                alert("Hitilafu ya simu: Imeshindwa kufungasha data za usajili mbele!");
-            }
+            // Swaga mtumiaji kwenda Hatua ya Tatu kibashara!
+            window.location.href = "upload-step3.html";
         });
     }
 
-    // Amsha duka la local upose ukurasa unamwaga macho ya kwanza kitaifa
-    amshaDukaLaUploadLocal();
 })();
-            
+                                           
