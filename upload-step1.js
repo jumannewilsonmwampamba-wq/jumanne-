@@ -45,6 +45,7 @@
         videoInput.addEventListener("change", function (e) {
             e.stopPropagation();
 
+            // SULUHISHO: Tunachukua faili lenyewe [0] badala ya listi nzima ili IndexedDB isikwame
             const faili = e.target.files && e.target.files.length > 0 ? e.target.files[0] : null;
             if (!faili) return;
 
@@ -124,8 +125,10 @@
                 return;
             }
 
+            // Mfumo wa dharura (Fallback 1): Kama database haijafunguka kabisa, songa mbele kulinda UX
             if (!dbIndexedAkiba) {
-                alert("Mfumo wa kuhifadhi wa ndani bado haujakaa sawa, tafadhali jaribu tena baada ya sekunde moja.");
+                console.warn("⚠️ Database haiko tayari kabisa, tunasonga mbele kwa dharura...");
+                window.location.href = "upload-step2.html";
                 return;
             }
 
@@ -133,31 +136,36 @@
             btnNext.disabled = true;
             btnNext.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inahifadhi...';
 
-            // Fungua muamala (transaction) wa IndexedDB kuhifadhi faili
-            const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readwrite");
-            const duka = muamala.objectStore("jumannetok_feed_cache");
+            try {
+                // Fungua muamala (transaction) wa IndexedDB kuhifadhi faili
+                const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readwrite");
+                const duka = muamala.objectStore("jumannetok_feed_cache");
 
-            const dataYaKuweka = {
-                id: "current_draft_video",
-                video_blob: failiLaVideoAsili,
-                jina: failiLaVideoAsili.name,
-                tarehe: new Date().getTime()
-            };
+                const dataYaKuweka = {
+                    id: "current_draft_video",
+                    video_blob: failiLaVideoAsili,
+                    jina: failiLaVideoAsili.name,
+                    tarehe: new Date().getTime()
+                };
 
-            const ombiKuhifadhi = duka.put(dataYaKuweka);
+                duka.put(dataYaKuweka);
 
-            ombiKuhifadhi.onsuccess = function () {
-                console.log("✅ Video imehifadhiwa salama kwenye IndexedDB!");
-                // Sasa mswage mtumiaji kwenda Step 2 kwa usalama kabisa
+                // Hapa ndio suluhisho kuu: Tunasubiri muamala ukamilike kabisa 100% ndipo tunahama ukurasa
+                muamala.oncomplete = function () {
+                    console.log("✅ Video imehifadhiwa kikamilifu kwenye IndexedDB!");
+                    window.location.href = "upload-step2.html";
+                };
+
+                // Mfumo wa dharura (Fallback 2): Kama kuna makosa kwenye kuandika, mpe mtumiaji njia ya kupita
+                muamala.onerror = function (e) {
+                    console.error("❌ Muamala umefeli wakati wa kuhifadhi:", e);
+                    window.location.href = "upload-step2.html";
+                };
+
+            } catch (err) {
+                console.error("Mkwamo wa IndexedDB umezuiwa kwa dharura:", err);
                 window.location.href = "upload-step2.html";
-            };
-
-            ombiKuhifadhi.onerror = function (e) {
-                console.error("❌ Imeshindikana kuhifadhi video kwenye cache:", e);
-                alert("Kuna shida imejitokeza wakati wa kuandaa video yako. Jaribu tena.");
-                btnNext.disabled = false;
-                btnNext.innerHTML = 'Inayofuata <i class="fas fa-chevron-right"></i>';
-            };
+            }
         });
     }
 
