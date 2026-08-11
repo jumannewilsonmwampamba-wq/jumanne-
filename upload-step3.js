@@ -37,55 +37,55 @@
 
     // ==========================================================================
     // 1. INJINI YA DATABASE: FUNGUA NA UREJESHE VIDEO YA VIPANDE KUTOKA STEP 1
-    // ==========================================================================
         // ==========================================================================
-    // HATUA YA 1: INJINI YA KUVUTA VIPANDE VYOTE KWA MPANGILIO KUTOKA DISK (FIXED)
+    // HATUA YA 1: INJINI YA KUVUTA VIPANDE VYOTE KWA MPANGILIO KUTOKA DISK (RECOVERY FIX)
     // ==========================================================================
     function vutaVipandeKutokaKwenyeDiski() {
-        const jumlaYaVipandeStr = sessionStorage.getItem("jumannetok_total_chunks");
-        if (!jumlaYaVipandeStr || !dbIndexedAkiba) {
-            console.error("❌ Mfumo haujapata hesabu ya vipande kwenye sessionStorage.");
-            return;
-        }
-
-        const jumlaYaVipande = parseInt(jumlaYaVipandeStr, 10);
-        
-        // 🔥 SULUHISHO: Fungua duka halisi la jumannetok_feed_cache lililoandikwa Step 1 kabla ya kuhamia hapa
-        const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readonly");
-        const duka = muamala.objectStore("jumannetok_feed_cache");
-        
-        let mfululizoWaVipande = [];
-        let index = 0;
-
-        function dakaKipandeKwenyeDiski() {
-            if (index >= jumlaYaVipande) {
-                unganishaVipandeNaWashaPlayer(mfululizoWaVipande);
+        // Mpe sekunde 0.2 mteja ili kivinjari kimalize kufungua diski vizuri
+        setTimeout(function() {
+            const jumlaYaVipandeStr = sessionStorage.getItem("jumannetok_total_chunks");
+            if (!jumlaYaVipandeStr || !dbIndexedAkiba) {
+                console.warn("⚠️ Hesabu ya vipande haijapatikana, tunasubiri...");
                 return;
             }
-            // Mchwa anavuta funguo sahihi ya jumanne_current_upload_draft uliyoiandika Step 1
-            const ombi = duka.get("jumanne_current_upload_draft"); 
+
+            const jumlaYaVipande = parseInt(jumlaYaVipandeStr, 10);
             
-            ombi.onsuccess = function (e) {
-                const data = e.target.result;
-                if (data && data.videoBlobData) {
-                    // Kwa kuwa msimbo wako wa Step 1 ulihifadhi faili zima au vipande, hapa tunadaka BlobData halisi
-                    // Kama ulihifadhi kama vipande, tunalisha index, kama uliweka file zima tunalivuta mara moja
-                    if(Array.isArray(data.videoBlobData)) {
-                        mfululizoWaVipande = data.videoBlobData;
-                    } else {
-                        mfululizoWaVipande.push(data.videoBlobData);
-                    }
+            // Fungua muamala sahihi wa duka la jumannetok_chunks
+            const muamala = dbIndexedAkiba.transaction(["jumannetok_chunks"], "readonly");
+            const duka = muamala.objectStore("jumannetok_chunks");
+            
+            let mfululizoWaVipande = [];
+            let index = 0;
+
+            function dakaKipandeKwenyeDiski() {
+                if (index >= jumlaYaVipande) {
+                    // Vipande vyote vimeshapatikana! Viwashe sasa kioni
+                    unganishaVipandeNaWashaPlayer(mfululizoWaVipande);
+                    return;
                 }
-                // Hapa tunasonga mbele kibashara kulupusha player
-                unganishaVipandeNaWashaPlayer(mfululizoWaVipande);
-            };
-            
-            ombi.onerror = function() {
-                console.error("❌ Hitilafu ya kusoma diski upande wa GitHub Pages.");
-            };
-        }
-        dakaKipandeKwenyeDiski();
+                
+                const ombi = duka.get(index);
+                
+                ombi.onsuccess = function (e) {
+                    if (e.target.result && e.target.result.maandishi_base64) {
+                        mfululizoWaVipande.push(e.target.result.maandishi_base64);
+                    }
+                    index++;
+                    dakaKipandeKwenyeDiski();
+                };
+                
+                ombi.onerror = function() {
+                    console.error("❌ Mkwamo wa kusoma kipande kwenye GitHub Pages.");
+                };
+            }
+
+            // Anza kudaka kipande cha kwanza
+            dakaKipandeKwenyeDiski();
+
+        }, 200); // Ulinzi wa milisekunde 200 kudhibiti lag ya simu
     }
+    
     
         // ==========================================================================
     // HATUA YA 2: INJINI YA CAPTION - RUHUSU HERUFI TU + RANGI ZA BENDERA 🇹🇿
