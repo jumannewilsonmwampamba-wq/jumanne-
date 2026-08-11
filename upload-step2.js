@@ -161,6 +161,9 @@
     // ==========================================================================
     // 5. INJINI YA KITUFE CHA INAYOFUATA (KUKUSANYA DATA NA KUVUKA STEP 3)
     // ==========================================================================
+        // ==========================================================================
+    // 5. INJINI YA KITUFE CHA INAYOFUATA (KUKUSANYA DATA NA KUVUKA STEP 3) - FIXED 🛡️
+    // ==========================================================================
     function washaKitufeChaKuvukaHatuaYaPili() {
         const btnNextStep3 = document.getElementById("jumanne-to-step3");
         const selectKipaji = document.getElementById("jumanne-video-category");
@@ -189,7 +192,7 @@
             btnNextStep3.disabled = true;
             btnNextStep3.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inasonga mbele...';
 
-            // 🔥 DAKA NA KUTUNZA TAARIFA ZOTE KWENYE SESSIONSTORAGE KWA AJILI YA STEP 3
+            // DAKA NA KUTUNZA TAARIFA ZOTE KWENYE SESSIONSTORAGE KWA AJILI YA STEP 3
             const dataZaHatuaYaPili = {
                 ainaYaKipaji: selectKipaji ? selectKipaji.value : "",
                 utaratibuWaVideo: haliYaVideoIliyochaguliwa,
@@ -199,10 +202,15 @@
             sessionStorage.setItem("jumannetok_step2_data", JSON.stringify(dataZaHatuaYaPili));
             console.log("💾 Data za Step 2 zimehifadhiwa salama:", dataZaHatuaYaPili);
 
+            // 🔥 PIGO LA USHINDI: Funga database hapa hapa ili isilete lock kule Step 3!
+            if (typeof dbIndexedAkiba !== "undefined" && dbIndexedAkiba !== null) {
+                dbIndexedAkiba.close();
+                console.log("🛡️ Database imefungwa salama Step 2 ili kuruhusu Step 3 kusoma.");
+            }
+
             // Swaga mtumiaji kwenda Hatua ya Tatu kibashara!
             window.location.href = "upload-step3.html";
         });
     }
 
 })();
-                                           
