@@ -104,6 +104,12 @@
     }
 
     // 3. INJINI INAYOGANDISHA BLOB NDANI YA INDEXEDDB NA KUMSWAGA USER KIBASHARA MBELE
+    (function () {
+    "use strict";
+
+    // Tafuta kitufe kwa ID mpya kabisa nchi nzima
+    const btnNext = document.getElementById("jumanne-btn-force-next-step2");
+
     if (btnNext) {
         const matukioYaMguso = ["click", "touchstart"];
         
@@ -111,67 +117,11 @@
             btnNext.addEventListener(tukio, function (event) {
                 event.preventDefault(); 
                 event.stopPropagation();
-
-                const botInput = document.getElementById("jumanne-video-bot-input");
-                if (botInput && botInput.value.length > 0) {
-                    sessionStorage.clear();
-                    window.location.reload();
-                    return;
-                }
-
-
-                if (!failiLaVideoAsili) {
-                    alert("Tafadhali gusa sanduku la juu ukachague video yako ya kipaji kwanza kabla ya kwenda hatua inayofuata!");
-                    return;
-                }
-
-                if (!dbIndexedAkiba) {
-                    alert("Mtambo wa simu bado haujajifunga vizuri diski, subiri sekunde moja kisha uguse tena!");
-                    return;
-                }
-
-                const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readwrite");
-                const duka = muamala.objectStore("jumannetok_feed_cache");
-
-                const dataYaVideoDraft = {
-                    id: "jumanne_current_upload_draft",
-                    jinaLaVideo: failiLaVideoAsili.name || "singeli_kipaji.mp4",
-                    ukubwaWaVideo: failiLaVideoAsili.size,
-                    videoBlobData: failiLaVideoAsili, 
-                    haliYaUploadNyuma: "isomeke", 
-
-                    tareheSajili: Date.now()
-                };
-
-                const ombiHifadhi = duka.put(dataYaVideoDraft);
-
-                ombiHifadhi.onsuccess = function () {
-                    console.log("💾 Disk Lock: Video Blob imelazwa IndexedDB salama kabisa!");
-                    if (localPlayer) {
-                        localPlayer.pause();
-                        localPlayer.src = "";
-                    }
-                    // Mfyatuko wa haraka wa kitufe kwenda ukurasa unaofuata mnyofu
-                    window.location.href = "upload-step2.html";
-                };
-
-                ombiHifadhi.onerror = function (err) {
-                    console.error("❌ Mkwamo wa kuandika video ndani ya IndexedDB:", err);
-                };
+                
+                // Amri ya haraka inayovuta reli kwenda Hatua ya 2 direct
+                window.location.href = "upload-step2.html";
             }, { passive: false });
-
         });
     }
-
-    // 4. ZUIA FORM ISIPIGE REFRESH KIENYEJI
-    if (formStep1) {
-        formStep1.addEventListener("submit", function (e) {
-            e.preventDefault();
-        });
-    }
-
-    amshaDukaLaUploadLocal();
 })();
-
-
-        
+    
