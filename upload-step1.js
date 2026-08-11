@@ -21,7 +21,7 @@
             dbIndexedAkiba = e.target.result;
             console.log("✅ Database imefunguka salama!");
             
-            // 🚀 Kagua na urejeshe video mara moja (Hata ukirefresh au ukirudi nyuma!)
+            // Kagua na urejeshe video mara moja (Hata ukirefresh au ukirudi nyuma!)
             rejeshaVideoKamaUserAmebofyaBack();
         };
 
@@ -33,14 +33,11 @@
     // 2. INJINI YA KUKAMATA VIDEO NA KUHIFADHI PAPO HAPO KWENYE DISKI (CHANGE EVENT)
     function amshaMtamboWaKupokeaVideo() {
         const videoInput = document.getElementById("jumanne-video-file-input");
-        const dropzoneBox = document.getElementById("jumanne-upload-box-dashed");
-        const bandoWarningBox = document.getElementById("jumanne-bando-warning");
-        const previewContainer = document.getElementById("jumanne-preview-container");
-        const changeVideoBtn = document.getElementById("jumanne-change-video-btn");
 
         if (!videoInput) return;
 
         videoInput.addEventListener("change", (e) => {
+            // SULUHISHO: Kuchukua index ya 0 moja kwa moja ili kupata File object ghafi
             const faili = e.target.files && e.target.files.length > 0 ? e.target.files[0] : null;
             if (!faili) return;
 
@@ -118,7 +115,7 @@
 
         ombiDaka.onsuccess = function(e) {
             const data = e.target.result;
-            // 🚀 Ikikutwa video kwenye diski, irudishe kioni upesi bila kumuomba mtumiaji achague tena!
+            // Ikikutwa video kwenye diski, irudishe kioni upesi bila kumuomba mtumiaji achague tena!
             if (data && data.videoBlobData) {
                 console.log("♻️ Mfumo umerejesha video kutoka kwenye diski baada ya refresh!");
                 failiLaVideoGhafi = data.videoBlobData;
@@ -157,13 +154,12 @@
                     return;
                 }
 
-                // Kila kitu safi, nenda Step 2 (Data tayari ipo kwenye diski tangu mwanzo!)
+                // Kila kitu safi, nenda Step 2 (Data tayari ipo kwenye diski tanzu tangu mwanzo!)
                 sessionStorage.setItem("jumannetok_upload_meta", JSON.stringify({ hasDraft: true, jina: failiLaVideoGhafi.name }));
                 window.location.href = "upload-step2.html";
             });
 
             videoSiriElement.addEventListener("error", () => {
-                // Kama ikifeli kupima kwa dharura, mruhusu kupita kwa usalama
                 window.location.href = "upload-step2.html";
             });
 
@@ -181,15 +177,14 @@
                 sessionStorage.removeItem("jumannetok_upload_meta");
                 console.log("🗑️ Mtumiaji amefuta video kwenye diski mwenyewe.");
             }
-            // Fungua upya uchaguzi wa faili
             document.getElementById("jumanne-video-file-input").click();
         });
     }
 
-    // WASHA KILA KITU MARA MOJA
+    // 🔥 WASHA MITUNGI YOTE KWA USAHIHI
     amshaDukaLaUploadLocal();
     amshaMtamboWaKupokeaVideo();
-    washakitufeChaKuvukaHatuaYaPwanza();
+    washaKitufeChaKuvukaHatuaYaPwanza(); // Imebadilishwa herufi kubwa hapa
 
 })();
-    
+                
