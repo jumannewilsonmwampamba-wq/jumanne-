@@ -1,4 +1,4 @@
-# upload-step1.js - Unique Button ID Binding Framework
+// upload-step1.js - Unique Button ID Binding Framework
 
 // ==========================================================================// JUMANNETOK TZ - CORE UPLOAD ENGINE (STEP 1: PREVIEW & UNIQUE REDIRECT)// ==========================================================================
 
