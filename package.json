@@ -1,0 +1,32 @@
+{
+  "name": "jumannetok-kernel-backend",
+  "version": "1.0.0",
+  "description": "Injini Kuu ya Nyuma ya JumanneTok TZ inayobeba na kuswaga Video na Wasifu",
+  "main": "server-test.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server-test.js",
+    "dev": "nodemon server-test.js",
+    "test-db": "node test-video-db.js"
+  },
+  "keywords": [
+    "singeli",
+    "jumannetok",
+    "tanzania",
+    "bare-metal",
+    "xhr-stream"
+  ],
+  "author": "Mbilionea Jumanne & Senior AI Architect",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

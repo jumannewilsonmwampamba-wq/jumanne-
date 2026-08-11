@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Usajili</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- CONTAINER KUU YA USAJILI -->
+    <div class="jumanne-auth-container">
+        
+        <!-- BAR YA MAENDELEO (PROGRESS BAR) -->
+        <div class="jumanne-progress-bar">
+            <div class="jumanne-progress-fill"></div>
+        </div>
+        <p class="jumanne-step-text">Hatua: <strong>1</strong> kati ya 7</p>
+
+        <!-- FOMU YA USAJILI -->
+        <form id="jumanne-step1-form">
+            
+            <!-- SEHEMU YA 1: MAJINA -->
+            <div class="jumanne-form-step" id="jumanne-step-1">
+                <!-- BOKSI LA SAA YA USALAMA (VISUAL COUNTDOWN TIMER) -->
+<div class="jumanne-timer-box">
+    <i class="fas fa-clock-rotate-left"></i>
+    Muda wa Usalama: <span id="jumanne-countdown-clock">03:00</span>
+</div>
+
+                <h2 class="jumanne-step-title">Tufahamishe Jina Lako</h2>
+               
+                <p class="jumanne-step-subtitle">Andika majina yako halisi ya ushindani.</p>
+
+                <!-- Mfumo wa Kuzuia Ma-robot (Honeypot Field) -->
+                <!-- Hili boksi linafichwa kwa siri ili binadamu asilione, robot akilijaza tunamblock -->
+                <div class="jumanne-pot-field">
+                    <input type="text" id="jumanne-honey-username" name="honey_username" tabindex="-1" autocomplete="off">
+                </div>
+
+                <!-- Maboksi Halisi ya Majina -->
+                <div class="jumanne-input-group">
+                    <label for="jumanne-firstname">Jina la Kwanza</label>
+                    <input type="text" id="jumanne-firstname" placeholder="Mfano: Juma" required autocomplete="given-name">
+                </div>
+
+                <div class="jumanne-input-group">
+                    <label for="jumanne-lastname">Jina la Pili</label>
+                    <input type="text" id="jumanne-lastname" placeholder="Mfano: Joseph" required autocomplete="family-name">
+                </div>
+
+<!-- Sehemu ya Kuchagua Aina ya Kipaji -->
+<div class="jumanne-input-group">
+    <label for="jumanne-talent-type">Aina ya Kipaji Chako</label>
+    <select id="jumanne-talent-type" required>
+        <option value="">-- Chagua Kipaji... --</option>
+        <option value="singeli">Singeli</option>
+        <option value="bongo-fleva">Bongo Fleva</option>
+        <option value="mpira">Mpira wa Miguu</option>
+        <option value="ucheshi">Ucheshi (Comedy)</option>
+        <option value="uchoraji">Uchoraji / Sanaa</option>
+        <option value="mshabiki">Mshabiki / Jaji wa Mtaa</option>
+    </select>
+</div>
+
+<!-- Sehemu ya Kuchagua Hadhi ya Akaunti -->
+<div class="jumanne-input-group">
+    <label for="jumanne-account-role">Unajiunga kama nani?</label>
+    <select id="jumanne-account-role" onchange="kaguaHadhiYaAkaunti()" required>
+        <option value="">-- Chagua Hadhi yako... --</option>
+        <option value="creator">Kipaji / Msanii (Creator)</option>
+        <option value="viewer">Mshabiki / Mtazamaji (Viewer)</option>
+        <option value="scout">Skauti / Mdhamini (Sponsor)</option>
+    </select>
+</div>
+
+                <!-- Kitufe cha Next -->
+                <button type="button" class="jumanne-btn-next" id="jumanne-btn-to-step2">Inayofuata</button>
+            </div>
+
+            <!-- BOKSI MAALUM LA GOOGLE ADS (Kama W3Schools) -->
+
+        </form>
+    </div>
+
+
+<!-- SEHEMU YA 2: ENEO UNALOTOKEA -->
+<div class="jumanne-form-step" id="jumanne-step-2" style="display: none;">
+                    <!-- BOKSI LA SAA YA USALAMA (VISUAL COUNTDOWN TIMER) -->
+                <div class="jumanne-timer-box">
+                    <i class="fas fa-clock-rotate-left"></i>
+                    Muda wa Usalama: <span id="jumanne-countdown-clock">03:00</span>
+                </div>
+    <h2 class="jumanne-step-title">Unapatikana Wapi?</h2>
+    <p class="jumanne-step-subtitle">Andika eneo lako ili ushindani mkoa kwa mkoa uanze.</p>
+
+    <!-- MTEGO WA SIRI WA MA-ROBOT (HONEYPOT) - Kila sehemu lazima iwe nao! -->
+    <div class="jumanne-pot-field" style="display: none !important; visibility: hidden !important;">
+        <input type="text" id="jumanne-honey-location" name="honey_location" tabindex="-1" autocomplete="off">
+    </div>
+
+    <!-- Boksi la kuandika Mkoa -->
+    <div class="jumanne-input-group">
+        <label for="jumanne-mkoa">Mkoa Wako</label>
+        <input type="text" id="jumanne-mkoa" placeholder="Mfano: Dar es Salaam, Mwanza" required autocomplete="address-level1">
+    </div>
+
+    <!-- Boksi la kuandika Wilaya -->
+    <div class="jumanne-input-group">
+        <label for="jumanne-wilaya">Wilaya Yako</label>
+        <input type="text" id="jumanne-wilaya" placeholder="Mfano: Ilala, Nyamagana" required autocomplete="address-level2">
+    </div>
+
+    <!-- Boksi la kuandika Mtaa -->
+    <div class="jumanne-input-group">
+        <label for="jumanne-mtaa">Mtaa Wako</label>
+        <input type="text" id="jumanne-mtaa" placeholder="Mfano: Kariakoo, Komakoma" required>
+        <!-- BOKSI LA KUDUMU LA KUONYESHA MATOKEO VYA KATA ZA ARRAY -->
+<div id="jumanne-search-results" style="background:#111; border:1px solid #222; border-radius:6px; margin-top:5px; max-height:180px; overflow-y:auto; padding:5px; display:none;"></div>
+
+    </div>
+
+    <!-- Vifungo vya Kusogea (Navigation Buttons) -->
+    <div class="jumanne-btn-group">
+        <button type="button" class="jumanne-btn-back" id="jumanne-back-to-step1">Rudi Nyuma</button>
+        <button type="button" class="jumanne-btn-next" id="jumanne-btn-to-step3">Inayofuata</button>
+    </div>
+
+    <!-- BOKSI LA GOOGLE ADS LA HATUA YA 2 -->
+    <div class="jumanne-ad-container">
+        <span class="jumanne-ad-label">TANGAZO</span>
+        <div class="jumanne-ad-box">
+            <p style="color: #666; font-size: 12px; margin: 0;">Google Ad Banner Here</p>
+        </div>
+    </div>
+</div>
+
+<!-- SEHEMU YA 3: TAREHE YA KUZALIWA -->
+<div class="jumanne-form-step" id="jumanne-step-3" style="display: none;">
+    <h2 class="jumanne-step-title">Tarehe ya Kuzaliwa</h2>
+    <p class="jumanne-step-subtitle">Hii inasaidia kupanga ushindani kulingana na umri wako (Challenge Week).</p>
+
+    <!-- MTEGO WA SIRI WA MA-ROBOT (HONEYPOT) -->
+    <div class="jumanne-pot-field" style="display: none !important; visibility: hidden !important;">
+        <input type="text" id="jumanne-honey-dob" name="honey_dob" tabindex="-1" autocomplete="off">
+    </div>
+
+    <!-- Boksi la kuchagua Tarehe ya Kuzaliwa -->
+    <div class="jumanne-input-group">
+        <label for="jumanne-dob">Chagua Tarehe yako ya Kuzaliwa</label>
+        <input type="date" id="jumanne-dob" required>
+    </div>
+
+    <!-- Vifungo vya Kusogea (Navigation Buttons) -->
+    <div class="jumanne-btn-group">
+        <button type="button" class="jumanne-btn-back" id="jumanne-back-to-step2">Rudi Nyuma</button>
+        <button type="button" class="jumanne-btn-next" id="jumanne-btn-to-step4">Inayofuata</button>
+    </div>
+
+    <!-- BOKSI LA GOOGLE ADS LA HATUA YA 3 -->
+    <div class="jumanne-ad-container">
+        <span class="jumanne-ad-label">TANGAZO</span>
+        <div class="jumanne-ad-box">
+            <p style="color: #666; font-size: 12px; margin: 0;">Google Ad Banner Here</p>
+        </div>
+    </div>
+</div>
+
+<!-- SEHEMU YA 4: UTAMBULISHO WA ACCOUNTI -->
+<div class="jumanne-form-step" id="jumanne-step-4" style="display: none;">
+    <h2 class="jumanne-step-title">Namba ya Simu</h2>
+    <p class="jumanne-step-subtitle">Itatumika kukutambua na kurejesha akaunti yako ukisahau password.</p>
+
+    <!-- MTEGO WA SIRI WA MA-ROBOT (HONEYPOT) -->
+    <div class="jumanne-pot-field" style="display: none !important; visibility: hidden !important;">
+        <input type="text" id="jumanne-honey-contact" name="honey_contact" tabindex="-1" autocomplete="off">
+    </div>
+
+    <!-- Boksi la kuandika Namba ya Simu -->
+    <div class="jumanne-input-group">
+        <label for="jumanne-phone">Namba yako ya Simu (Ya Lazima)</label>
+        <input type="tel" id="jumanne-phone" placeholder="Mfano: 07XXXXXXXX" required autocomplete="tel">
+    </div>
+
+    <!-- Boksi la kuandika Email Mbadala -->
+    <div class="jumanne-input-group">
+        <label for="jumanne-email">Barua Pepe / Email (Mbadala wa Hiyari)</label>
+        <input type="email" id="jumanne-email" placeholder="Mfano: juma@gmail.com" autocomplete="email">
+    </div>
+
+    <!-- Vifungo vya Kusogea (Navigation Buttons) -->
+    <div class="jumanne-btn-group">
+        <button type="button" class="jumanne-btn-back" id="jumanne-back-to-step3">Rudi Nyuma</button>
+        <button type="button" class="jumanne-btn-next" id="jumanne-btn-to-step5">Inayofuata</button>
+    </div>
+
+    <!-- BOKSI LA GOOGLE ADS LA HATUA YA 4 -->
+    <div class="jumanne-ad-container">
+        <span class="jumanne-ad-label">TANGAZO</span>
+        <div class="jumanne-ad-box">
+            <p style="color: #666; font-size: 12px; margin: 0;">Google Ad Banner Here</p>
+        </div>
+    </div>
+</div>
+
+class=""
+
+<!-- SEHEMU YA 6: PICHA YA PROFILE -->
+<div class="jumanne-form-step" id="jumanne-step-6" style="display: none;">
+    <h2 class="jumanne-step-title">Weka Picha Yako</h2>
+    <p class="jumanne-step-subtitle">Pakia picha nzuri itakayowaonyesha mashabiki na majaji muonekano wako.</p>
+
+    <!-- MTEGO WA SIRI WA MA-ROBOT (HONEYPOT) -->
+    <div class="jumanne-pot-field" style="display: none !important; visibility: hidden !important;">
+        <input type="text" id="jumanne-honey-avatar" name="honey_avatar" tabindex="-1" autocomplete="off">
+    </div>
+
+    <!-- Sehemu ya Kupakia Picha -->
+    <div class="jumanne-input-group jumanne-upload-group">
+        <label for="jumanne-avatar" class="jumanne-avatar-label">
+            <div class="jumanne-upload-icon">📷</div>
+            <span>Bonyeza hapa kuchagua picha</span>
+        </label>
+        <input type="file" id="jumanne-avatar" accept="image/*" style="display: none;">
+        <!-- Sehemu ya kuonyesha picha iliyochaguliwa (Preview) -->
+        <div id="jumanne-avatar-preview" class="jumanne-preview-box" style="display: none;"></div>
+    </div>
+
+    <!-- Vifungo vya Kusogea (Navigation Buttons) -->
+    <div class="jumanne-btn-group">
+        <button type="button" class="jumanne-btn-back" id="jumanne-back-to-step5">Rudi Nyuma</button>
+        <button type="button" class="jumanne-btn-next" id="jumanne-btn-to-step7">Inayofuata</button>
+    </div>
+
+    <!-- BOKSI LA GOOGLE ADS LA HATUA YA 6 -->
+    <div class="jumanne-ad-container">
+        <span class="jumanne-ad-label">TANGAZO</span>
+        <div class="jumanne-ad-box">
+            <p style="color: #666; font-size: 12px; margin: 0;">Google Ad Banner Here</p>
+        </div>
+    </div>
+</div>
+
+<!-- SEHEMU YA 7: JINSIA, MAKUBALIANO NA HITIMISHO (ILIVYONYOOSHWA) -->
+<div class="jumanne-form-step" id="jumanne-step-7" style="display: none;">
+    <h2 class="jumanne-step-title">Kamilisha Usajili</h2>
+    <p class="jumanne-step-subtitle">Hatua ya mwisho kabisa kuanza safari yako ndani ya JumanneTok TZ.</p>
+
+    <!-- MTEGO WA SIRI WA MA-ROBOT (HONEYPOT) -->
+    <div class="jumanne-pot-field" style="display: none !important; visibility: hidden !important;">
+        <input type="text" id="jumanne-honey-final" name="honey_final" tabindex="-1" autocomplete="off">
+    </div>
+
+    <!-- 1. Sehemu ya Kuchagua Jinsia -->
+    <div class="jumanne-input-group">
+        <label for="jumanne-gender">Jinsia Yako</label>
+        <select id="jumanne-gender" required>
+            <option value="">-- Chagua Jinsia... --</option>
+            <option value="Mume">Mme (Kiume)</option>
+            <option value="Mke">Mke (Kike)</option>
+        </select>
+    </div>
+
+    <!-- 2. Sehemu ya Promo Code / Aliyekualika -->
+    <div class="jumanne-input-group">
+        <label for="jumanne-promo">Namba ya Aliyekualika / Promo Code (Hiyari)</label>
+        <input type="text" id="jumanne-promo" placeholder="Mfano: JUMA50" autocomplete="off">
+    </div>
+
+    <!-- 3. Sehemu ya Mfumo wa Bando (Data Saver) -->
+    <div class="jumanne-input-group">
+        <label for="jumanne-data-mode">Hali ya Mtandao Wako (Bando)</label>
+        <select id="jumanne-data-mode" required>
+            <option value="normal">Muonekano wa Kawaida (HD Mode - 4G/Wi-Fi)</option>
+            <option value="saver">Kutunza Bando (Data Saver Mode - 3G/2G)</option>
+        </select>
+    </div>
+
+    <!-- 4. KIKUNDI CHA MASHARTI YOTE 7 YAMEJIPANGA HAPA (JUU YA VIFUNGO) -->
+    <div class="jumanne-checkbox-group">
+        
+        <!-- Sharti la 1: Vigezo na Masharti -->
+        <label class="jumanne-checkbox-container">
+            <input type="checkbox" id="jumanne-terms" required>
+            <span class="jumanne-checkbox-text">Ninakubali Vigezo na Masharti ya JumanneTok TZ.</span>
+        </label>
+        
+        <!-- Sharti la 2: Ahadi ya Maadili / Kuzuia Utupu -->
+        <label class="jumanne-checkbox-container">
+            <input type="checkbox" id="jumanne-anti-nudity" required>
+            <span class="jumanne-checkbox-text" style="color: #ff5252; font-weight: 500;">
+                ½ Ninaahidi kuwa sitapakia picha au video yoyote ya utupu au isiyo na maadili. Nikivunja, akaunti yangu ifutwe.
+            </span>
+        </label>
+
+        <!-- Sharti la 3: Umri na Idhini ya Wazazi -->
+        <label class="jumanne-checkbox-container">
+            <input type="checkbox" id="jumanne-age-consent" required>
+            <span class="jumanne-checkbox-text">
+                Ninamithibitisha kuwa nina umri wa miaka 18 au zaidi, au nina idhini ya wazazi/walezi wangu kushiriki mashindano haya ya vipaji.
+            </span>
+        </label>
+
+        <!-- Sharti la 4: Hakimiliki na Umiliki wa Video -->
+        <label class="jumanne-checkbox-container">
+            <input type="checkbox" id="jumanne-copyright-consent" required>
+            <span class="jumanne-checkbox-text">
+                Ninakubali kuwa video zote nitakazopakia ni kazi zangu halisi. Ninampa mratibu wa JumanneTok haki ya kuzionyesha na kuzitangaza kwenye mashindano.
+            </span>
+        </label>
+
+        <!-- Sharti la 5: Lugha na Tabia (Anti-Cyberbullying) -->
+        <label class="jumanne-checkbox-container">
+            <input type="checkbox" id="jumanne-behavior-consent" required>
+            <span class="jumanne-checkbox-text">
+                Ninaahidi kutotumia lugha ya matusi, kashfa, uchochezi, au kejeli kwenye maoni (comments) au maelezo ya video zangu.
+            </span>
+        </label>
+
+        <!-- Sharti la 6: Udanganyifu wa Kura (Anti-Vote Manipulation) -->
+        <label class="jumanne-checkbox-container">
+            <input type="checkbox" id="jumanne-fairplay-consent" required>
+            <span class="jumanne-checkbox-text">
+                Ninakubali kuwa matumizi ya mifumo feki (bots/hacks) kununua au kuongeza kura kwenye Challenge Week yatasababisha nifutwe mashindanoni mara moja.
+            </span>
+        </label>
+
+        <!-- Sharti la 7: Matumizi ya Data na Faragha (Privacy Consent) -->
+        <label class="jumanne-checkbox-container">
+            <input type="checkbox" id="jumanne-privacy-consent" required>
+            <span class="jumanne-checkbox-text">
+                Ninaruhusu JumanneTok kutumia namba yangu ya simu na utambulisho wangu kwa ajili ya usalama wa akaunti na kupokea taarifa za ushindi.
+            </span>
+        </label>
+
+        <!-- Sharti la 8 (La Dhahabu): Zawadi Papo Hapo M-Pesa/Tigo Pesa -->
+        <label class="jumanne-checkbox-container">
+            <input type="checkbox" id="jumanne-instant-payout-consent" required>
+            <span class="jumanne-checkbox-text" style="color: #00e676; font-weight: 600;">
+                💰 Ninakubali kuwa mshindi wa Challenge Week atapatikana kwa kura za haki na zawadi zote zitatumwa papo hapo kwa namba ya simu niliyosajili (M-Pesa, Airtel Money, au Tigo Pesa) ndani ya masaa 24.
+            </span>
+        </label>
+
+    </div>
+
+    <!-- 5. VIFUNGO VYA KUSOGEA SASA VIMESHACHUSHWA CHINI KABISA YA MASHARTI YOTE -->
+    <!-- VIFUNGO VYA CHINI KABISA VILIVYOREKEBISHWA -->
+<div class="jumanne-btn-group">
+    <button type="button" class="jumanne-btn-back" id="jumanne-back-to-step6">Rudi Nyuma</button>
+    <button type="submit" class="jumanne-btn-submit" id="jumanne-submit-all">Kamilisha & Ingia</button>
+</div>
+
+
+    <!-- 6. BOKSI LA GOOGLE ADS LINAFUNGA UKURASA KWA CHINI KABISA (Kama W3Schools) -->
+    <div class="jumanne-ad-container">
+        <span class="jumanne-ad-label">TANGAZO</span>
+        <div class="jumanne-ad-box">
+            <p style="color: #666; font-size: 12px; margin: 0;">Google Ad Banner Here</p>
+        </div>
+    </div>
+</div>
+
+    <!-- BOKSI LA GOOGLE ADS LA HATUA YA 7 -->
+    <div class="jumanne-ad-container">
+        <span class="jumanne-ad-label">TANGAZO</span>
+        <div class="jumanne-ad-box">
+            <p style="color: #666; font-size: 12px; margin: 0;">Google Ad Banner Here</p>
+        </div>
+    </div>
+</div>
+<script>
+// ==========================================================================
+// INJINI YA USAJILI: HATUA YA 1 - KIPANDE CHA 2 (RAM STATE & NAVIGATION)
+// ==========================================================================
+
+// 1. CHOMBO KIKUU CHA DATA KWENYE RAM (GLOBAL STATE OBJECT)
+// Sanduku hili litashikilia data zote 7 kimya kimya bila kutesa processor
+let fomuKuuData = {};
+
+function amshaKitufeChaHatuaYaKwanza() {
+    const btnToStep2 = document.getElementById("jumanne-btn-to-step2");
+    if (!btnToStep2) return;
+
+    btnToStep2.addEventListener("click", () => {
+        // [A] MTEGO WA KUZUIA MAROBOTI (HONEYPOT DETECTOR)
+        const siriYaHoneypot = document.getElementById("jumanne-honey-username").value;
+        if (siriYaHoneypot.length > 0) {
+            console.error("Mtego umenasa robot hatua ya kwanza!");
+            fomuKuuData = {}; // Safisha kila kitu
+            window.location.reload(); // Reload ukurasa mwanzo kabisa
+            return;
+        }
+
+        // [B] KUKAMATA DATA HALISI ZA BINADAMU (MAX 8 CHARS)
+        const jinaKwanza = document.getElementById("jumanne-firstname").value.trim();
+        const jinaPili = document.getElementById("jumanne-lastname").value.trim();
+        const ainaKipaji = document.getElementById("jumanne-talent-type").value;
+        const hadhiRole = document.getElementById("jumanne-account-role").value;
+
+        // Validation: Kuzuia maboksi yasipite yakiwa tupu kiononi
+        if (!jinaKwanza || !jinaPili || !ainaKipaji || !hadhiRole) {
+            alert("Tafadhali jaza majina yako na hadhi kabla ya kusonga mbele!");
+            return;
+        }
+
+        // [C] STATE MANAGEMENT: Tunahifadhi data za hatua ya 1 kwenye sanduku la RAM
+        fomuKuuData.jinaLaKwanza = jinaKwanza;
+        fomuKuuData.jinaLaPili = jinaPili;
+        fomuKuuData.ainaYaKipaji = ainaKipaji;
+        fomuKuuData.hadhiYaAkaunti = hadhiRole;
+
+        console.log("Hatua ya 1 imefungwa salama kwenye RAM State:", fomuKuuData);
+
+        // [D] KUVUKA SEHEMU YA PILI: Ficha hatua ya 1 na uonyeshe hatua ya 2 kwa sekunde sifuri
+        document.getElementById("jumanne-step-1").style.display = "none";
+        
+        const step2Div = document.getElementById("jumanne-step-2");
+        if (step2Div) {
+            step2Div.style.display = "block"; // Fungua sehemu ya pili mbele ya kioo
+            
+            // Kukuza progress bar juu ya kioo (Hatua ya 2: 28.5%)
+            document.querySelector(".jumanne-progress-fill").style.width = "28.5%";
+            document.querySelector(".jumanne-step-text strong").innerText = "2";
+        }
+    });
+}
+
+// Inahakikisha akili ya kitufe inaamka vizuri kiononi
+window.addEventListener("DOMContentLoaded", amshaKitufeChaHatuaYaKwanza);
+// ==========================================================================
+// INJINI YA USAJILI: HATUA YA 1 - KIPANDE CHA 3 (VISUAL TIMER ENGINE - NO LAG)
+// ==========================================================================
+
+// Viambata vya saa vimetangazwa hapa chini kulinda RAM na kuzuia loops mfululizo
+let saaYaKikomoKilaSehemu = null;
+let saaYaKiooniInterval = null;
+
+// KAZI YA SAA YA KIOONI: Inashusha dakika 3 kiooni kidijitali na kusafisha RAM muda ukiisha
+function amshaSaaYaSkriniKilaHatua() {
+    // 1. Kusafisha saa zote za nyuma zilizokuwa zinarun ili kuzuia memory overload
+    if (saaYaKikomoKilaSehemu) clearTimeout(saaYaKikomoKilaSehemu);
+    if (saaYaKiooniInterval) clearInterval(saaYaKiooniInterval);
+
+    let sekundeZilizobaki = 3 * 60; // Sekunde 180 kamili (Dakika 3)
+    const clockDisplay = document.getElementById("jumanne-countdown-clock");
+
+    // 2. INJINI YA KUSHUSHA NAMBA KIOONI (INTERVAL SECONDS COUNTER)
+    saaYaKiooniInterval = setInterval(() => {
+        sekundeZilizobaki--;
+        
+        let mins = Math.floor(sekundeZilizobaki / 60);
+        let secs = sekundeZilizobaki % 60;
+
+        // Inachora namba kiooni upesi kwa mfumo safi wa 02:59, 02:58 bila lag
+        if (clockDisplay) {
+            clockDisplay.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+    }, 1000);
+
+    // 3. INJINI YA KUFUTA DATA MUDA UKIISHA (TIMEOUT GARBAGE COLLECTION)
+    saaYaKikomoKilaSehemu = setTimeout(() => {
+        clearInterval(saaYaKiooniInterval); // Zima saa ya kiooni
+        console.warn("Muda wa usalama wa sekunde 180 umeisha ghafula!");
+        
+        fomuKuuData = {}; // Futa na kusafisha kabisa sanduku la data kwenye RAM
+        
+        const form1 = document.getElementById("jumanne-step1-form");
+        if (form1) form1.reset(); // Safisha maboksi yote ya fomu kiooni
+
+        alert("Muda wa dakika 3 wa kujaza sehemu hii umeisha! Mfumo umerudi mwanzo kulinda faragha.");
+        window.location.reload(); // Pakia upya ukurasa kuelekea Hatua ya 1
+    }, 3 * 60 * 1000);
+}
+
+// TUNAIUNGANISHA SAA KELENYE LANGO: Saa inaanza kusoma kiotomatiki ukurasa ukifunguka
+window.addEventListener("DOMContentLoaded", () => {
+    amshaSaaYaSkriniKilaHatua();
+    console.log("Saa ya dakika 3 ya usalama imeanza kurun kikomandoo!");
+});
+
+    // ==========================================================================
+// INJINI YA USAJILI: HATUA YA 1 - KIPANDE CHA 1 (ULINZI WA HERUFI 8 - NO LAG)
+// ==========================================================================
+
+function amshaUlinziWaHerufiNane() {
+    const jinaKwanzaInput = document.getElementById("jumanne-firstname");
+    const jinaPiliInput = document.getElementById("jumanne-lastname");
+
+    // Mfumo unalazimisha simu kuzuia herufi kiasili (Native Hardware Limit)
+    // Hii haina hesabu yoyote ya nyuma, kwa hiyo keyboard haitaganda kabisa!
+    if (jinaKwanzaInput) jinaKwanzaInput.maxLength = 8;
+    if (jinaPiliInput) jinaPiliInput.maxLength = 8;
+
+    console.log("Ulinzi wa herufi 8 umewashwa kiasili kwenye simu.");
+}
+
+// Mfumo unaamka mara tu ukurasa unapofunguka kiooni
+window.addEventListener("DOMContentLoaded", amshaUlinziWaHerufiNane);
+// ==========================================================================
+// INJINI YA USAJILI - HATUA YA 2: KIPANDE CHA 1 (ULINZI WA BOTI NA VALIDATION)
+// ==========================================================================
+
+function amshaUlinziNaKusogeaHatuaYaTatu() {
+    const btnToStep3 = document.getElementById("jumanne-btn-to-step3");
+    if (!btnToStep3) return;
+
+    btnToStep3.addEventListener("click", () => {
+        // [A] MTEGO WA KUZUIA BOTS (HONEYPOT FILTER)
+        const siriYaHoneypot2 = document.getElementById("jumanne-honey-location").value;
+        if (siriYaHoneypot2.length > 0) {
+            console.error("Robot amenaswa kwenye Hatua ya Pili!");
+            
+            idadiYaMajaribioYaRobot++;
+            localStorage.setItem("jumannetok_robot_attempts", idadiYaMajaribioYaRobot);
+
+            // Kama boti likivuruga mara 3, tunalipiga kufuli la masaa 8 mlangoni
+            if (idadiYaMajaribioYaRobot >= 3) {
+                const masaaManeMilisekunde = 8 * 60 * 60 * 1000;
+                localStorage.setItem("jumannetok_block_until", (Date.now() + masaaManeMilisekunde).toString());
+                kaguaKifungoChaMasaaMane(); // Fungia kifaa kizima kioo kikiwa cheusi
+                return;
+            }
+
+            fomuKuuData = {};
+            window.location.reload();
+            return;
+        }
+
+        // [B] KUDHIBITI MABOKSI YALIYOJAZWA (EMPTY FIELDS CHECK)
+        const mkoa = document.getElementById("jumanne-mkoa").value.trim();
+        const wilaya = document.getElementById("jumanne-wilaya").value.trim();
+        const mtaa = document.getElementById("jumanne-mtaa").value.trim();
+
+        // Kuzuia fomu isipite ikiwa tupu hata boksi moja
+        if (!mkoa || !wilaya || !mtaa) {
+            alert("Tafadhali jaza au chagua mkoa, wilaya na mtaa wako ili ushindani uanze kisheria!");
+            return; // Zuia kodi isisogee mbele kabisa!
+        }
+
+        // [C] STATE MANAGEMENT: Tunatunza data kwenye sanduku lile lile la RAM
+        fomuKuuData.mkoaWako = mkoa;
+        fomuKuuData.wilayaYako = wilaya;
+        fomuKuuData.mtaaWako = mtaa;
+
+        console.log("Hatua ya 2 imehifadhiwa salama kwenye RAM State:", fomuKuuData);
+
+        // [D] KUSOGEA HATUA YA 3: Zima saa ya sasa, badili kioo kwa sekunde sifuri
+        if (saaYaKikomoKilaSehemu) clearTimeout(saaYaKikomoKilaSehemu);
+
+        document.getElementById("jumanne-step-2").style.display = "none"; // Ficha sehemu ya 2
+        
+        const step3Div = document.getElementById("jumanne-step-3");
+        if (step3Div) {
+            step3Div.style.display = "block"; // Fungua hatua ya 3 kiooni milisekunde sifuri
+            
+            // Kukuza progress bar juu ya kioo (Hatua ya 3: 42.8%)
+            document.querySelector(".jumanne-progress-fill").style.width = "42.8%";
+            document.querySelector(".jumanne-step-text strong").innerText = "3";
+            
+            // Washa upya kabisa saa nyingine ya dakika 3 ya usalama kwa ajili ya Hatua ya 3!
+            amshaSaaYaSkriniKilaHatua();
+        }
+    });
+}
+
+// Inahakikisha amri ya kitufe cha hatua ya pili inaamka upesi mtumiaji anapovuka
+window.addEventListener("DOMContentLoaded", amshaUlinziNaKusogeaHatuaYaTatu);
+// ==========================================================================
+// INJINI YA USAJILI - HATUA YA 2: KIPANDE CHA 2 (KITUFE CHA RUDI NYUMA)
+// ==========================================================================
+
+function amshaKitufeChaRudiNyumaHatuaYaPili() {
+    const btnBackToStep1 = document.getElementById("jumanne-back-to-step1");
+    if (!btnBackToStep1) return;
+
+    btnBackToStep1.addEventListener("click", () => {
+        console.log("Mtumiaji anarudi Hatua ya 1 kurekebisha majina...");
+
+        // 1. Ficha lile boksi la siri la matokeo ya utafutaji lisibaki wazi kiooni bure
+        const matokeoBoksi = document.getElementById("jumanne-search-results");
+        if (matokeoBoksi) matokeoBoksi.style.display = "none";
+
+        // 2. KUVUKA GOLI NYUMA: Zima saa ya sasa, ficha skrini ya 2, na ufungue Hatua ya 1
+        if (saaYaKikomoKilaSehemu) clearTimeout(saaYaKikomoKilaSehemu);
+
+        document.getElementById("jumanne-step-2").style.display = "none"; // Ficha sehemu ya 2
+        
+        const step1Div = document.getElementById("jumanne-step-1");
+        if (step1Div) {
+            step1Div.style.display = "block"; // Fungua sehemu ya 1 upesi kiooni
+            
+            // Rejesha progress bar nyuma (Hatua ya 1: 14.2%)
+            document.querySelector(".jumanne-progress-fill").style.width = "14.2%";
+            document.querySelector(".jumanne-step-text strong").innerText = "1";
+            
+            // KIKOMANDOO: Washa upya kabisa saa nyingine safi ya dakika 3 ya usalama kwa ajili ya Hatua ya 1!
+            amshaSaaYaSkriniKilaHatua();
+        }
+    });
+}
+
+// Inahakikisha amri ya kitufe cha kurudi nyuma inaamka kivinjari kikifunguka ghafi
+window.addEventListener("DOMContentLoaded", amshaKitufeChaRudiNyumaHatuaYaPili);
+
+// ==========================================================================
+// INJINI YA USAJILI - HATUA YA 2: KIPANDE CHA 3 (KULAZIMISHA SAA ISOME KIOONI)
+// ==========================================================================
+
+// KAZI YA DHAHAMANI: Hii inawasha saa upya na kulazimisha namba zianze kukimbia kiooni
+function amshaSaaUpyaSehemuYaPili() {
+    // 1. Zima na kusafisha kabisa mizinguo ya saa zote za zamani zilizotoka Hatua ya 1
+    if (saaYaKikomoKilaSehemu) clearTimeout(saaYaKikomoKilaSehemu);
+    if (saaYaKiooniInterval) clearInterval(saaYaKiooniInterval);
+
+    let sekundeZilizobaki = 3 * 60; // Sekunde 180 kamili (Dakika 3)
+    const clockDisplay = document.getElementById("jumanne-countdown-clock");
+
+    console.log("Mtambo unalazimisha saa ya Hatua ya Pili kusoma kiooni...");
+
+    // 2. INJINI YA KUSHUSHA NAMBA KIOONI (TICKER)
+    saaYaKiooniInterval = setInterval(() => {
+        sekundeZilizobaki--;
+        
+        let mins = Math.floor(sekundeZilizobaki / 60);
+        let secs = sekundeZilizobaki % 60;
+
+        // Inalazimisha namba ziandikwe kwenye ile span ya HTML ya saa
+        if (clockDisplay) {
+            clockDisplay.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+    }, 1000);
+
+    // 3. INJINI YA KUFUTA DATA MUDA UKIISHA (TIMEOUT GATEWAY)
+    saaYaKikomoKilaSehemu = setTimeout(() => {
+        clearInterval(saaYaKiooniInterval); // Zima mteremko wa saa
+        console.warn("Muda wa usalama wa Hatua ya Pili umeisha ghafula!");
+        
+        fomuKuuData = {}; // Safisha RAM
+        const form1 = document.getElementById("jumanne-step1-form");
+        if (form1) form1.reset(); // Safisha maboksi yote ya fomu
+
+        alert("Muda wa dakika 3 wa sehemu hii umeisha! Mfumo umerudi mwanzo kulinda faragha ya data.");
+        window.location.reload(); // Pakia upya ukurasa kuelekea Hatua ya 1
+    }, 3 * 60 * 1000);
+}
+
+// MTAMBO WA KULAZIMISHA SAA UPEPO: Kila mtumiaji anapobofya kitufe cha pili, saa inajiwasha kinguvu!
+const kitufeChaStep3 = document.getElementById("jumanne-btn-to-step3");
+if (kitufeChaStep3) {
+    // Kazi ya kusikiliza pindi mtumiaji anapovuka na kuingia skrini ya pili
+    document.getElementById("jumanne-btn-to-step2").addEventListener("click", () => {
+        // Tunampa milisekunde 50 tu ili kioo kishafunguka kwanza ndipo saa ianze kurun
+        setTimeout(amshaSaaUpyaSehemuYaPili, 50);
+    });
+}
+
+</script>
+</script>
+</body>
+</html>

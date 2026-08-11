@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Home</title>
+    <!-- CSS NA FONTAWESOME VINAPACHIKWA HAPA MNYOFU -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/all.min.css">
+</head>
+<!-- 🔥 KUFULI LA SEVA: Zima refresh ya kuvuta kioo chini (Pull-to-Refresh) kwa CSS ili bando na server zilindwe -->
+<body class="jumanne-dark-mode" style="background-color: #000000; color: #ffffff; font-family: sans-serif; margin: 0; padding: 0; overscroll-behavior-y: contain; overflow: hidden;">
+
+    <!-- ==========================================================================
+    1. FLOATING BACKGROUND UPLOAD BAR (MSTARI WA JUO WA PROGRESS WA NYUMA YA PAZIA) [A]
+    ========================================================================== -->
+    <div id="jumanne-top-upload-zone" style="display: none; position: fixed; top: 0; left: 0; width: 100%; z-index: 99999; background: rgba(20, 15, 15, 0.95); padding: 12px 15px; box-sizing: border-box; border-bottom: 2px solid #331111; backdrop-filter: blur(5px);">
+        <!-- Mrija mwembamba wa kijani -->
+        <div style="width: 100%; height: 5px; background: #222; border-radius: 4px; overflow: hidden; border: 1px solid #333;">
+            <div id="jumanne-top-progress-bar" style="width: 0%; height: 100%; background: #00e676; transition: width 0.1s linear;"></div>
+        </div>
+        <!-- Hesabu halisi ya namba na kitufe chekundu cha chuma [A] -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; width: 100%; box-sizing: border-box;">
+            <span id="jumanne-top-status-txt" style="font-size: 11px; color: #00e676; font-weight: bold; font-family: monospace;">⏳ Inapakia kipaji chako nyuma ya pazia: 0%</span>
+            <button type="button" id="jumanne-top-abort-btn" style="background: #ff5252; color: #ffffff; border: none; padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 4px; box-shadow: 0 4px 12px rgba(255, 82, 82, 0.2);">
+                <i class="fas fa-times-circle"></i> Ghairi (Okoa Bando)
+            </button>
+        </div>
+    </div>
+
+    <!-- 2. SEHEMU YA JUU (TOP NAV - SEARCH & NOTIFICATION ICONS) -->
+    <header class="top-nav" style="position: fixed; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; box-sizing: border-box; z-index: 9999; background: linear-gradient(rgba(0,0,0,0.6), transparent);">
+        <a href="search-home.html" class="top-icon-link" id="nav-search" style="color: #ffffff; font-size: 20px; text-decoration: none;">
+            <i class="fas fa-search"></i>
+        </a>
+        <div class="top-buttons">
+            <span class="top-tab active" style="font-size: 17px; font-weight: bold; color: #ffffff; border-bottom: 2px solid #00e676; padding-bottom: 5px;">For You</span>
+        </div>
+        <a href="notification.html" class="top-icon-link" id="nav-notification" style="color: #ffffff; font-size: 20px; text-decoration: none;">
+            <i class="fas fa-bell"></i>
+        </a>
+    </header>
+
+    <!-- 3. SEHEMU KUU YA MAUDHUI (MAIN CONTENT AREA - HOME FEED ONLY) -->
+    <main class="main-container" style="width: 100%; height: 100vh; overflow: hidden; box-sizing: border-box;">
+        <section id="home-page" class="page active-page" style="width: 100%; height: 100vh; position: relative;">
+            
+            <!-- 3A. BOKSI LA MTEGO WA DROO TUPU (FALLBACK EMPTY FEED) -->
+            <div id="jumanne-empty-feed" style="display: none; width: 100%; height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; box-sizing: border-box; background: #121212; position: absolute; top: 0; left: 0; z-index: 100;">
+                <i class="fas fa-video-slash" style="font-size: 50px; color: #555; margin-bottom: 15px;"></i>
+                <h3 style="font-size: 18px; color: #fff; margin: 5px 0; font-weight: bold;">Mlisho wa video upo tupu!</h3>
+                <p style="font-size: 13px; color: #888; margin-bottom: 20px; max-width: 280px; line-height: 1.5;">Kuwa msanii wa kwanza kuonyesha kipaji chako mtaani kwa kupakia video yako sasa hivi.</p>
+                <a href="upload-step1.html" style="display: inline-block; padding: 12px 24px; background: linear-gradient(45deg, #00e676, #00b0ff); color: #000; font-weight: bold; border-radius: 30px; text-decoration: none; font-size: 14px; box-shadow: 0 4px 15px rgba(0,230,118,0.3);">
+                    <i class="fas fa-plus"></i> Pakia Video ya Kwanza
+                </a>
+            </div>
+
+            <!-- 3B. 📱 SCROLL WRAPPER: Mlisho wa ma-video ambapo kadi ya upakiaji itatokea [A] -->
+            <div id="jumanne-video-scroll-wrapper" style="width: 100%; height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; box-sizing: border-box; -webkit-overflow-scrolling: touch;">
+                
+                <!-- 🔥 PACHIKO LA KISANII: Sanduku linalowasha video mpya ya msanii hapo hapo nyoofu [A] -->
+                <div id="jumanne-background-upload-card-holder"></div>
+
+                <!-- [Ma-kadi manne ya kawaida ya wasanii wengine yatamwagwa hapa mbeleni...] -->
+            </div>
+
+        </section>
+    </main>
+
+    <!-- 4. SEHEMU YA CHINI (BOTTOM NAVIGATION BAR - MULTI-PAGE LINKS) -->
+    <nav class="bottom-nav" style="position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: space-around; align-items: center; background: #000000; border-top: 1px solid #1a1a1a; padding: 10px 0; z-index: 9999; box-sizing: border-box;">
+        <a href="index.html" class="nav-item active" style="text-decoration: none; text-align: center; color: #ffffff; font-size: 11px; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+            <i class="fas fa-home" style="font-size: 20px; color: #ffffff;"></i>
+            <span style="font-weight: bold;">Home</span>
+        </a>
+        <a href="explore.html" class="nav-item" style="text-decoration: none; text-align: center; color: #666666; font-size: 11px; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+            <i class="fas fa-compass" style="font-size: 20px;"></i>
+            <span>Explore</span>
+        </a>
+        <!-- Kitufe cha Uzalendo cha Upload chenye rangi za Taifa la Tanzania [A] -->
+        <a href="upload-step1.html" class="tz-upload-btn" style="text-decoration: none; display: flex; align-items: center; justify-content: center; position: relative;">
+            <div style="position: relative; width: 46px; height: 32px; background: #ffffff; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: visible;">
+                <div class="tz-layer green-layer" style="position: absolute; left: -4px; top: 0; width: 12px; height: 100%; background: #00e676; border-radius: .5rem .3rem 0 0 4px; z-index: -8;"></div>
+                <div class="tz-layer blue-layer" style="position: absolute; right: -4px; top: 0; width: 12px; height: 100%; background: #00b0ff; border-radius:  .5rem; z-index: 1;"></div>
+                <div class="upload-icon-center" style="z-index: 2;">
+                    <i class="fas fa-plus" style="color: #000000; font-size: 15px; font-weight: bold;"></i>
+                </div>
+            </div>
+        </a>
+        <a href="weekchallenge.html" class="nav-item" style="text-decoration: none; text-align: center; color: #666666; font-size: 11px; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+            <i class="fas fa-trophy" style="font-size: 20px;"></i>
+            <span>WeekChallenge</span>
+        </a>
+        <a href="profile.html" class="nav-item" id="profile-nav-link" style="text-decoration: none; text-align: center; color: #666666; font-size: 11px; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+            <i class="fas fa-user" style="font-size: 20px;"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+<!-- ==========================================================================
+    🔥 KIBANDIKO CHA DHAHABU CHA USHINDI WA UPLOAD (TOAST NOTIFICATION) [A]
+    ========================================================================== -->
+    <div id="jumanne-toast-victory" onclick="window.location.href='profile.html'" style="display: none; position: fixed; bottom: 85px; left: 15px; z-index: 99999; background: linear-gradient(45deg, #00e676, #00b0ff); color: #000000; padding: 12px 18px; border-radius: 12px; font-weight: bold; font-size: 13px; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 8px 24px rgba(0,230,118,0.4); transition: all 0.3s ease;">
+        <i class="fas fa-check-circle" style="font-size: 18px;"></i>
+        <span>Mdundo Umetua! Kipaji chako kipo mubashara mtaani. Gusa ukione!</span>
+    </div>
+    <!-- 🔥 FUNGASHA INJINI YA JAVASCRIPT YA NYUMA YA PAZIA MAABARA [A] -->
+    <script src="i.js"></script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Trend Map Kitaifa</title>
+    
+    <!-- Link ya FontAwesome kwa ajili ya ikoni zote za mfumo -->
+    <link rel="stylesheet" href="https://cloudflare.com" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/all.min.css">
+
+</head>
+<body>
+
+    <!-- 1. SEHEMU YA JUU (SEARCH ENGINE YA KUTAFUTA CHANGAMOTO) -->
+   <!-- 1. SEHEMU YA JUU (SEARCH ENGINE YA KUTAFUTA TRENDS NDANI KWA NDANI) -->
+<header class="explore-header">
+    <div class="explore-search-container">
+        <i class="fas fa-search search-inside-icon"></i>
+        <!-- Nimeondoa 'onclick' ili mfumo usihame ukurasa kabisa -->
+        <input type="text" id="trend-search-trigger" placeholder="Tafuta changamoto za wiki...">
+    </div>
+</header>
+
+
+    <!-- 2. KATEGORIA KUU ZA JUU: TREND MAP INAKUWA ACTIVE -->
+    <div class="category-scroll-wrapper" style="top: 60px;">
+        <div class="category-tabs">
+            <a href="weekchallenge.html" class="cat-tab-link">
+                <span class="cat-tab">Zote</span>
+            </a>
+            
+            <a href="trendmap-challenge.html" class="cat-tab-link">
+                <span class="cat-tab active">Trend Map</span>
+            </a>
+            
+            <a href="mkoawangu.html" class="cat-tab-link">
+                <span class="cat-tab">Mkoa</span>
+            </a>
+            
+            <a href="wilaya-challenge.html" class="cat-tab-link">
+                <span class="cat-tab">Wilaya</span>
+            </a>
+            
+            <a href="mtaa-challenge.html" class="cat-tab-link">
+                <span class="cat-tab">Mtaa</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- KICHWA CHA HABARI CHA DASHBOARD -->
+    <div class="page-title-section" style="margin-top: 115px; padding: 0 15px;">
+        <h2 style="font-size: 16px; color: #ffffff;"><i class="fas fa-chart-bar"></i> Trend Map - Takwimu za Ushindani</h2>
+        <p style="font-size: 12px; color: #8a8a8f;">Mizani live ya mikoa, wilaya na mitaa inayofukuta kwa vipaji</p>
+    </div>
+
+    <!-- 3. SEHEMU KUU AMBAPO JAVASCRIPT ITAMWAGA CHATI NA TAKWIMU LIVE -->
+    <main class="challenge-main-container" id="trendmap-dynamic-area" style="padding: 10px 15px;">
+        <!-- JAVASCRIPT ITAMWAGA LIVE LEADERBOARDS, CHARTS NA RISING STARS HAPA KIOTOMATIKI -->
+    </main>
+
+    <!-- 4. SEHEMU YA CHINI (BOTTOM NAVIGATION BAR) -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="explore.html" class="nav-item">
+            <i class="fas fa-compass"></i>
+            <span>Explore</span>
+        </a>
+        <a href="upload.html" class="nav-item tz-upload-btn">
+            <div class="tz-layer green-layer"></div>
+            <div class="tz-layer blue-layer"></div>
+            <div class="upload-icon-center">
+                <i class="fas fa-plus"></i>
+            </div>
+        </a>
+        <a href="weekchallenge.html" class="nav-item active">
+            <i class="fas fa-trophy"></i>
+            <span>WeekChallenge</span>
+        </a>
+        <a href="profile.html" class="nav-item" id="profile-nav-link">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Kuunganisha JavaScript maalum ya kuhesabu kura na kuchora chati za Trend Map -->
+    <script src="trendmap-logic.js"></script>
+</body>
+</html>

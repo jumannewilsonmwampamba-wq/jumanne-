@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Wiki Changamoto Wilaya</title>
+    
+    <!-- Link ya FontAwesome kwa ajili ya ikoni zote za mfumo -->
+    <link rel="stylesheet" href="https://cloudflare.com" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/all.min.css">
+
+</head>
+<body>
+
+<!-- 1. SEHEMU YA JUU (SEARCH ENGINE YA KUTAFUTA WILAYA/COUNTY NDANI KWA NDANI) -->
+<header class="explore-header">
+    <div class="explore-search-container">
+        <i class="fas fa-search search-inside-icon"></i>
+        <!-- Nimeondoa 'onclick' ili mfumo usihame ukurasa kabisa mkuu -->
+        <input type="text" id="wilaya-search-trigger" placeholder="Tafuta wilaya au kaunti hapa...">
+    </div>
+</header>
+
+
+    <!-- 2. KATEGORIA KUU ZA JUU: ZIMEBADILIKA KUWA LINKS ZA MAFAILI MAPYA (HORIZONTAL SCROLL) -->
+    <div class="category-scroll-wrapper" style="top: 60px;">
+        <div class="category-tabs">
+            <!-- MTUMIAJI AKIBONYEZA HAPA MFUMO UNAMPELEKA KWENYE FILE MPYA LA WILAYA ZA BARA -->
+            <a href="Tanzania-wilaya.html" class="cat-tab-link">
+                <span class="cat-tab">Tanzania Bara</span>
+            </a>
+            
+            <!-- Link itakayopeleka kwenye faili la wilaya za Zanzibar -->
+            <a href="wilaya-zanzibar.html" class="cat-tab-link">
+                <span class="cat-tab">Zanzibar</span>
+            </a>
+            
+            <!-- Link itakayopeleka kwenye faili la kaunti za Kenya -->
+            <a href="wilaya-kenya.html" class="cat-tab-link">
+                <span class="cat-tab">Kenya</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- KICHWA CHA HABARI CHA SEHEMU HII -->
+    <div class="page-title-section" style="margin-top: 115px; padding: 0 15px;">
+        <h2 style="font-size: 16px; color: #ffffff;"><i class="fas fa-map-marked-alt"></i> Chagua Eneo la Wilaya au Kaunti</h2>
+        <p style="font-size: 12px; color: #8a8a8f;">Bonyeza kategoria juu kufungua orodha ya wilaya za eneo husika</p>
+    </div>
+
+    <!-- 3. KONTENA KUU LINALOSUBIRI JAVASCRIPT AU MAUDHUI YA AWALI -->
+    <main class="mikoa-grid-container" id="wilaya-general-container">
+        <!-- Sehemu hii unaweza kuacha tupu au ukaweka ujumbe mfupi wa muongozo -->
+        <div style="grid-column: span 2; text-align: center; color: #8a8a8f; padding-top: 40px; font-size: 13px;">
+            <i class="fas fa-arrow-up" style="font-size: 24px; color: #1c9e49; margin-bottom: 10px;"></i>
+            <p>Tafadhali chagua kategoria hapo juu kuona wilaya zote za <strong>Tanzania Bara</strong>, <strong>Zanzibar</strong>, au <strong>Kenya</strong>.</p>
+        </div>
+    </main>
+
+    <!-- 4. SEHEMU YA CHINI (BOTTOM NAVIGATION BAR) -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="explore.html" class="nav-item">
+            <i class="fas fa-compass"></i>
+            <span>Explore</span>
+        </a>
+        <a href="upload.html" class="nav-item tz-upload-btn">
+            <div class="tz-layer green-layer"></div>
+            <div class="tz-layer blue-layer"></div>
+            <div class="upload-icon-center">
+                <i class="fas fa-plus"></i>
+            </div>
+        </a>
+        <a href="weekchallenge.html" class="nav-item active">
+            <i class="fas fa-trophy"></i>
+            <span>WeekChallenge</span>
+        </a>
+        <a href="profile.html" class="nav-item" id="profile-nav-link">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+<script>
+
+
+
+</script>
+</body>
+</html>

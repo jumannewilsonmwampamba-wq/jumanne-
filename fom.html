@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Pakia Video (Hatua ya 1)</title>
+    <!-- CSS NA FONTAWESOME VINAPACHIKWA HAPA -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/all.min.css">
+</head>
+<body class="jumanne-dark-mode" style="background-color: #121212; color: #ffffff; font-family: sans-serif; margin: 0; padding: 0;">
+
+    <!-- CONTAINER KUU YA MCHAKATO WA UPLOAD -->
+    <div class="jumanne-upload-container" style="padding: 15px; box-sizing: border-box;">
+
+        <!-- 1. MUUNDO WA JUU: UPAU WA KICHWA -->
+        <div class="jumanne-upload-header" style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+            <button type="button" class="jumanne-btn-back-arrow" onclick="window.history.back()" style="background: none; border: none; color: #fff; font-size: 18px; cursor: pointer;">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2 class="jumanne-upload-title" style="margin: 0; font-size: 20px; font-weight: bold;">Onyesha Kipaji Chako</h2>
+        </div>
+
+<!-- FOMU KUU YA MAPINDUZI YA UPLOAD -->
+<!-- FOMU KUU YA MAPINDUZI YA UPLOAD -->
+<!-- FOMU KUU YA MAPINDUZI YA UPLOAD (VERSION SALAMA YA BLOB) -->
+<form id="jumanne-upload-form-step1" novalidate>
+
+    <!-- MTEGO WA SIRI WA MA-ROBOT -->
+    <div class="jumanne-video-pot-gate" style="display: none !important; visibility: hidden !important;">
+        <input type="text" id="jumanne-video-bot-input" value="" name="video_bot_security" tabindex="-1" autocomplete="off">
+    </div>
+
+    <!-- BOKSI KUBWA LA KUCHAGUA VIDEO (THE UPLOAD DROPZONE) -->
+    <div id="jumanne-upload-box-dashed" class="jumanne-upload-dropzone" onclick="document.getElementById('jumanne-video-file-input').click()" style="text-align: center; padding: 50px 20px; background: #111; border: 2px dashed #00e676; border-radius: 12px; cursor: pointer; box-sizing: border-box; margin-bottom: 20px;">
+        <i class="fas fa-cloud-upload-alt jumanne-cloud-icon" style="font-size: 45px; color: #00e676; margin-bottom: 12px;"></i>
+        <p class="jumanne-dropzone-text" style="margin: 5px 0; font-size: 15px; font-weight: bold;">Gusa hapa kuchagua video yako ya kipaji</p>
+        <span class="jumanne-dropzone-subtext" style="font-size: 12px; color: #666;">Inaruhusu video za simu tu (MP4, MOV)</span>
+    </div>
+
+    <!-- Input ya siri inayofungua Gallery ya simu -->
+    <input type="file" id="jumanne-video-file-input" name="video_file" accept="video/*" style="display: none;" required>
+
+    <!-- 🔥 INJINI YA PREVIEW YA SKRINI NZIMA + PROGRESS BAR NA TIME BADGE -->
+    <div id="jumanne-preview-container" style="width: 100%; display: none; flex-direction: column; position: relative; box-sizing: border-box; margin-bottom: 20px;">
+        <video id="jumanne-local-preview-player" controls autoplay muted playsinline 
+               style="width: 100%; max-height: 440px; border-radius: 10px 10px 0 0; border: 2px solid #00e676; border-bottom: none; background: #000; object-fit: cover;">
+        </video>
+        
+        <!-- KIBANDIKO CHA MUDA OVER THE VIDEO -->
+        <div id="jumanne-time-badge" style="position: absolute; bottom: 25px; left: 15px; background: rgba(0,0,0,0.7); color: #00e676; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; font-family: monospace; z-index: 5;">
+            0:00 / 1:30
+        </div>
+
+        <!-- PROGRESS BAR YA KIJANI CHINI YA VIDEO PLAYER -->
+        <div style="width: 100%; height: 5px; background: #222; border-radius: 0 0 10px 10px; overflow: hidden; margin-top: 0px; border: 2px solid #00e676; border-top: none; box-sizing: border-box;">
+            <div id="jumanne-video-progress" style="width: 0%; height: 100%; background: #00e676; transition: width 0.1s linear;"></div>
+        </div>
+    </div>
+
+    <!-- ONYO LA BANDO -->
+    <div id="jumanne-bando-warning" class="jumanne-bando-warning-box" style="background: #1a1510; border: 1px solid #ff9100; padding: 12px; border-radius: 8px; margin-bottom: 25px; box-sizing: border-box;">
+      <p style="margin: 0; font-size: 13px; color: #ff9100; line-height: 1.5; text-align: left;">
+        ⚠️ <strong>Ushauri wa Bando:</strong> Hakikisha video yako haizidi <strong>MB 45</strong> na haina urefu wa zaidi ya <strong>dakika 1 na sekunde 30</strong> ili kupakia kwa kasi ya 5G bila kula kifurushi chako fasta!
+      </p>
+    </div>
+    
+    <!-- KUNDI LA VIFUNGO VYA CHINI (PEMBENI KWA PEMBENI) -->
+    <div class="jumanne-upload-btn-group" id="jumanne-btn-action-group" style="margin-top: 20px; display: flex; gap: 12px; width: 100%; box-sizing: border-box;">
+      
+      <button type="button" id="jumanne-change-video-btn" onclick="document.getElementById('jumanne-video-file-input').click()" style="display: none; flex: 1; padding: 12px; background: #222222; color: #aaaaaa; border: 1px solid #333333; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; align-items: center; justify-content: center; gap: 8px;">
+        <i class="fas fa-sync-alt" style="color: #ff5252;"></i> Badilisha
+      </button>
+
+      <button type="button" class="jumanne-btn-upload-next" id="jumanne-to-step2" style="flex: 2; padding: 12px; background: #00e676; color: #000; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        Inayofuata <i class="fas fa-chevron-right"></i>
+      </button>
+
+    </div>
+    
+</form>
+
+            </div> <!-- CONTAINER KUU END -->
+            
+
+<script>
+let failiLaVideoGhafi = null;
+let dbIndexedAkiba = null;
+
+// 1. FUNGUA DATABASE MAPEMA
+function amshaDukaLaUploadLocal() {
+  const ombiDuka = indexedDB.open("JumanneTok_Local_Cache", 1);
+  
+  ombiDuka.onupgradeneeded = function(e) {
+    const db = e.target.result;
+    if (!db.objectStoreNames.contains("jumannetok_feed_cache")) {
+      db.createObjectStore("jumannetok_feed_cache", { keyPath: "id" });
+    }
+  };
+  
+  ombiDuka.onsuccess = function(e) {
+    dbIndexedAkiba = e.target.result;
+    console.log("✅ Database ipo imara!");
+    rejeshaVideoKamaUserAmebofyaBack();
+  };
+}
+
+// 2. MTAMBO WA REJESHA DATA USER AKIRUDI NYUMA
+function rejeshaVideoKamaUserAmebofyaBack() {
+  if (!dbIndexedAkiba) return;
+  
+  const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readonly");
+  const duka = muamala.objectStore("jumannetok_feed_cache");
+  const ombiDaka = duka.get("jumanne_current_upload_draft");
+  
+  ombiDaka.onsuccess = function(e) {
+    const data = e.target.result;
+    if (data && data.videoBlobData) {
+      failiLaVideoGhafi = data.videoBlobData;
+      washaVideoKioniMnyofu(data.videoBlobData);
+    }
+  };
+}
+
+// 3. INJINI YA KUPANGA VIDEO IPLEI PREVIEW YA SKRINI NZIMA
+function amshaMtamboWaKupokeaVideo() {
+  const videoInput = document.getElementById("jumanne-video-file-input");
+  if (!videoInput) return;
+  
+  videoInput.addEventListener("change", (e) => {
+    const faili = e.target.files && e.target.files.length > 0 ? e.target.files[0] : null;
+    if (!faili) return;
+    
+    const kikomoChaMb45 = 45 * 1024 * 1024;
+    if (faili.size > kikomoChaMb45) {
+      alert(`Video yako ina ukubwa wa ${(faili.size / (1024 * 1024)).toFixed(1)} MB. Kikomo ni MB 45 pekee.`);
+      videoInput.value = "";
+      return;
+    }
+    
+    failiLaVideoGhafi = faili;
+    washaVideoKioniMnyofu(faili);
+  });
+}
+
+// ARRE YA CHUMA: INAWASHA VIDEO PLAYER NA PROGRESS MONITOR
+function washaVideoKioniMnyofu(blobFaili) {
+  const dropzoneBox = document.getElementById("jumanne-upload-box-dashed");
+  const bandoWarningBox = document.getElementById("jumanne-bando-warning");
+  const previewContainer = document.getElementById("jumanne-preview-container");
+  const localPlayer = document.getElementById("jumanne-local-preview-player");
+  const changeVideoBtn = document.getElementById("jumanne-change-video-btn");
+  
+  try {
+    if (localPlayer.src) URL.revokeObjectURL(localPlayer.src);
+    
+    const URLyaVideo = URL.createObjectURL(blobFaili);
+    localPlayer.src = URLyaVideo;
+    
+    previewContainer.style.display = "flex";
+    localPlayer.style.width = "100%";
+    localPlayer.style.height = "60vh";
+    localPlayer.style.objectFit = "cover";
+    localPlayer.play().catch(() => {});
+    
+    if (changeVideoBtn) changeVideoBtn.style.display = "flex";
+    if (dropzoneBox) dropzoneBox.style.setProperty("display", "none", "important");
+    if (bandoWarningBox) bandoWarningBox.style.display = "none";
+    
+    // 🔥 MTAMBO WA KUENDESHA LIVE PROGRESS BAR NA TIME BADGE
+    localPlayer.addEventListener("timeupdate", () => {
+      const progressLine = document.getElementById("jumanne-video-progress");
+      const timeBadge = document.getElementById("jumanne-time-badge");
+      
+      if (localPlayer.duration) {
+        const asilimia = (localPlayer.currentTime / localPlayer.duration) * 100;
+        if (progressLine) progressLine.style.width = `${asilimia}%`;
+        
+        const sasa = localPlayer.currentTime.toFixed(0);
+        const jumla = localPlayer.duration.toFixed(0);
+        
+        if (timeBadge) {
+          timeBadge.innerText = `0:${sasa < 10 ? '0' + sasa : sasa} / 1:${jumla < 90 ? jumla : '30'}`;
+        }
+      }
+    });
+    
+  } catch (err) { console.error(err); }
+}
+
+// 4. KIBONYEZO CHA NEXT KUELEKEA STEP 2
+function washaKitufeChaKuvukaHatuaYaPwanza() {
+  const btnNext = document.getElementById("jumanne-to-step2");
+  const videoInput = document.getElementById("jumanne-video-file-input");
+  
+  if (!btnNext || !videoInput) return;
+  
+  btnNext.addEventListener("click", () => {
+    const honeyValue = document.getElementById("jumanne-video-bot-input").value;
+    if (honeyValue.length > 0) { sessionStorage.clear();
+      location.reload(); return; }
+    
+    if (!failiLaVideoGhafi) { alert("Tafadhali chagua video yako ya kipaji kwanza!"); return; }
+    
+    // Kagua urefu wa video (Max 90 seconds) kabla ya kukimbia mbele
+    const videoSiriElement = document.createElement("video");
+    videoSiriElement.src = URL.createObjectURL(failiLaVideoGhafi);
+    
+    videoSiriElement.addEventListener("loadedmetadata", () => {
+      const urefuWaVideo = videoSiriElement.duration;
+      URL.revokeObjectURL(videoSiriElement.src);
+      
+      if (urefuWaVideo > 90.5) {
+        alert(`Challenge Week inaruhusu mwisho dakika 1:30 (sekunde 90). Video yako ina sekunde ${urefuWaVideo.toFixed(0)}.`);
+        return;
+      }
+      
+      if (!dbIndexedAkiba) {
+        sessionStorage.setItem("jumannetok_upload_meta", JSON.stringify({ hasDraft: false, jina: failiLaVideoGhafi.name }));
+        window.location.href = "upload-step2.html";
+        return;
+      }
+      
+      const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readwrite");
+      const duka = muamala.objectStore("jumannetok_feed_cache");
+      
+      const dataYaDraft = {
+        id: "jumanne_current_upload_draft",
+        jinaLaVideo: failiLaVideoGhafi.name || "Talent_Video.mp4",
+        ukubwaWaVideo: failiLaVideoGhafi.size,
+        videoBlobData: failiLaVideoGhafi,
+        tareheYaKupandisha: Date.now()
+      };
+      
+      duka.put(dataYaDraft).onsuccess = function() {
+        sessionStorage.setItem("jumannetok_upload_meta", JSON.stringify({ hasDraft: true, jina: failiLaVideoGhafi.name || "Talent_Video.mp4" }));
+        window.location.href = "upload-step2.html";
+      };
+    });
+    videoSiriElement.load();
+  });
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  amshaDukaLaUploadLocal();
+  amshaMtamboWaKupokeaVideo();
+  washaKitufeChaKuvukaHatuaYaPwanza();
+});
+
+
+
+            </script>
+            </body>
+            
+            </html>

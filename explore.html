@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Explore</title>
+    
+    <!-- Link ya FontAwesome kwa ajili ya ikoni zote za mfumo -->
+    <link rel="stylesheet" href="https://cloudflare.com" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/all.min.css">
+</head>
+<body>
+
+    <!-- 1. SEHEMU YA JUU (SEARCH ENGINE INPUT) -->
+    <header class="explore-header">
+        <div class="explore-search-container">
+            <i class="fas fa-search search-inside-icon"></i>
+            <!-- Mtumiaji akibonyeza hapa anapelekwa search.html kiotomatiki -->
+            <input type="text" id="explore-search-trigger" placeholder="Tafuta mkoa, wilaya, mtaa au kipaji..." onclick="window.location.href='search-explore.html'">
+        </div>
+    </header>
+
+    <!-- 2. SEHEMU YA KATEGORIA ZA VIPAJI (HORIZONTAL SCROLL) -->
+    <div class="category-scroll-wrapper">
+        <div class="category-tabs">
+            <!-- Mtumiaji akibonyeza hii inampeleka kwenye faili maalumu la karibu-yangu.html -->
+            <a href="karibu-yangu.html" class="cat-tab-link">
+                <span class="cat-tab">Kwa Ajili Yako</span>
+            </a>
+            <span class="cat-tab active" data-category="all">Zote</span>
+            <span class="cat-tab" data-category="sports">Michezo</span>
+            <span class="cat-tab" data-category="comedy">Vichekesho</span>
+            <span class="cat-tab" data-category="education">Elimu</span>
+            <span class="cat-tab" data-category="business">Biashara</span>
+            <span class="cat-tab" data-category="music">Muziki</span>
+            <span class="cat-tab" data-category="creativity">Ubunifu</span>
+        </div>
+    </div>
+
+    <!-- 3. SEHEMU KUU AMBAPO JAVASCRIPT ITAMWAGA VIDEO (GRID VIEW) -->
+    <main class="explore-grid-container" id="explore-dynamic-grid">
+        <!-- JAVASCRIPT ITAMWAGA KADI ZA VIDEO HAPA KIOTOMATIKI -->
+    </main>
+
+    <!-- 4. SEHEMU YA CHINI (BOTTOM NAVIGATION BAR) -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+
+        <a href="explore.html" class="nav-item active">
+            <i class="fas fa-compass"></i>
+            <span>Explore</span>
+        </a>
+
+        <a href="upload.html" class="nav-item tz-upload-btn">
+            <div class="tz-layer green-layer"></div>
+            <div class="tz-layer blue-layer"></div>
+            <div class="upload-icon-center">
+                <i class="fas fa-plus"></i>
+            </div>
+        </a>
+
+        <a href="weekchallenge.html" class="nav-item">
+            <i class="fas fa-trophy"></i>
+            <span>WeekChallenge</span>
+        </a>
+
+        <a href="profile.html" class="nav-item" id="profile-nav-link">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Kuunganisha JavaScript maalum kwa ajili ya kupakia video na hover logic -->
+    <script src="explore.js"></script>
+</body>
+</html>

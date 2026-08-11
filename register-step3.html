@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Usajili Hatua ya 3</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Faili la ikoni za FontAwesome -->
+    <link rel="stylesheet" href="css/all.min.css">
+</head>
+<body>
+
+    <!-- CONTAINER KUU YA USAJILI -->
+    <div class="jumanne-auth-container">
+        
+        <!-- BAR YA MAENDELEO (PROGRESS BAR) -->
+        <div class="jumanne-progress-bar">
+            <div class="jumanne-progress-fill" style="width: 42.8%;"></div>
+        </div>
+        <p class="jumanne-step-text">Hatua: <strong>3</strong> kati ya 7</p>
+
+        <!-- FOMU YA USAJILI -->
+        <form id="jumanne-step3-form">
+            
+            <!-- SEHEMU YA 3: TAREHE YA KUZALIWA -->
+            <div class="jumanne-form-step" id="jumanne-step-3">
+                <!-- BOKSI LA SAA YA USALAMA (VISUAL COUNTDOWN TIMER) -->
+                <div class="jumanne-timer-box">
+                    <i class="fas fa-clock-rotate-left"></i>
+                    Muda wa Usalama: <span id="jumanne-countdown-clock">03:00</span>
+                </div>
+                
+                <h2 class="jumanne-step-title">Tarehe ya Kuzaliwa</h2>
+                <p class="jumanne-step-subtitle">Hii inasaidia kupanga ushindani kulingana na umri wako (Challenge Week).</p>
+
+                <!-- MTEGO WA SIRI WA MA-ROBOT (HONEYPOT) -->
+                <div class="jumanne-pot-field" style="display: none !important; visibility: hidden !important;">
+                    <input type="text" id="jumanne-honey-dob" name="honey_dob" tabindex="-1" autocomplete="off">
+                </div>
+
+                <!-- Boksi la kuchagua Tarehe ya Kuzaliwa -->
+                <!-- NGOME YA SIRI: MTAMBO WA KUTELEZESHA NAMBA KAMA TIKTOK (3-COLUMN DRUM PICKER) -->
+<div class="jumanne-input-group" style="text-align: center; margin: 25px 0;">
+    <label style="display: block; margin-bottom: 15px; font-weight: bold; color: #fff;">Sogeza Namba Kuchagua Tarehe ya Kuzaliwa</label>
+    
+    <div style="display: flex; justify-content: center; gap: 15px; background: #000; padding: 15px; border-radius: 8px; border: 1px solid #222; height: 160px; overflow: hidden; position: relative;">
+        
+        <!-- Mstari wa Ulinzi: Kioo cha katikati kinachoonyesha namba iliyochaguliwa -->
+        <div style="position: absolute; top: 60px; left: 0; width: 100%; height: 40px; border-top: 1px solid #333; border-bottom: 1px solid #333; background: rgba(255,255,255,0.03); pointer-events: none;"></div>
+
+        <!-- 1. DRUM YA SIKU (DAY) -->
+        <div id="drum-siku" style="width: 70px; height: 100%; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; -ms-overflow-style: none;">
+            <div style="height: 60px; pointer-events: none;"></div>
+            <!-- Namba 01 hadi 31 zitajaa hapa kupitia JavaScript -->
+            <div style="height: 60px; pointer-events: none;"></div>
+        </div>
+
+        <!-- 2. DRUM YA MWEZI (MONTH) -->
+        <div id="drum-mwezi" style="width: 70px; height: 100%; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; -ms-overflow-style: none;">
+            <div style="height: 60px; pointer-events: none;"></div>
+            <!-- Namba 01 hadi 12 zitajaa hapa kupitia JavaScript -->
+            <div style="height: 60px; pointer-events: none;"></div>
+        </div>
+
+        <!-- 3. DRUM YA MWAKA (YEAR) -->
+        <div id="drum-mwaka" style="width: 90px; height: 100%; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; -ms-overflow-style: none;">
+            <div style="height: 60px; pointer-events: none;"></div>
+            <!-- Miaka kuanzia 1970 hadi 2016 itajaa hapa kupitia JavaScript -->
+            <div style="height: 60px; pointer-events: none;"></div>
+        </div>
+
+    </div>
+</div>
+
+
+                <!-- Vifungo vya Kusogea (Navigation Buttons) -->
+                <div class="jumanne-btn-group">
+                    <button type="button" class="jumanne-btn-back" id="jumanne-back-to-step2">Rudi Nyuma</button>
+                    <button type="button" class="jumanne-btn-next" id="jumanne-btn-to-step4">Inayofuata</button>
+                </div>
+
+                <!-- BOKSI LA GOOGLE ADS LA HATUA YA 3 -->
+                <div class="jumanne-ad-container">
+                    <span class="jumanne-ad-label">TANGAZO</span>
+                    <div class="jumanne-ad-box">
+                        <p style="color: #666; font-size: 12px; margin: 0;">Google Ad Banner Here</p>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- KUUNGANISHA JAVASCRIPT YA UKURASA HUU PEKEE -->
+    <script src="register-step3.js"></script>
+</body>
+</html>

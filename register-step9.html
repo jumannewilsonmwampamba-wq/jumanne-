@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Usajili Masharti na Hitimisho</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Faili la ikoni za FontAwesome -->
+    <link rel="stylesheet" href="css/all.min.css">
+</head>
+<body>
+
+    <!-- CONTAINER KUU YA USAJILI -->
+    <div class="jumanne-auth-container">
+        
+        <!-- BAR YA MAENDELEO (PROGRESS BAR YA HITIMISHO) -->
+        <div class="jumanne-progress-bar">
+            <div class="jumanne-progress-fill" style="width: 100%;"></div>
+        </div>
+        <p class="jumanne-step-text">Hatua: <strong>7</strong> kati ya 7</p>
+
+        <!-- FOMU YA USAJILI -->
+        <form id="jumanne-step7-form">
+            
+            <div class="jumanne-form-step" id="jumanne-step-7">
+                <!-- BOKSI LA SAA YA USALAMA (VISUAL COUNTDOWN TIMER) -->
+                <div class="jumanne-timer-box">
+                    <i class="fas fa-clock-rotate-left"></i>
+                    Muda wa Usalama: <span id="jumanne-countdown-clock">03:00</span>
+                </div>
+
+                <h2 class="jumanne-step-title">Vigezo, Masharti na Hitimisho</h2>
+                <p class="jumanne-step-subtitle">Soma na ukubali masharti yote chini ili kukamilisha usajili wako.</p>
+
+                <!-- MTEGO WA SIRI WA MA-ROBOT (HONEYPOT) -->
+                <div class="jumanne-pot-field" style="display: none !important; visibility: hidden !important;">
+                    <input type="text" id="jumanne-honey-final" name="honey_final" tabindex="-1" autocomplete="off">
+                </div>
+
+                <!-- 4. KIKUNDI CHA MASHARTI YOTE 7 YAMEJIPANGA HAPA (JUU YA VIFUNGO) -->
+                <div class="jumanne-checkbox-group">
+                    
+                    <!-- Sharti la 1: Vigezo na Masharti -->
+                    <label class="jumanne-checkbox-container">
+                        <input type="checkbox" id="jumanne-terms" required>
+                        <span class="jumanne-checkbox-text">Ninakubali Vigezo na Masharti ya JumanneTok TZ.</span>
+                    </label>
+                    
+                    <!-- Sharti la 2: Ahadi ya Maadili / Kuzuia Utupu -->
+                    <label class="jumanne-checkbox-container">
+                        <input type="checkbox" id="jumanne-anti-nudity" required>
+                        <span class="jumanne-checkbox-text" style="color: #ff5252; font-weight: 500;">
+                            ½ Ninaahidi kuwa sitapakia picha au video yoyote ya utupu au isiyo na maadili. Nikivunja, akaunti yangu ifutwe.
+                        </span>
+                    </label>
+
+                    <!-- Sharti la 3: Umri na Idhini ya Wazazi -->
+                    <label class="jumanne-checkbox-container">
+                        <input type="checkbox" id="jumanne-age-consent" required>
+                        <span class="jumanne-checkbox-text">
+                            Ninamithibitisha kuwa nina umri wa miaka 18 au zaidi, au nina idhini ya wazazi/walezi wangu kushiriki mashindano haya ya vipaji.
+                        </span>
+                    </label>
+
+                    <!-- Sharti la 4: Hakimiliki na Umiliki wa Video -->
+                    <label class="jumanne-checkbox-container">
+                        <input type="checkbox" id="jumanne-copyright-consent" required>
+                        <span class="jumanne-checkbox-text">
+                            Ninakubali kuwa video zote nitakazopakia ni kazi zangu halisi. Ninampa mratibu wa JumanneTok haki ya kuzionyesha na kuzitangaza kwenye mashindano.
+                        </span>
+                    </label>
+
+                    <!-- Sharti la 5: Lugha na Tabia (Anti-Cyberbullying) -->
+                    <label class="jumanne-checkbox-container">
+                        <input type="checkbox" id="jumanne-behavior-consent" required>
+                        <span class="jumanne-checkbox-text">
+                            Ninaahidi kutotumia lugha ya matusi, kashfa, uchochezi, au kejeli kwenye maoni (comments) au maelezo ya video zangu.
+                        </span>
+                    </label>
+
+                    <!-- Sharti la 6: Udanganyifu wa Kura (Anti-Vote Manipulation) -->
+                    <label class="jumanne-checkbox-container">
+                        <input type="checkbox" id="jumanne-fairplay-consent" required>
+                        <span class="jumanne-checkbox-text">
+                            Ninakubali kuwa matumizi ya mifumo feki (bots/hacks) kununua au kuongeza kura kwenye Challenge Week yatasababisha nifutwe mashindanoni mara moja.
+                        </span>
+                    </label>
+
+                    <!-- Sharti la 7: Matumizi ya Data na Faragha (Privacy Consent) -->
+                    <label class="jumanne-checkbox-container">
+                        <input type="checkbox" id="jumanne-privacy-consent" required>
+                        <span class="jumanne-checkbox-text">
+                            Ninaruhusu JumanneTok kutumia namba yangu ya simu na utambulisho wangu kwa ajili ya usalama wa akaunti na kupokea taarifa za ushindi.
+                        </span>
+                    </label>
+
+                    <!-- Sharti la 8 (La Dhahabu): Zawadi Papo Hapo M-Pesa/Tigo Pesa -->
+                    <label class="jumanne-checkbox-container">
+                        <input type="checkbox" id="jumanne-instant-payout-consent" required>
+                        <span class="jumanne-checkbox-text" style="color: #00e676; font-weight: 600;">
+                            💰 Ninakubali kuwa mshindi wa Challenge Week atapatikana kwa kura za haki na zawadi zote zitatumwa papo hapo kwa namba ya simu niliyosajili (M-Pesa, Airtel Money, au Tigo Pesa) ndani ya masaa 24.
+                        </span>
+                    </label>
+
+                </div>
+
+                <!-- 5. VIFUNGO VYA KUSOGEA SASA VIMESHACHUSHWA CHINI KABISA YA MASHARTI YOTE -->
+                <div class="jumanne-btn-group">
+                    <button type="button" class="jumanne-btn-back" id="jumanne-back-to-step6">Rudi Nyuma</button>
+                    <button type="submit" class="jumanne-btn-submit" id="jumanne-submit-all">Kamilisha & Ingia</button>
+                </div>
+
+                <!-- 6. BOKSI LA GOOGLE ADS LINAFUNGA UKURASA KWA CHINI KABISA -->
+                <div class="jumanne-ad-container">
+                    <span class="jumanne-ad-label">TANGAZO</span>
+                    <div class="jumanne-ad-box">
+                        <p style="color: #666; font-size: 12px; margin: 0;">Google Ad Banner Here</p>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- KUUNGANISHA JAVASCRIPT YA UKURASA HUU PEKEE -->
+    <script>
+// ==========================================================================
+// JUMANNETOK TZ - REGISTER STEP 7 (INSTANT EVACUATION & CACHE persistence)
+// ==========================================================================
+
+(function () {
+    "use strict";
+
+    // 1. INJINI YA SAA YA ULINZI (THE SECURE TIMER)
+    let mudaUliobaki = 3 * 60; 
+    const kiooSaa = document.getElementById("jumanne-countdown-clock");
+
+    const mtamboWaSaa = setInterval(() => {
+        mudaUliobaki--;
+        let dakika = String(Math.floor(mudaUliobaki / 60)).padStart(2, '0');
+        let sekunde = String(mudaUliobaki % 60).padStart(2, '0');
+        if (kiooSaa) kiooSaa.textContent = `${dakika}:${sekunde}`;
+
+        if (mudaUliobaki <= 0) {
+            clearInterval(mtamboWaSaa);
+            sessionStorage.clear();
+            alert("Muda wa usalama umeisha! Tafadhali anza upya usajili.");
+            window.location.reload();
+        }
+    }, 1000);
+
+    // 2. LISENI YA KUVUKA GOLI LA USAJILI KWA DAKIKA YA SIFURI (THE PERSISTENCE LOCK)
+    const btnBack = document.getElementById("jumanne-back-to-step6");
+    const formSubmit = document.getElementById("jumanne-step7-form");
+
+    if (btnBack) {
+        btnBack.addEventListener("click", () => {
+            clearInterval(mtamboWaSaa);
+            window.location.href = "register-step6.html";
+        });
+    }
+
+    if (formSubmit) {
+        formSubmit.addEventListener("submit", (e) => {
+            e.preventDefault(); // Zuia fomu isipige page reload kienyeji mlangoni
+
+            // Mtego wa siri wa ma-robot (Honeypot Enforcement)
+            const honeyInput = document.getElementById("jumanne-honey-final");
+            if (honeyInput && honeyInput.value.length > 0) {
+                sessionStorage.clear();
+                window.location.reload();
+                return;
+            }
+
+            // Uhakiki wa Makufuli yote 8 ya Checkbox (Must check all options)
+            const maCheckbox = formSubmit.querySelectorAll("input[type='checkbox'][required]");
+            let zoteZimegusa = true;
+            
+            maCheckbox.forEach((checkbox) => {
+                if (!checkbox.checked) zoteZimegusa = false;
+            });
+
+            if (!zoteZimegusa) {
+                alert("Ni lazima ukubali vigezo na masharti yote ya JumanneTok TZ kabla ya kuingia feed!");
+                return;
+            }
+
+            // 🔥 PIGO LA USHINDI WA ASILI: Hakuna Fetch wala XHR hapa!
+            // Mtambo unachoma chapa fupi kwenye sessionStorage kuashiria kuwa huyu ni user mpya anaingia foleni
+            sessionStorage.setItem("jumannetok_pipeline_trigger", "READY_FOR_BATCH_INGESTION");
+
+            // Tokomeza saa ya ulinzi mlangoni upesi
+            clearInterval(mtamboWaSaa);
+
+            console.log("✈️ Data persistence secure! Mtumiaji anarushwa index.html kwa dakika ya sifuri.");
+            
+            // Mvute msanii sekunde hii mnyofu ndani ya uwanja wa video wa Home Feed
+            window.location.href = "index.html";
+        });
+    }
+})();
+
+
+    </script>
+</script>
+</body>
+</html>

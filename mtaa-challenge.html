@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Ushindani wa Kata</title>
+    <!-- LINK YA FONT AWESOME KWA AJILI YA AIKONI YA SEARCH NA MSHALE -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/all.min.css">
+    <style>
+        /* CSS YOTE YA REMBO ITAPANGWA HAPA CHINI HATUA KWA HATUA CHACHE */
+        /* ==========================================================================
+   1. MISINGI YA UKURASA NA ULAYINI WA SCROLL (GLOBAL LAYOUT)
+   ========================================================================== */
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    background-color: #121212 !important; /* Nyeusi safi ya kisasa */
+    color: #ffffff !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    overflow-y: auto !important; /* Inaruhusu kuteleza kwenda chini kwa ulaini */
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important; /* Inalainisha scroll kwenye simu */
+    box-sizing: border-box !important;
+}
+
+*, *:before, *:after {
+    box-sizing: border-box !important;
+}
+
+/* CONTAINER KUU YA UKURASA */
+.jumanne-explore-page-wrapper {
+    width: calc(100% - 32px) !important;
+    max-width: 420px !important; /* Vipimo salama vya kioo cha simu */
+    margin: 0 auto !important;
+    padding: 16px 0 100px 0 !important; /* Nafasi ya chini kuzuia kufunikwa na nav bar */
+}
+
+/* ==========================================================================
+   2. UPAU WA JUU NA ENGINE YA SEARCH (EXPLORE HEADER)
+   ========================================================================== */
+.explore-header {
+    width: 100% !important;
+    margin-bottom: 20px !important;
+    background-color: #121212 !important;
+    position: sticky !important; /* Inabaki juu wakati mtumiaji anascroll */
+    top: 0 !important;
+    z-index: 10 !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+}
+
+/* Kitufe cha kurudi nyuma */
+.jumanne-btn-back-home:active {
+    color: #00e676 !important; /* Inang'aa kijani ikiguszwa */
+}
+
+/* BOKSI KUU LA SEARCH ENGINE */
+.explore-search-container {
+    width: 100% !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* Aikoni ya kioo cha kukuza (Search Icon) */
+.search-inside-icon {
+    position: absolute !important;
+    left: 16px !important;
+    color: #8a8a8a !important;
+    font-size: 14px !important;
+    z-index: 2 !important;
+}
+
+/* Sehemu ya kuandikia (Input field) */
+.explore-search-container input {
+    width: 100% !important;
+    background-color: #1e1e1e !important; /* Kijivu kizito cha kisasa */
+    border: 1px solid #2d2d2d !important;
+    border-radius: 24px !important; /* Pembe za duara kamili kama skrini yako */
+    padding: 12px 16px 12px 44px !important; /* Acha nafasi kushoto kwa ajili ya icon */
+    color: #ffffff !important;
+    font-size: 14px !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+    transition: border-color 0.2s !important;
+}
+
+.explore-search-container input:focus {
+    border-color: #00e676 !important; /* Wigo unakuwa wa kijani inayong'aa ikiguszwa */
+}
+
+/* VICHWA VYA SEHEMU (SECTION TITLES) */
+.jumanne-section-title {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    color: #00e676 !important; /* Kijani ya JumanneTok */
+    margin: 24px 0 14px 0 !important;
+    text-align: left !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* ==========================================================================
+   3. GRID KUU YA VIFUNGO VYA KATA (DYNAMIC RENDERING GRID)
+   ========================================================================== */
+.kata-grid-container {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important; /* Inaruhusu vifungo vishuke mstari wa chini vikijaa */
+    gap: 8px !important; /* Nafasi ndogo na nadhifu kati ya vifungo */
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* KADI MOJA YA KIFUNGO CHA KATA (WARD CARD BUTTON) */
+.kata-card-btn {
+    background-color: #1e1e1e !important;
+    border: 1px solid #2d2d2d !important;
+    color: #ffffff !important;
+    padding: 10px 16px !important;
+    font-size: 13.5px !important;
+    font-weight: 600 !important;
+    border-radius: 20px !important; /* Pembe za duara za kisasa */
+    text-decoration: none !important;
+    display: inline-block !important;
+    transition: background-color 0.15s, border-color 0.15s !important;
+    box-sizing: border-box !important;
+}
+
+/* Mtumiaji akikanyaga kifungo kwa kidole chake */
+.kata-card-btn:active {
+    background-color: #00e676 !important; /* Kinageuka kuwa kijani kiboko */
+    color: #000000 !important; /* Maandishi yanakuwa meusi juu ya kijani yajisome vizuri */
+    border-color: #00e676 !important;
+}
+
+    </style>
+</head>
+<body>
+
+    <!-- CONTAINER KUU YA UKURASA MZIMA (WRAPPER) -->
+    <div class="jumanne-explore-page-wrapper">
+
+        <!-- 1. UPAU WA JUU: SEHEMU YA KUTAFUTA KATA (TOP FIXED BAR) -->
+        <header class="explore-header">
+            <div class="jumanne-top-row" style="display: flex; align-items: center; margin-bottom: 16px;">
+                <!-- Kitufe cha mshale wa kurudi nyuma kinachomrudisha mtumiaji kule alikotoka -->
+                <button type="button" class="jumanne-btn-back-home" onclick="window.history.back()" style="background: none; border: none; color: white; font-size: 18px; padding-right: 12px; cursor: pointer;">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+               
+            </div>
+
+            <!-- ENGINE YA SEARCH: Boksi la kutafuta kata kwa nguvu ya kidole -->
+            <div class="explore-search-container">
+                <i class="fas fa-search search-inside-icon"></i>
+                <input type="text" id="kata-search-trigger" placeholder="Andika jina la Kata yako hapa..." autocomplete="off">
+            </div>
+        </header>
+
+        <!-- 2. KIOO CHA MATOKEO: HAPA NDIPO JAVASCRIPT ITAKAPOCHORA KATA MAHUSUSI -->
+        <h3 class="jumanne-section-title" id="jumanne-feedback-title">Kata za Ushindani</h3>
+        
+        <!-- Kontena kuu litakalojazwa kielektroniki na Array yetu ya siri -->
+        <main id="jumanne-kata-display-grid" class="kata-grid-container">
+            <!-- Vifungo vya kata vitajaa hapa moja kwa moja bila kupunguza kasi ya simu -->
+        </main>
+
+    </div>
+    <!-- 4. SEHEMU YA CHINI (BOTTOM NAVIGATION BAR) -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="explore.html" class="nav-item">
+            <i class="fas fa-compass"></i>
+            <span>Explore</span>
+        </a>
+        <a href="upload.html" class="nav-item tz-upload-btn">
+            <div class="tz-layer green-layer"></div>
+            <div class="tz-layer blue-layer"></div>
+            <div class="upload-icon-center">
+                <i class="fas fa-plus"></i>
+            </div>
+        </a>
+        <a href="weekchallenge.html" class="nav-item active">
+            <i class="fas fa-trophy"></i>
+            <span>WeekChallenge</span>
+        </a>
+        <a href="profile.html" class="nav-item" id="profile-nav-link">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+<script src="kata.js"></script>
+</body>
+</html>

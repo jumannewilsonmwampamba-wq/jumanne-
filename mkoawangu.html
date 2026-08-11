@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Trend Map Kitaifa</title>
+    
+    <!-- Link ya FontAwesome kwa ajili ya ikoni zote za mfumo -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/all.min.css">
+
+</head>
+<body>
+
+
+<!-- 1. SEHEMU YA JUU (SEARCH ENGINE YA KUTAFUTA CHANGAMOTO) -->
+   <header class="explore-header">
+       <div class="explore-search-container">
+                                           <div class="region-search-wrapper">
+                                    <div class="region-search-box">
+                                        <i class="fas fa-search search-icon-left"></i>
+                                        <input type="text" id="mkoa-search-input" placeholder="Tafuta mkoa, kaunti au jimbo..." onkeyup="tafutaMkoa()">
+                                    </div>
+                                </div>
+
+       </div>
+   </header>
+    tengeneza mfumo wa kuserch mkuu
+    <!-- 2. KATEGORIA KUU ZA JUU: ZINAZOTELEZA (SCROLL TABS) -->
+    <div class="category-scroll-wrapper" style="top: 60px;">
+        <div class="category-tabs">
+            <a href="weekchallenge.html" class="cat-tab-link">
+                <span class="cat-tab">Zote</span>
+            </a>
+            
+            <a href="trendmap-challenge.html" class="cat-tab-link">
+                <span class="cat-tab active">Trend Map</span>
+            </a>
+            
+            <a href="Mkoa-challenge.html" class="cat-tab-link">
+                <span class="cat-tab">Mkoa</span>
+            </a>
+            
+            <a href="wilaya-challenge.html" class="cat-tab-link">
+                <span class="cat-tab">Wilaya</span>
+            </a>
+            
+            <a href="mtaa-challenge.html" class="cat-tab-link">
+                <span class="cat-tab">Mtaa</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- KICHWA CHA HABARI CHA DASHBOARD -->
+    <div class="page-title-section" style="margin-top: 115px; padding: 0 15px;">
+        <h2 style="font-size: 16px; color: #ffffff;"><i class="fas fa-chart-bar"></i> Trend Map - Takwimu za Ushindani</h2>
+        <p style="font-size: 12px; color: #8a8a8f;">Mizani live ya mikoa, wilaya na mitaa inayofukuta kwa vipaji</p>
+    </div>
+
+    <!-- 3. SEHEMU KUU YA MIKOA (MAIN CONTAINER) -->
+    <main class="challenge-main-container" id="trendmap-dynamic-area" style="padding: 10px 15px; padding-bottom: 90px;">
+        
+
+
+        <!-- KUNDI LA 1: TANZANIA BARA -->
+        <div class="region-group-section">
+            <h3 class="group-title"><i class="fas fa-map-marker-alt"></i> Tanzania Bara</h3>
+            <div class="mikoa-grid-container">
+                <button class="mkoa-item-btn" onclick="funguaMkoa('kilimanjaro')">Kilimanjaro</button>
+                <button class="mkoa-item-btn" onclick="funguaMkoa('lindi')">Lindi</button>
+                <button class="mkoa-item-btn" onclick="funguaMkoa('mbeya')">Mbeya</button>
+                <button class="mkoa-item-btn" onclick="funguaMkoa('mwanza')">Mwanza</button>
+                
+                <button class="mkoa-item-btn" onclick="funguaMkoa('dar-es-salaam')">Dar es Salaam</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('dodoma')">Dodoma</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('arusha')">Arusha</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('tanga')">Tanga</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('morogoro')">Morogoro</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('pwani')">Pwani</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('iringa')">Iringa</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('njombe')">Njombe</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('tabora')">Tabora</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('singida')">Singida</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('shinyanga')">Shinyanga</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('simiyu')">Simiyu</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('geita')">Geita</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('kagera')">Kagera</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('mara')">Mara</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('kigoma')">Kigoma</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('ruvuma')">Ruvuma</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('mtwara')">Mtwara</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('katavi')">Katavi</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('rukwa')">Rukwa</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('songwe')">Songwe</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('manyara')">Manyara</button>
+
+            </div>
+        </div>
+
+        <!-- KUNDI LA 2: ZANZIBAR -->
+        <div class="region-group-section">
+            <h3 class="group-title"><i class="fas fa-umbrella-beach"></i> Zanzibar</h3>
+            <div class="mikoa-grid-container">
+                <button class="mkoa-item-btn" onclick="funguaMkoa('mjini-magharibi')">Mjini Magharibi</button>
+                <button class="mkoa-item-btn" onclick="funguaMkoa('kaskazini-unguia')">Kaskazini Unguja</button>
+                <button class="mkoa-item-btn" onclick="funguaMkoa('kusini-unguia')">Kusini Unguja</button>
+                <button class="mkoa-item-btn" onclick="funguaMkoa('kaskazini-pemba')">Kaskazini Pemba</button>
+                <button class="mkoa-item-btn" onclick="funguaMkoa('kusini-pemba')">Kusini Pemba</button>
+
+            </div>
+        </div>
+
+        <!-- KUNDI LA 3: KENYA -->
+        <div class="region-group-section">
+            <h3 class="group-title"><i class="fas fa-globe-africa"></i> Kenya (Counties)</h3>
+            <div class="mikoa-grid-container">
+                <button class="mkoa-item-btn" onclick="funguaMkoa('nairobi')">Nairobi</button>
+                <button class="mkoa-item-btn" onclick="funguaMkoa('mombasa')">Mombasa</button>
+                <button class="mkoa-item-btn" onclick="funguaMkoa('kisumu')">Kisumu</button>
+                <button class="mkoa-item-btn" onclick="funguaMkoa('nakuru')">Nakuru</button>
+                <button class="mkoa-item-btn" onclick="funguaMkoa('kiambu')">Kiambu</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('machakos')">Machakos</button>
+<button class="mkoa-item-btn" onclick="funguaMkoa('uasin-gishu')">Uasin Gishu (Eldoret)</button>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 4. SEHEMU YA CHINI (BOTTOM NAVIGATION BAR) -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="explore.html" class="nav-item">
+            <i class="fas fa-compass"></i>
+            <span>Explore</span>
+        </a>
+        <!-- Kitufe cha Kati cha Upload (TikTok Style) -->
+        <a href="upload.html" class="nav-item tz-upload-btn">
+            <div class="tz-layer green-layer"></div>
+            <div class="tz-layer blue-layer"></div>
+            <div class="upload-icon-center">
+                <i class="fas fa-plus"></i>
+            </div>
+        </a>
+        <a href="weekchallenge.html" class="nav-item active">
+            <i class="fas fa-trophy"></i>
+            <span>WeekChallenge</span>
+        </a>
+        <a href="profile.html" class="nav-item" id="profile-nav-link">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script>
+// ==========================================================================
+// INJINI MPYA YA UTANGAZAJI NA UTAFUTAJI WA MKOA (LIVE SEARCH CONTROLLER)
+// ==========================================================================
+
+function tafutaMkoa() {
+    // 1. Kamata lile boksi la search kupitia ID yake
+    const boksiLaSearch = document.getElementById("mkoa-search-input");
+    if (!boksiLaSearch) return;
+
+    // 2. Geuza herufi zote kuwa ndogo (Lower Case) ili kusafisha utafutaji
+    const nenoLinalotafutwa = boksiLaSearch.value.toLowerCase().trim();
+
+    // 3. Kamata vifungo vyote vya mikoa na wilaya vyenye class ya mkoa-card-btn
+    const vifungoVyaMaeneo = document.querySelectorAll(".mkoa-item-btn");
+
+    // 4. Pita kwenye kila kitufe na ukague kama herufi zinaendana
+    vifungoVyaMaeneo.forEach(kifungo => {
+        // Soma maandishi yaliyopo juu ya kitufe (mfano: Temeke, Kinondoni, Mombasa)
+        const jinaLaEneo = kifungo.textContent || kifungo.innerText;
+        const jinaSafi = jinaLaEneo.toLowerCase();
+
+        // KAGUA: Kama jina la eneo lina yale maandishi ya kwenye boksi
+        if (jinaSafi.includes(nenoLinalotafutwa)) {
+            // Kama neno lipo, rudi kiooni kwa nguvu na ondoa mtindo wowote wa kujificha
+            kifungo.style.setProperty("display", "inline-block", "important");
+        } else {
+            // Kama halipo, lifute kiooni kabisa sekunde hiyo hiyo
+            kifungo.style.setProperty("display", "none", "important");
+        }
+    });
+}
+
+// MTEGO WA ZIADA (BACKUP): Hakikisha inafanya kazi hata kama onkeyup ya HTML ikizenga
+document.addEventListener("DOMContentLoaded", () => {
+    const boksiLaSearch = document.getElementById("mkoa-search-input");
+    if (boksiLaSearch) {
+        // Inasikiliza kila mguso, kila herufi inayoshuka, na hata mtu akipaste neno
+        boksiLaSearch.addEventListener("input", tafutaMkoa);
+    }
+});
+
+    </script>
+</body>
+</html>

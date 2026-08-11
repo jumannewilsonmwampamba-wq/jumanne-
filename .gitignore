@@ -1,0 +1,6 @@
+# Ficha ma-file ya siri na maktaba nzito zisipande GitHub kienyeji
+.env
+node_modules/
+vipaji_ghafi_test/
+jumanne_videos_vault_test/
+.DS_Store

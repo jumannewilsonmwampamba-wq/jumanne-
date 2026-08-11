@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Usajili Jinsia</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Faili la ikoni za FontAwesome -->
+    <link rel="stylesheet" href="css/all.min.css">
+</head>
+<body>
+
+    <!-- CONTAINER KUU YA USAJILI -->
+    <div class="jumanne-auth-container">
+        
+        <!-- BAR YA MAENDELEO (PROGRESS BAR) -->
+        <div class="jumanne-progress-bar">
+            <div class="jumanne-progress-fill" style="width: 85.7%;"></div>
+        </div>
+        <p class="jumanne-step-text">Hatua: <strong>6</strong> kati ya 7</p>
+
+        <!-- FOMU YA USAJILI -->
+        <form id="jumanne-gender-form">
+            
+            <!-- SEHEMU YA KUCHAGUA JINSIA -->
+            <div class="jumanne-form-step" id="jumanne-step-gender">
+                <!-- BOKSI LA SAA YA USALAMA (VISUAL COUNTDOWN TIMER) -->
+                <div class="jumanne-timer-box">
+                    <i class="fas fa-clock-rotate-left"></i>
+                    Muda wa Usalama: <span id="jumanne-countdown-clock">03:00</span>
+                </div>
+                
+                <h2 class="jumanne-step-title">Jinsia Yako</h2>
+                <p class="jumanne-step-subtitle">Tufahamishe jinsia yako ili kukamilisha wasifu wako mtaani.</p>
+
+                <!-- MTEGO WA SIRI WA MA-ROBOT (HONEYPOT) -->
+                <div class="jumanne-pot-field" style="display: none !important; visibility: hidden !important;">
+                    <input type="text" id="jumanne-honey-gender" name="honey_gender" tabindex="-1" autocomplete="off">
+                </div>
+
+                <!-- 1. Sehemu ya Kuchagua Jinsia -->
+                <div class="jumanne-input-group">
+                    <label for="jumanne-gender">Jinsia Yako</label>
+                    <select id="jumanne-gender" required style="width: 100%; padding: 12px; background: #111; border: 1px solid #222; border-radius: 6px; color: #fff; font-size: 15px;">
+                        <option value="">-- Chagua Jinsia... --</option>
+                        <option value="Mume">Mme (Kiume)</option>
+                        <option value="Mke">Mke (Kike)</option>
+                    </select>
+                </div>
+
+                <!-- Vifungo vya Kusogea (Navigation Buttons) -->
+                <div class="jumanne-btn-group">
+                    <button type="button" class="jumanne-btn-back" id="jumanne-back-to-profile-pic">Rudi Nyuma</button>
+                    <button type="button" class="jumanne-btn-next" id="jumanne-btn-to-step7">Inayofuata</button>
+                </div>
+
+                <!-- BOKSI LA GOOGLE ADS LA SEHEMU YA JINSIA -->
+                <div class="jumanne-ad-container">
+                    <span class="jumanne-ad-label">TANGAZO</span>
+                    <div class="jumanne-ad-box">
+                        <p style="color: #666; font-size: 12px; margin: 0;">Google Ad Banner Here</p>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- KUUNGANISHA JAVASCRIPT YA UKURASA HUU PEKEE -->
+    <script src="gender.js"></script>
+</body>
+</html>

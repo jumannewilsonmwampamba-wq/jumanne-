@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Tafuta Haraka</title>
+    
+    <!-- Link ya FontAwesome kwa ajili ya ikoni zote za mfumo -->
+    <link rel="stylesheet" href="https://cloudflare.com" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/all.min.css">
+
+</head>
+<body>
+
+    <!-- 1. SEHEMU YA JUU (QUICK SEARCH SYSTEM WITH BACK ARROW) -->
+    <header class="search-page-header">
+        <!-- Kitufe cha mshale kinachomrudisha mtumiaji Home Feed (index.html) -->
+        <button class="btn-back-arrow" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        
+        <!-- Sanduku la utafutaji wa haraka (Akaunti na Hashtags) -->
+        <div class="main-search-input-box">
+            <i class="fas fa-search inside-input-icon"></i>
+            <input type="text" id="home-search-field" placeholder="Tafuta wasanii, video au #hashtags..." autofocus>
+        </div>
+    </header>
+
+    <!-- 2. SEHEMU KUU AMBAPO JAVASCRIPT ITAMWAGA MAJIBU YA VIDEO (GRID VIEW) -->
+    <main class="explore-grid-container" id="search-home-results">
+        <!-- JAVASCRIPT ITAMWAGA MATOKEO YA WASANII NA VIDEO HAPA USER AKIANZA KUANDIKA -->
+    </main>
+
+    <!-- 3. SEHEMU YA CHINI (BOTTOM NAVIGATION BAR) -->
+    <nav class="bottom-nav">
+        <!-- Kitufe cha Home kinabaki active kwa sababu utafutaji huu umeanzia Home -->
+        <a href="index.html" class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+
+        <a href="explore.html" class="nav-item">
+            <i class="fas fa-compass"></i>
+            <span>Explore</span>
+        </a>
+
+        <a href="upload.html" class="nav-item tz-upload-btn">
+            <div class="tz-layer green-layer"></div>
+            <div class="tz-layer blue-layer"></div>
+            <div class="upload-icon-center">
+                <i class="fas fa-plus"></i>
+            </div>
+        </a>
+
+        <a href="weekchallenge.html" class="nav-item">
+            <i class="fas fa-trophy"></i>
+            <span>WeekChallenge</span>
+        </a>
+
+        <a href="profile.html" class="nav-item" id="profile-nav-link">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Kuunganisha JavaScript maalumu ya utafutaji wa haraka wa wasanii na hashtags -->
+    <script src="search-home.js"></script>
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Taarifa (Notifications)</title>
+    <!-- LINK YA FONT AWESOME KWA AJILI YA AIKONI ZA UPENDELEO -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <link rel="stylesheet" href="css/all.min.css">
+    <style>
+        /* CSS YOTE YA REMBO ITATESTIWA NA KUWEKWA HAPA KIDOGO KIDOGO */
+        /* ==========================================================================
+   1. MISINGI YA UKURASA NA ULAINI WA SCROLL (GLOBAL LAYOUT)
+   ========================================================================== */
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    background-color: #121212 !important; /* Rangi nyeusi ya JumanneTok */
+    color: #ffffff !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    overflow-y: auto !important; /* Inaruhusu scroll ya kwenda chini */
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important; /* Inalainisha scroll kwenye simu */
+    box-sizing: border-box !important;
+}
+
+*, *:before, *:after {
+    box-sizing: border-box !important;
+}
+
+/* CONTAINER KUU YA UKURASA WA TAARIFA */
+.jumanne-notifications-container {
+    width: calc(100% - 32px) !important;
+    max-width: 420px !important; /* Vipimo kamili vya skrini ya simu */
+    background-color: #1e1e1e !important; /* Kijivu kizito cha Dark Mode */
+    padding: 20px !important;
+    border-radius: 16px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+    margin: 40px auto 100px auto !important; /* Nafasi ya chini kuzuia kufunikwa na nav bar */
+}
+
+/* ==========================================================================
+   2. UPAU WA JUU (TOP HEADER LAYOUT)
+   ========================================================================== */
+.jumanne-notifications-header {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin-bottom: 24px !important;
+    border-bottom: 1px solid #2a2a2a !important;
+    padding-bottom: 14px !important;
+}
+
+/* Kitufe cha mshale wa kurudi nyuma */
+.jumanne-btn-back {
+    background-color: transparent !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-size: 18px !important;
+    cursor: pointer !important;
+    padding: 6px 12px 6px 0 !important;
+    transition: color 0.2s !important;
+}
+
+.jumanne-btn-back:active {
+    color: #00e676 !important; /* Inang'aa kijani ikiguszwa */
+}
+
+.jumanne-page-title {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
+    letter-spacing: -0.5px !important;
+}
+
+/* CONTENA LA FEED YA TAARIFA */
+.jumanne-feed-wrapper {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important; /* Nafasi kati ya kadi na kadi */
+}
+
+/* ==========================================================================
+   3. MUUNDO WA MSINGI WA KADI YA TAARIFA (NOTIFICATION CARD BASE)
+   ========================================================================== */
+.jumanne-notification-card {
+    width: 100% !important;
+    background-color: #252525 !important; /* Kijivu chepesi kidogo */
+    border: 1px solid #2d2d2d !important;
+    border-radius: 12px !important;
+    padding: 14px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 12px !important;
+    box-sizing: border-box !important;
+    transition: background-color 0.2s !important;
+    position: relative !important;
+}
+
+/* Duara la picha ya mtumiaji (Avatar) */
+.jumanne-noti-avatar {
+    width: 46px !important;
+    height: 46px !important;
+    border-radius: 50% !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-color: #333333 !important;
+    flex-shrink: 0 !important; /* Kuzuia duara lisibonyezwe */
+    position: relative !important;
+}
+
+/* Eneo la maandishi ya taarifa */
+.jumanne-noti-content {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    text-align: left !important;
+}
+
+.jumanne-noti-text {
+    font-size: 13.5px !important;
+    line-height: 1.4 !important;
+    color: #e0e0e0 !important;
+    margin: 0 0 4px 0 !important;
+}
+
+.jumanne-noti-text strong {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+/* Maandishi ya muda (Time stamp) */
+.jumanne-noti-time {
+    font-size: 11px !important;
+    color: #8a8a8a !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+}
+
+/* Aikoni ya kiashiria iliyopo kulia kabisa */
+.jumanne-noti-action-icon {
+    font-size: 18px !important;
+    flex-shrink: 0 !important;
+    opacity: 0.8 !important;
+}
+/* ==========================================================================
+   4. UREMBO MAALUM WA KADI YA KURA (VOTE ALERT HIGHLIGHT)
+   ========================================================================== */
+.jumanne-alert-vote {
+    border-left: 4px solid #00e676 !important; /* Mstari mwembamba wa kijani kushoto */
+}
+
+.jumanne-alert-vote:active {
+    background-color: #2d2d2d !important;
+}
+
+/* ==========================================================================
+   5. UNG'AAJI WA KADI YA MDHAMINI / SKAUTI (SPONSOR ALERT HIGHLIGHT)
+   ========================================================================== */
+.jumanne-alert-sponsor {
+    background-color: rgba(0, 176, 255, 0.05) !important; /* Bluu ya mbali sana nyuma */
+    border: 1px solid rgba(0, 176, 255, 0.3) !important; /* Wigo mwembamba wa bluu ya bando */
+    border-left: 4px solid #00b0ff !important; /* Mstari thabiti wa bluu kushoto */
+}
+
+/* Background ya duara la aikoni ya suti */
+.jumanne-scout-icon-bg {
+    background-color: #00b0ff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.jumanne-scout-icon-bg i {
+    color: #000000 !important; /* Aikoni nyeusi juu ya bluu */
+    font-size: 18px !important;
+}
+
+/* ==========================================================================
+   6. REMBO LA KADI YA SIKU YA KUZALIWA (BIRTHDAY ALERT HIGHLIGHT)
+   ========================================================================== */
+.jumanne-alert-birthday {
+    background-color: rgba(255, 215, 0, 0.03) !important; /* Rangi ya dhahabu ya mbali sana nyuma */
+    border: 1px solid rgba(255, 215, 0, 0.2) !important;
+    border-left: 4px solid #ffd700 !important; /* Mstari wa dhahabu wa sherehe kushoto */
+}
+
+/* Kibandiko cha keki juu ya picha (Cake Badge) */
+.jumanne-cake-badge {
+    position: absolute !important;
+    bottom: -4px !important;
+    right: -4px !important;
+    font-size: 14px !important;
+    background-color: #1e1e1e !important;
+    border-radius: 50% !important;
+    padding: 2px !important;
+    display: block !important;
+}
+
+/* KITUFE CHA DHAHABU CHA BONASI YA KURA (BIRTHDAY WISH BUTTON) */
+.jumanne-btn-birthday-wish {
+    align-self: flex-start !important; /* Kitufe kisivutike kioo kizima */
+    background-color: #00e676 !important; /* Kijani inayong'aa ya JumanneTok */
+    color: #000000 !important; /* Herufi nyeusi juu ya kijani */
+    border: none !important;
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    border-radius: 6px !important;
+    margin-top: 8px !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s, opacity 0.2s !important;
+    box-sizing: border-box !important;
+}
+
+.jumanne-btn-birthday-wish:active {
+    background-color: #00c864 !important;
+}
+
+/* Hali ya kitufe kikitumiwa na mshabiki (Disabled/Used State) */
+.jumanne-btn-birthday-wish.jumanne-wish-used {
+    background-color: #333333 !important; /* Kijivu kilichokufa */
+    color: #8a8a8a !important; /* Herufi za kijivu zilofubaa */
+    cursor: not-allowed !important; /* Kataa mshale wa kidole */
+    pointer-events: none !important; /* Zuia amri ya kubonyeza kabisa */
+}
+
+    </style>
+</head>
+<body>
+
+    <!-- KONTENA KUU YA UKURASA WA TAARIFA -->
+    <div class="jumanne-notifications-container">
+
+        <!-- 1. MUUNDO WA JUU: UPAU WA JUU (TOP HEADER) -->
+        <div class="jumanne-notifications-header">
+            <!-- Kitufe cha mshale kinachomrudisha mtumiaji kule alikotoka Home au Profile -->
+            <button type="button" class="jumanne-btn-back" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2 class="jumanne-page-title">Taarifa Zako</h2>
+        </div>
+
+        <!-- LIST KUU YA MABOKSI YA TAARIFA (NOTIFICATION FEED CONTAINER) -->
+        <!-- JavaScript itakuwa inadondosha kadi za kura, likes, na birthday hapa kutoka kwenye database -->
+        <div id="jumanne-notifications-feed" class="jumanne-feed-wrapper">
+            
+            <!-- VIPENGELE VYA KADI ZA TAARIFA VITAFUATA HAPA CHINI HATUA KWA HATUA -->
+            <!-- KADI YA 1: TAARIFA YA KURA MPYA (VOTING ALERT CARD) -->
+<div class="jumanne-notification-card jumanne-alert-vote">
+    <!-- Duara la picha ya shabiki aliyepiga kura -->
+    <div class="jumanne-noti-avatar" style="background-image: url('https://picsum.photos');"></div>
+    
+    <!-- Maelezo ya kura kutoka Database -->
+    <div class="jumanne-noti-content">
+        <p class="jumanne-noti-text">
+            <strong>Kipaji Chipukizi</strong> na watu wengine 12 wamekupigia <strong>Kura</strong> kwenye Challenge ya Mkoa!
+        </p>
+        <span class="jumanne-noti-time"><i class="fas fa-clock"></i> Dakika 2 zilizopita</span>
+    </div>
+    
+    <!-- Aikoni ya ushindi kulia mwa boksi -->
+    <div class="jumanne-noti-action-icon">🗳️</div>
+</div>
+
+<!-- KADI YA 2: TAARIFA YA MDHAMINI / SKAUTI (SPONSOR ALERT CARD) -->
+<div class="jumanne-notification-card jumanne-alert-sponsor">
+    <!-- Aikoni ya mdhamini au suti ya kibiashara -->
+    <div class="jumanne-noti-avatar jumanne-scout-icon-bg">
+        <i class="fas fa-user-tie"></i>
+    </div>
+    
+    <!-- Maelezo ya fursa ya mkataba -->
+    <div class="jumanne-noti-content">
+        <p class="jumanne-noti-text">
+            <strong>Mdhamini / Skauti</strong> amekagua Profile yako na kuomba <strong>Namba yako ya Simu</strong> ya usajili!
+        </p>
+        <span class="jumanne-noti-time"><i class="fas fa-clock"></i> Lisaa 1 lililopita</span>
+    </div>
+    
+    <!-- Alama ya kengele ya fursa -->
+    <div class="jumanne-noti-action-icon">📞</div>
+</div>
+<!-- KADI YA 3: TAARIFA YA SIKU YA KUZALIWA YA RAFIKI (BIRTHDAY ALERT CARD) -->
+<div class="jumanne-notification-card jumanne-alert-birthday">
+    
+    <!-- Picha ya yule rafiki anayesherehekea siku yake ya kuzaliwa leo -->
+    <div class="jumanne-noti-avatar jumanne-birthday-avatar-bg" style="background-image: url('https://picsum.photos');">
+        <!-- Karagosi kidogo cha keki juu ya picha yake -->
+        <span class="jumanne-cake-badge">🎂</span>
+    </div>
+    
+    <!-- Ujumbe na maelezo ya siku ya kuzaliwa kutoka database -->
+    <div class="jumanne-noti-content">
+        <p class="jumanne-noti-text">
+            Leo ni siku ya kuzaliwa ya msanii wa nyumbani <strong>Jumaa_Rap_TZ</strong> kutoka mkoani kwako!
+        </p>
+        <!-- Kitufe cha dhahabu cha kumpiga bonasi ya kura 5 za bure -->
+        <!-- JavaScript itashughulika na mabadiliko ya kitufe hiki kikibonyezwa -->
+        <button type="button" class="jumanne-btn-birthday-wish" onclick="pigaKuraZaBirthday(this)">
+            🎉 Mtakie Heri (+5 Kura)
+        </button>
+    </div>
+    
+    <!-- Alama ya maputo kulia mwa kadi -->
+    <div class="jumanne-noti-action-icon">🎈</div>
+    
+</div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

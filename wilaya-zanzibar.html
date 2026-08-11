@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Wilaya za Zanzibar</title>
+    
+    <!-- Link ya FontAwesome kwa ajili ya ikoni zote za mfumo -->
+    <link rel="stylesheet" href="https://cloudflare.com" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/all.min.css">
+
+</head>
+<body>
+
+    <!-- 1. SEHEMU YA JUU (SEARCH ENGINE YA KUTAFUTA WILAYA ZA ZANZIBAR NDANI KWA NDANI) -->
+<header class="explore-header">
+    <div class="explore-search-container">
+        <i class="fas fa-search search-inside-icon"></i>
+        <!-- Nimeondoa 'onclick' ili mfumo usihame ukurasa kabisa mkuu -->
+        <input type="text" id="zanzibar-search-trigger" placeholder="Tafuta wilaya za Zanzibar...">
+    </div>
+</header>
+
+
+    <!-- 2. KATEGORIA KUU ZA JUU: ZANZIBAR INAKUWA ACTIVE -->
+    <div class="category-scroll-wrapper" style="top: 60px;">
+        <div class="category-tabs">
+            <a href="wilaya-bara.html" class="cat-tab-link">
+                <span class="cat-tab">Tanzania Bara</span>
+            </a>
+            <a href="wilaya-zanzibar.html" class="cat-tab-link">
+                <span class="cat-tab active">Zanzibar</span>
+            </a>
+            <a href="wilaya-kenya.html" class="cat-tab-link">
+                <span class="cat-tab">Kenya</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- KICHWA CHA HABARI -->
+    <div class="page-title-section" style="margin-top: 115px; padding: 0 15px;">
+        <h2 style="font-size: 16px; color: #ffffff;"><i class="fas fa-map-marker-alt"></i> Orodha ya Wilaya (Zanzibar)</h2>
+        <p style="font-size: 12px; color: #8a8a8f;">Chagua wilaya kuona changamoto zake</p>
+    </div>
+
+    <!-- 3. ORODHA YA WILAYA (GRID YA UNGUJA) -->
+    <main class="mikoa-grid-container">
+        
+<!-- ==========================================================================
+     24. ZANZIBAR (UNGUJA NA PEMBA ISLANDS): KWENDA CHALLENGE FEED
+     ========================================================================== -->
+<a href="challenge-feed.html?wilaya=Mjini Unguja" class="mkoa-card-btn">Mjini Unguja</a>
+<a href="challenge-feed.html?wilaya=Kaskazini A Unguja" class="mkoa-card-btn">Kaskazini A</a>
+<a href="challenge-feed.html?wilaya=Kusini Unguja" class="mkoa-card-btn">Kusini Unguja</a>
+<a href="challenge-feed.html?wilaya=Chake Chake Pemba" class="mkoa-card-btn">Chake Chake (Pemba)</a>
+<a href="challenge-feed.html?wilaya=Wete Pemba" class="mkoa-card-btn">Wete (Pemba)</a>
+<a href="challenge-feed.html?wilaya=Mkoani Pemba" class="mkoa-card-btn">Mkoani (Pemba)</a>
+<!-- ==========================================================================
+     30. MAENEO YA ZIADA ZANZIBAR (HITIMISHO LA RAMANI)
+     ========================================================================== -->
+<a href="challenge-feed.html?wilaya=Magharibi A Unguja" class="mkoa-card-btn">Magharibi A</a>
+<a href="challenge-feed.html?wilaya=Magharibi B Unguja" class="mkoa-card-btn">Magharibi B</a>
+<a href="challenge-feed.html?wilaya=Kaskazini B Unguja" class="mkoa-card-btn">Kaskazini B</a>
+<a href="challenge-feed.html?wilaya=Micheweni Pemba" class="mkoa-card-btn">Micheweni (Pemba)</a>
+
+
+    </main>
+
+    <!-- 4. SEHEMU YA CHINI (BOTTOM NAVIGATION BAR) -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="explore.html" class="nav-item">
+            <i class="fas fa-compass"></i>
+            <span>Explore</span>
+        </a>
+        <a href="upload.html" class="nav-item tz-upload-btn">
+            <div class="tz-layer green-layer"></div>
+            <div class="tz-layer blue-layer"></div>
+            <div class="upload-icon-center">
+                <i class="fas fa-plus"></i>
+            </div>
+        </a>
+        <a href="weekchallenge.html" class="nav-item active">
+            <i class="fas fa-trophy"></i>
+            <span>WeekChallenge</span>
+        </a>
+        <a href="profile.html" class="nav-item" id="profile-nav-link">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+<script>
+    // INJINI YA KUTAFUTA WILAYA ZA ZANZIBAR LIVE (ZANZIBAR DISTRICT SEARCH CONTROLLER)
+document.addEventListener("DOMContentLoaded", () => {
+    
+    const boksiLaZanzibarSearch = document.getElementById("zanzibar-search-trigger");
+
+    // Sikiliza kila herufi inayoshuka kutoka kwenye keyboard ya simu
+    boksiLaZanzibarSearch.addEventListener("input", function() {
+        // Geuza maandishi kuwa herufi ndogo (Lower Case) kusafisha utafutaji
+        const nenoLinalotafutwa = this.value.toLowerCase().trim();
+        
+        // Kamata vifungo vyote vya mikoa na wilaya (class="mkoa-card-btn")
+        const vifungoVyaMaeneo = document.querySelectorAll(".mkoa-card-btn");
+
+        vifungoVyaMaeneo.forEach(kifungo => {
+            // Soma jina la eneo lililoandikwa juu ya kitufe
+            const jinaLaEneo = kifungo.innerText.toLowerCase();
+
+            // KAGUA: Kama jina lina herufi zinazofanana na zilizoandikwa kwenye search bar
+            if (jinaLaEneo.includes(nenoLinalotafutwa)) {
+                // Lifanye boksi libaki kiooni
+                kifungo.style.setProperty("display", "inline-block", "important");
+            } else {
+                // Lifiche boksi kabisa lisivuruge kioo cha mtumiaji
+                kifungo.style.setProperty("display", "none", "important");
+            }
+        });
+    });
+});
+
+</script>
+</body>
+</html>

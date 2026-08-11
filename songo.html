@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Wasifu wa Msanii</title>
+    <!-- CSS NA FONTAWESOME VINAPACHIKWA HAPA -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/all.min.css">
+</head>
+<body class="jumanne-dark-mode">
+
+    <!-- 1. KADI KUU YA PROFILE (PROFILE WRAPPER) -->
+    <div class="jumanne-profile-container">
+
+        <!-- ==========================================================================
+        MENU YA SIRI YA NUKTA TATU JUU KULIA (MORE OPTIONS)
+        ========================================================================= -->
+        <div class="jumanne-more-container">
+            <button type="button" class="jumanne-btn-more" onclick="togglesemuyamore()">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div id="jumanne-more-menu" class="jumanne-more-dropdown" style="display: none;">
+                <a class="jumanne-dropdown-item" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+                    <i class="fas fa-cog"></i> Mapende Account Yako
+                </a>
+                <a class="jumanne-dropdown-item" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+                    <i class="fas fa-check-circle" style="color: #00b0ff !important;"></i> Thibitisha Kipaji (Verification)
+                </a>
+                <a class="jumanne-dropdown-item" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+                    <i class="fas fa-user-tie"></i> Mfumo wa Skauti / Sponsor
+                </a>
+                <a class="jumanne-dropdown-item" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+                    <i class="fas fa-user-plus" style="color: #00e676 !important;"></i> Alika Rafiki (Promo Code)
+                </a>
+                <a class="jumanne-dropdown-item" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+                    <i class="fas fa-vote-yea" style="color: #00e676 !important;"></i> Sheria & Viwango vya Kura
+                </a>
+                <a class="jumanne-dropdown-item" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+                    <i class="fas fa-copyright" style="color: #00e676 !important;"></i> Haki Miliki (Copyright)
+                </a>
+                <a class="jumanne-dropdown-item" onclick="badiliMfumoWaBando()">
+                    <i class="fas fa-database" id="jumanne-datasaver-icon"></i> 
+                    <span id="jumanne-datasaver-text">Kutunza Bando: IMEZIMWA</span>
+                </a>
+                <a class="jumanne-dropdown-item" onclick="badiliMuonekanoMode()">
+                    <i class="fas fa-moon"></i> Badili Dark/Light
+                </a>
+                <a class="jumanne-dropdown-item jumanne-item-danger" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+                    <i class="fas fa-exclamation-triangle"></i> Ripoti Ukiukaji wa Maadili
+                </a>
+                <a class="jumanne-dropdown-item" onclick="ondokaKwenyeMfumo()">
+                    <i class="fas fa-sign-out-alt"></i> Ondoka (Log Out)
+                </a>
+            </div>
+        </div>
+
+        <!-- ==========================================================================
+        2. BOKSI LA JUU LA UTUMBULISHO (PROFILE HEADER BOX)
+        ========================================================================== -->
+        <div class="jumanne-profile-header-box" style="text-align: center; margin-top: 20px;">
+            <!-- Mduara mkubwa wa picha ya mtumiaji (Avatar Box) -->
+            <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+                <div id="jumanne-user-avatar" class="jumanne-avatar-large" style="width: 110px; height: 110px; border-radius: 50%; background-size: cover; background-position: center; border: 3px solid #00f2fe;"></div>
+            </div>
+            
+            <!-- Kitufe cha siri cha simu kufungua Gallery na kubadili picha -->
+            <input type="file" id="jumanne-change-avatar-input" accept="image/*" style="display: none;">
+            <button type="button" id="jumanne-btn-change-avatar" class="jumanne-btn-change-photo" onclick="document.getElementById('jumanne-change-avatar-input').click()" style="margin-bottom: 15px;">
+                📸 Badilisha Picha
+            </button>
+
+            <!-- Jona la Username ya Kisanii na kiungo cha kushare WhatsApp -->
+            <h2 id="jumanne-user-name" class="jumanne-profile-fullname" style="margin: 5px 0; font-size: 22px;">Inapakia Jina...</h2>
+            <p id="jumanne-user-location" class="jumanne-profile-location-text" style="color: #888; font-size: 14px; margin-bottom: 15px;">Inapakia Eneo...</p>
+        </div>
+
+        <!-- ==========================================================================
+        3. HADHI YA AKAUNTI NA MATAJI (ROLE & BADGES SHOWCASE)
+        ========================================================================== -->
+        <div class="jumanne-profile-badges-section" style="text-align: center; margin-bottom: 20px;">
+            <span id="jumanne-user-role" class="jumanne-badge-role" style="padding: 5px 15px; background: #222; border-radius: 20px; font-weight: bold; font-size: 13px; color: #00f2fe;">Hadhi ya Akaunti</span>
+            
+            <div id="jumanne-user-trophies" class="jumanne-trophies-container" style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
+                <span class="jumanne-badge-trophy" title="Ameshinda kura nyingi mtaani kwake">🏅 Mfalme wa Mtaa</span>
+                <span class="jumanne-badge-trophy" title="Ameingia Top 10 ya Wilaya">🔥 Mkali wa Wiki</span>
+            </div>
+        </div>
+
+        <!-- ==========================================================================
+        4. SHAJARA YA MTAA (DAY STORY TEXT BOX)
+        ========================================================================== -->
+        <div class="jumanne-shajara-section" style="background: #111; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <div class="jumanne-shajara-title" style="font-weight: bold; font-size: 14px; color: #555; margin-bottom: 5px;">
+                <span>📢 Shajara ya Mtaa (Masaa 24)</span>
+            </div>
+            <div class="jumanne-shajara-content">
+                <p id="jumanne-user-story" style="margin: 0; font-size: 14px; color: #fff;">Inapakia taarifa za leo...</p>
+            </div>
+        </div>
+
+        <!-- ==========================================================================
+        5. TAKWIMU ZA USHINDANI (ANALYTICS GRID BOXES)
+        ========================================================================== -->
+        <div class="jumanne-stats-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; text-align: center; margin-bottom: 25px; background: #111; padding: 10px; border-radius: 8px;">
+            <div class="jumanne-stat-box">
+                <span id="jumanne-count-followers" class="jumanne-stat-number" style="display: block; font-weight: bold; font-size: 16px; color: #fff;">0</span>
+                <span class="jumanne-stat-label" style="font-size: 11px; color: #666;">Mashabiki</span>
+            </div>
+            <div class="jumanne-stat-box">
+                <span id="jumanne-count-following" class="jumanne-stat-number" style="display: block; font-weight: bold; font-size: 16px; color: #fff;">0</span>
+                <span class="jumanne-stat-label" style="font-size: 11px; color: #666;">Anaofuata</span>
+            </div>
+            <div class="jumanne-stat-box">
+                <span id="jumanne-count-likes" class="jumanne-stat-number" style="display: block; font-weight: bold; font-size: 16px; color: #fff;">0</span>
+                <span class="jumanne-stat-label" style="font-size: 11px; color: #666;">Likes</span>
+            </div>
+            <div class="jumanne-stat-box">
+                <span id="jumanne-count-views" class="jumanne-stat-number" style="display: block; font-weight: bold; font-size: 16px; color: #fff;">0</span>
+                <span class="jumanne-stat-label" style="font-size: 11px; color: #666;">Views</span>
+            </div>
+            <div class="jumanne-stat-box">
+                <span id="jumanne-count-points" class="jumanne-stat-number" style="display: block; font-weight: bold; font-size: 16px; color: #00e676;">0</span>
+                <span class="jumanne-stat-label" style="font-size: 11px; color: #666;">Pointi</span>
+            </div>
+        </div>
+
+        <!-- ==========================================================================
+        6. 🔥 DROO YA CHINI: UWANJA WA VIDEO (CONDITIONAL RENDERING BOXES)
+        ========================================================================== -->
+        <div class="jumanne-profile-videos-section" style="border-top: 1px solid #222; padding-top: 15px;">
+            
+            <!-- 📱 BOKSI A: Gridi ya Video 3-Column Layout (Mtumiaji akiwa na video) -->
+            <!-- JavaScript itamwaga ma-thumbnail ya video hapa kishandisi kutoka Database -->
+            <div id="jumanne-video-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px;"></div>
+
+            <!-- 🕳️ BOKSI B: Uwanja Tupu wa Mwaliko (Mtumiaji akiwa hana hata video moja) -->
+            <!-- Kiasili umefichwa (display: none), JS itauamsha kama database ikisoma 0 -->
+            <div id="jumanne-empty-videos" style="display: none; text-align: center; padding: 40px 20px; background: #111; border-radius: 8px; border: 2px dashed #333;">
+                <div style="font-size: 40px; color: #555; margin-bottom: 10px;">📹</div>
+<nav class="bottom-nav">
+    <!-- Kiunganishi cha Home (Ukurasa huu huu) -->
+    <a href="index.html" class="nav-item active">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+    </a>
+
+    <!-- Kitufe cha Friends kimebadilika kuwa Explore na kinaenda explore.html -->
+    <a href="explore.html" class="nav-item">
+        <i class="fas fa-compass"></i>
+        <span>Explore</span>
+    </a>
+
+    <!-- KITUFE CHA UPLOAD CHENYE RANGI ZA BENDERA YA TZ -->
+    <a href="upload.html" class="nav-item tz-upload-btn">
+        <div class="tz-layer green-layer"></div>
+        <div class="tz-layer blue-layer"></div>
+        <div class="upload-icon-center">
+            <i class="fas fa-plus"></i>
+        </div>
+    </a>
+
+    <!-- Kitufe cha Inbox kimebadilika kuwa Week Challenge na kinaenda weekchallenge.html -->
+    <a href="weekchallenge.html" class="nav-item">
+        <i class="fas fa-trophy"></i>
+        <span>WeekChallenge</span>
+    </a>
+
+    <!-- Kitufe cha Profile kinachodhibitiwa na JS kwenda register.html au profile.html -->
+    <a href="profile.html" class="nav-item" id="profile-nav-link">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+    </a>
+</nav>
+
+        <!-- INJINI YA JAVASCRIPT YA PROFILE INAFUNGA UKURASA -->
+        <script src="profile.js"></script>
+        </body>
+        
+        </html>

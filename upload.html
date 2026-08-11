@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Pandisha Kipaji</title>
+    <!-- LINK YA FONT AWESOME KWA AJILI YA ICON YA BACK NA CLOUD -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <link rel="stylesheet" href="css/all.min.css">
+    <style>
+        /* CSS YOTE YA REMBO ITATESTIWA NA KUWEKWA HAPA CHINI KIDOGO */
+        /* ==========================================================================
+   1. MISINGI YA UKURASA NA ULAYINI WA SCROLL (GLOBAL LAYOUT)
+   ========================================================================== */
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    background-color: #121212 !important; /* Nyeusi ya kisasa ya JumanneTok */
+    color: #ffffff !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    box-sizing: border-box !important;
+}
+
+*, *:before, *:after {
+    box-sizing: border-box !important;
+}
+
+/* CONTAINER KUU YA UPLOAD */
+.jumanne-upload-container {
+    width: calc(100% - 32px) !important;
+    max-width: 420px !important;
+    background-color: #1e1e1e !important; /* Kijivu kizito cha fomu */
+    padding: 24px !important;
+    border-radius: 16px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+    margin: 40px auto 100px auto !important;
+}
+
+/* ==========================================================================
+   2. UPAU WA JUU (TOP HEADER)
+   ========================================================================== */
+.jumanne-upload-header {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin-bottom: 28px !important;
+    border-bottom: 1px solid #2a2a2a !important;
+    padding-bottom: 14px !important;
+}
+
+/* Kitufe cha mshale wa kurudi nyuma */
+.jumanne-btn-back-arrow {
+    background-color: transparent !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-size: 18px !important;
+    cursor: pointer !important;
+    padding: 6px 12px 6px 0 !important;
+    transition: color 0.2s !important;
+}
+
+.jumanne-btn-back-arrow:active {
+    color: #00e676 !important;
+}
+
+.jumanne-upload-title {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
+    letter-spacing: -0.5px !important;
+}
+
+/* ==========================================================================
+   3. BOKSI LA KUCHAGUA VIDEO (THE UPLOAD DROPZONE)
+   ========================================================================== */
+.jumanne-upload-dropzone {
+    width: 100% !important;
+    aspect-ratio: 4 / 3 !important; /* Muundo mzuri wa kisasa wa boksi */
+    background-color: #252525 !important;
+    border: 2px dashed #00e676 !important; /* Mistari iliyokatika ya kijani ya JumanneTok */
+    border-radius: 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 20px !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s !important;
+    box-sizing: border-box !important;
+    margin-bottom: 20px !important;
+}
+
+.jumanne-upload-dropzone:active {
+    background-color: #2d2d2d !important;
+}
+
+/* Aikoni ya wingu (Cloud icon) */
+.jumanne-cloud-icon {
+    font-size: 40px !important;
+    color: #00e676 !important;
+    margin-bottom: 12px !important;
+}
+
+.jumanne-dropzone-text {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: #ffffff !important;
+    margin: 0 0 6px 0 !important;
+}
+
+.jumanne-dropzone-subtext {
+    font-size: 12px !important;
+    color: #aaaaaa !important;
+}
+
+/* ==========================================================================
+   4. BOKSI LA ONYO LA BANDO (DATA SAVER WARNING)
+   ========================================================================== */
+.jumanne-bando-warning-box {
+    width: 100% !important;
+    background-color: rgba(255, 179, 0, 0.1) !important; /* Njano iliyofubaa nyuma */
+    border: 1px solid #ffb300 !important; /* Wigo thabiti wa njano ya onyo */
+    border-radius: 8px !important;
+    padding: 12px 16px !important;
+    margin-bottom: 28px !important;
+    box-sizing: border-box !important;
+}
+
+.jumanne-bando-warning-box p {
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+    color: #ffb300 !important; /* Herufi za njano ya ustaarabu */
+    margin: 0 !important;
+    text-align: left !important;
+}
+
+/* ==========================================================================
+   5. KITUFE CHA INAYOFUATA (NEXT BUTTON GROUP)
+   ========================================================================== */
+.jumanne-upload-btn-group {
+    width: 100% !important;
+    display: flex !important;
+}
+
+.jumanne-btn-upload-next {
+    width: 100% !important;
+    background-color: #00e676 !important; /* Kijani inayong'aa ya ushindi */
+    color: #000000 !important; /* Herufi nyeusi juu ya kijani kusomeka vizuri */
+    border: none !important;
+    padding: 14px !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    transition: background-color 0.2s !important;
+}
+
+.jumanne-btn-upload-next:active {
+    background-color: #00c864 !important;
+}
+
+/* ==========================================================================
+   6. CSS YA UKURASA WA PILI (STEP 2 - CATEGORY & VIDEO TYPE)
+   ========================================================================== */
+
+/* MPANGILIO WA MABOKSI YA INPUT NA SELECT YA KAWAIDA */
+.jumanne-input-group {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    text-align: left !important;
+    margin-bottom: 20px !important;
+    box-sizing: border-box !important;
+}
+
+.jumanne-input-group label {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #00e676 !important; /* Kijani ya JumanneTok kwa lebo zote */
+    margin-bottom: 8px !important;
+}
+
+/* Urembo wa Dropdown ya Kuchagua Kipaji */
+.jumanne-input-group select {
+    width: 100% !important;
+    background-color: #252525 !important;
+    border: 1px solid #444444 !important;
+    border-radius: 8px !important;
+    color: #ffffff !important;
+    padding: 14px !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    outline: none !important;
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+    -webkit-appearance: none !important; /* Inaondoa mshale wa zamani wa simu */
+    -moz-appearance: none !important;
+    appearance: none !important;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2300e676' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>") !important; /* Mshale safi wa kijani */
+    background-repeat: no-repeat !important;
+    background-position: right 14px center !important;
+    background-size: 16px !important;
+}
+
+.jumanne-input-group select:focus {
+    border-color: #00e676 !important;
+    box-shadow: 0 0 0 2px rgba(0, 230, 118, 0.2) !important;
+}
+
+/* 7. GRID YA KADI ZA KUCHAGUA AINA YA VIDEO */
+.jumanne-video-type-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* Kadi Moja ya Uchaguzi (Challenge au Freestyle) */
+.jumanne-type-card {
+    width: 100% !important;
+    background-color: #252525 !important;
+    border: 1px solid #333333 !important;
+    border-radius: 12px !important;
+    padding: 16px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 16px !important;
+    cursor: pointer !important;
+    transition: border-color 0.2s, background-color 0.2s !important;
+    box-sizing: border-box !important;
+}
+
+.jumanne-type-card:active {
+    background-color: #2d2d2d !important;
+}
+
+/* Aikoni kubwa iliyopo kushoto mwa kadi */
+.jumanne-card-icon {
+    font-size: 28px !important;
+    flex-shrink: 0 !important;
+}
+
+/* Maelezo ya ndani ya kadi */
+.jumanne-card-info {
+    display: flex !important;
+    flex-direction: column !important;
+    text-align: left !important;
+}
+
+.jumanne-card-title {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    margin-bottom: 4px !important;
+}
+
+.jumanne-card-desc {
+    font-size: 12px !important;
+    color: #aaaaaa !important;
+    line-height: 1.4 !important;
+}
+
+/* HALI YA KADI ILIYOCHAGULIWA NA MTUMIAJI (ACTIVE STATE) */
+.jumanne-type-card.jumanne-card-active {
+    border: 2px solid #00e676 !important; /* Wigo unakuwa wa kijani inayong'aa */
+    background-color: rgba(0, 230, 118, 0.05) !important; /* Background inapata u-kijani wa mbali */
+}
+
+.jumanne-type-card.jumanne-card-active .jumanne-card-title {
+    color: #00e676 !important; /* Jina linabadilika kuwa la kijani */
+}
+
+/* 8. KITUFE CHA RUDI NYUMA (BACK BUTTON LAYOUT) */
+.jumanne-btn-upload-back {
+    background-color: transparent !important;
+    border: 1px solid #444444 !important;
+    color: #ffffff !important;
+    padding: 14px 20px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    box-sizing: border-box !important;
+    transition: background-color 0.2s !important;
+}
+
+.jumanne-btn-upload-back:active {
+    background-color: #2a2a2a !important;
+}
+
+/* ==========================================================================
+   9. CSS YA UKURASA WA TATU (STEP 3 - CAPTION & TZ HASHTAGS)
+   ========================================================================== */
+
+/* BOKSI LA MAELEZO (CAPTION TEXTAREA) */
+.jumanne-input-group textarea {
+    width: 100% !important;
+    background-color: #252525 !important;
+    border: 1px solid #444444 !important;
+    border-radius: 8px !important;
+    color: #ffffff !important;
+    padding: 14px !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    outline: none !important;
+    resize: none !important; /* Inazuia msanii asivute boksi likaharibu muonekano */
+    box-sizing: border-box !important;
+    font-family: inherit !important;
+}
+
+.jumanne-input-group textarea:focus {
+    border-color: #00e676 !important;
+    box-shadow: 0 0 0 2px rgba(0, 230, 118, 0.2) !important;
+}
+
+/* BOKSI LA KUANDIKIA HASHTAGS GHAFI */
+.jumanne-input-group input[type="text"] {
+    width: 100% !important;
+    background-color: #252525 !important;
+    border: 1px solid #444444 !important;
+    border-radius: 8px !important;
+    color: #ffffff !important;
+    padding: 14px !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+}
+
+.jumanne-input-group input[type="text"]:focus {
+    border-color: #00e676 !important;
+}
+
+/* 10. KONTENA LA PREVIEW YA HASHTAGS ZILIZOREMBWA */
+.jumanne-tz-tags-wrapper {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    margin-top: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* MTINDO WA JUMLA WA HASHTAG MOJA (TAG BASE) */
+.jumanne-tz-tag {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    padding: 6px 12px !important;
+    border-radius: 6px !important;
+    display: inline-block !important;
+    white-space: nowrap !important;
+}
+
+/* RANGI YA 1: KIJANI YA TANZANIA */
+.jumanne-tag-green {
+    background-color: rgba(0, 230, 118, 0.15) !important;
+    color: #00e676 !important;
+    border: 1px solid rgba(0, 230, 118, 0.3) !important;
+}
+
+/* RANGI YA 2: NJANO YA DHAHABU */
+.jumanne-tag-yellow {
+    background-color: rgba(255, 215, 0, 0.15) !important;
+    color: #ffd700 !important;
+    border: 1px solid rgba(255, 215, 0, 0.3) !important;
+}
+
+/* RANGI YA 3: NYEUSI YA NYUMBANI */
+.jumanne-tag-black {
+    background-color: rgba(0, 0, 0, 0.4) !important;
+    color: #ffffff !important;
+    border: 1px solid #444444 !important;
+}
+
+/* RANGI YA 4: BLUU YA BAHARI */
+.jumanne-tag-blue {
+    background-color: rgba(0, 176, 255, 0.15) !important;
+    color: #00b0ff !important;
+    border: 1px solid rgba(0, 176, 255, 0.3) !important;
+}
+
+/* RANGI YA 5: MCHANGANYIKO (KIJANI TENA AU NYEUSI) */
+.jumanne-tag-mix {
+    background-color: rgba(0, 230, 118, 0.1) !important;
+    color: #00e676 !important;
+    border: 1px dashed #00e676 !important;
+}
+
+/* 11. KITUFE CHA MWISHO KIKUBWA CHA KURUSHA VIDEO (SUBMIT) */
+.jumanne-btn-upload-submit {
+    background-color: #00e676 !important; /* Kijani kiboko ya ushindi */
+    color: #000000 !important;
+    border: none !important;
+    padding: 14px !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    box-sizing: border-box !important;
+    transition: background-color 0.2s !important;
+}
+
+.jumanne-btn-upload-submit i {
+    font-size: 14px !important;
+}
+
+.jumanne-btn-upload-submit:active {
+    background-color: #00c864 !important;
+    box-shadow: 0 0 12px rgba(0, 230, 118, 0.4) !important;
+}
+
+    </style>
+</head>
+<body>
+
+    <!-- CONTAINER KUU YA MCHAKATO WA UPLOAD (WIZARD WRAPPER) -->
+    <div class="jumanne-upload-container">
+
+        <!-- 1. MUUNDO WA JUU: UPAU WA KICHWA (TOP HEADER) -->
+        <div class="jumanne-upload-header">
+            <!-- Kitufe cha kurudi nyuma kinachomrudisha mtumiaji kule alikotoka -->
+            <button type="button" class="jumanne-btn-back-arrow" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2 class="jumanne-upload-title">Onyesha Kipaji Chako</h2>
+        </div>
+
+        <!-- FOMU KUU YA MAPINDUZI YA UPLOAD (3-STEP WIZARD) -->
+        <form id="jumanne-upload-multi-form" enctype="multipart/form-data" novalidate>
+
+            <!-- MTEGO WA SIRI WA MA-ROBOT (HONEYPOT ACCELERATION) -->
+            <!-- Binadamu haoni kitu kabisa kiooni, lakini robot akijaza tu mfumo unamkamata -->
+            <div class="jumanne-video-pot-gate" style="display: none !important; visibility: hidden !important;">
+                <input type="text" id="jumanne-video-bot-input" name="video_bot_security" tabindex="-1" autocomplete="off">
+            </div>
+
+
+            <div id="jumanne-upload-step-1" class="jumanne-upload-wizard-step">
+                
+                <!-- Boksi Kubwa la Kuchagua Video (The Upload Dropzone) -->
+                <!-- Mtumiaji akigusa hapa, simu inafungua Gallery ya video -->
+                <div class="jumanne-upload-dropzone" onclick="document.getElementById('jumanne-video-file-input').click()">
+                    <i class="fas fa-cloud-upload-alt jumanne-cloud-icon"></i>
+                    <p class="jumanne-dropzone-text">Gusa hapa kuchagua video yako ya kipaji</p>
+                    <span class="jumanne-dropzone-subtext">Inaruhusu video za simu tu (MP4, MOV)</span>
+                </div>
+
+                <!-- Input ya siri inayofungua Gallery ya simu ikichochewa na boksi la juu -->
+                <input type="file" id="jumanne-video-file-input" name="video_file" accept="video/*" style="display: none;" required>
+
+                <!-- MTEGO WA DATA SAVER: Onyo la kulinda bando la wasanii wa mitaani -->
+                <div class="jumanne-bando-warning-box">
+                    <p>⚠️ <strong>Ushauri wa Bando:</strong> Hakikisha video yako haizidi <strong>MB 15</strong> na haina urefu wa zaidi ya <strong>sekunde 60</strong> ili kupakia kwa haraka bila kula bando lako la Tsh 500 fasta!</p>
+                </div>
+
+                <!-- KITUFE CHA KUSONGA MBELE KWENDA UKURASA WA 2 -->
+                <div class="jumanne-upload-btn-group">
+                    <button type="button" class="jumanne-btn-upload-next" id="jumanne-to-step2">
+                        Inayofuata <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+
+            </div>
+            <!-- ==========================================================================
+   UKURASA WA 2: SEHEMU YA MAPANDEKEZO NA HALI YA VIDEO (STEP 2 OF 3)
+   ========================================================================== -->
+<div id="jumanne-upload-step-2" class="jumanne-upload-wizard-step" style="display: none;">
+    
+    <!-- 1. BOKSI LA KUCHAGUA AINA YA KIPAJI (TALENT CATEGORY) -->
+    <div class="jumanne-input-group">
+        <label for="jumanne-video-category">Aina ya Kipaji Chako</label>
+        <select id="jumanne-video-category" name="video_category" required>
+            <option value="">-- Chagua Aina ya Kipaji... --</option>
+            <option value="singeli">🎵 Singeli</option>
+            <option value="bongofleva">🎤 Bongo Fleva / Rap</option>
+            <option value="michezo">⚽ Michezo (Mpira wa Miguu/Chenga)</option>
+            <option value="ucheshi">😂 Ucheshi / Vichekesho</option>
+            <option value="dansi">🕺 Dansi / Sarakasi</option>
+            <option value="">-- Chagua Aina ya Kipaji... --</option>
+
+<!-- KUNDI LA SANAA YA MUZIKI NA SAUTI -->
+<option value="singeli">🎵 Singeli (Kuchana/Miziki ya Kasi)</option>
+<option value="bongofleva">🎤 Bongo Fleva / Rap / Hip Hop</option>
+<option value="gospel">🎹 Muziki wa Injili / Kwaya</option>
+<option value="utongaji">📜 Utongaji Mashairi / Spoken Word</option>
+
+<!-- KUNDI LA MICHEZO NA MAZOEZI (SPORTS) -->
+<option value="soka">⚽ Michezo (Mpira wa Miguu/Chenga)</option>
+<option value="acheni">🏀 Mpira wa Kikapu / Wavu / Netiboli</option>
+<option value="ngumi">🥊 Ngumi za Mchanganyiko / Kareti / Judo</option>
+<option value="riadha">🏃 Riadha / Kukimbia / Sarakasi</option>
+
+<!-- KUNDI LA IGIZO NA BURUDANI (CREATIVE ARTS) -->
+<option value="ucheshi">😂 Ucheshi / Vichekesho / Stand-up Comedy</option>
+<option value="uigizaji">🎬 Uigizaji wa Filamu / Maigizaji Mfupi (Skits)</option>
+<option value="dansi">🕺 Dansi (Kucheza Shalo/Mitindo ya Kisasa)</option>
+<option value="mafumbo">🪄 Viini Macho / Mazingaombwe</option>
+
+<!-- KUNDI LA SANAA YA MIKONO NA UBUNIFU -->
+<option value="uchoraji">🎨 Uchoraji / Uchongaji / Usanii wa Mikono</option>
+<option value="mitindo">👗 Ubunifu wa Mavazi / Mitindo (Modelling)</option>
+<option value="unyanyasaji">🎧 Udj (DJing) / Kutengeneza Beat (Music Production)</option>
+<!-- KUNDI LA TAMADUNI NA UTAMADUNI WA NYUMBANI -->
+<option value="ngoma_za_kienyeji">🥁 Ngoma za Kienyeji (Asili/Mila)</option>
+<option value="taarab">🎻 Mduara / Taarab ya Pwani</option>
+<option value="mchiriku">🪘 Mchiriku / Mnanda (Muziki wa Vigoma)</option>
+
+<!-- KUNDI LA MICHEZO YA AKILI NA GAMING -->
+<option value="gaming">🎮 Ma-Gamers (Video Games Check / E-Sports)</option>
+<option value="michezo_ya_bodi">🎲 Michezo ya Akili (Bao la Kete/Dhumna/Drafti)</option>
+
+<!-- KUNDI LA MAUDHUI YA KIDIJITALI NA BURUDANI YA SASA -->
+<option value="content_creation">📱 Waandishi wa Maudhui / Vlogs za Mitaani</option>
+<option value="maiga_sauti">🗣️ Kuiga Sauti (Viongozi/Wanyama/Watu Maarufu)</option>
+<option value="vipaji_vya_ajabu">⚡ Vipaji vya Kipekee (Kusokota Mwili/Vimiminika/Nguvu)</option>
+<!-- KUNDI LA TAMADUNI NA UTAMADUNI WA NYUMBANI -->
+<option value="ngoma_za_kienyeji">🥁 Ngoma za Kienyeji (Asili/Mila)</option>
+<option value="taarab">🎻 Mduara / Taarab ya Pwani</option>
+<option value="mchiriku">🪘 Mchiriku / Mnanda (Muziki wa Vigoma)</option>
+
+<!-- KUNDI LA MICHEZO YA AKILI NA GAMING -->
+<option value="gaming">🎮 Ma-Gamers (Video Games Check / E-Sports)</option>
+<option value="michezo_ya_bodi">🎲 Michezo ya Akili (Bao la Kete/Dhumna/Drafti)</option>
+
+<!-- KUNDI LA MAUDHUI YA KIDIJITALI NA BURUDANI YA SASA -->
+<option value="content_creation">📱 Waandishi wa Maudhui / Vlogs za Mitaani</option>
+<option value="maiga_sauti">🗣️ Kuiga Sauti (Viongozi/Wanyama/Watu Maarufu)</option>
+<option value="vipaji_vya_ajabu">⚡ Vipaji vya Kipekee (Kusokota Mwili/Vimiminika/Nguvu)</option>
+<!-- KUNDI LA UCHESHI NA VICHEKESHO (COMEDY CATEGORIES) -->
+<option value="skits_mtaani">🎬 Vichekesho Vifupi vya Mtaani (Short Skits/Vine)</option>
+<option value="stand_up_comedy">🎙️ Ucheshi wa Jukwaani (Stand-up Comedy/Ma-Comedian)</option>
+<option value="vichekesho_vya_sauti">🔊 Kuigiza Sauti / Katuni (Comedy Voice-Overs/Meme Sounds)</option>
+
+        </select>
+    </div>
+
+    <!-- 2. SEHEMU YA KUCHAGUA HALI YA VIDEO (CHALLENGE VS FREESTYLE) -->
+    <div class="jumanne-input-group" style="margin-top: 24px;">
+        <label>Utaratibu wa Video Hii</label>
+        <p style="font-size: 13px; color: #aaaaaa; margin: -4px 0 12px 0; text-align: left;">Chagua kama unataka kuingia kwenye ushindani rasmi au unaweka ya kawaida.</p>
+        
+        <!-- Input za siri za redio zinazofanya kazi nyuma ya pazia -->
+        <input type="radio" id="jumanne-radio-challenge" name="video_type" value="challenge" checked style="display: none;">
+        <input type="radio" id="jumanne-radio-freestyle" name="video_type" value="freestyle" style="display: none;">
+
+        <div class="jumanne-video-type-grid">
+            <!-- Kadi ya 1: Challenge Entry -->
+            <div id="jumanne-card-challenge" class="jumanne-type-card jumanne-card-active" onclick="chaguaHaliYaVideo('challenge')">
+                <div class="jumanne-card-icon">🏆</div>
+                <div class="jumanne-card-info">
+                    <span class="jumanne-card-title">Challenge ya Mkoa</span>
+                    <span class="jumanne-card-desc">Ingia rasmi kwenye ushindani wa wiki ili uombewe Kura mtaani kwako.</span>
+                </div>
+            </div>
+
+            <!-- Kadi ya 2: Freestyle Entry -->
+            <div id="jumanne-card-freestyle" class="jumanne-type-card" onclick="chaguaHaliYaVideo('freestyle')">
+                <div class="jumanne-card-icon">🎤</div>
+                <div class="jumanne-card-info">
+                    <span class="jumanne-card-title">Free Style / Mazoezi</span>
+                    <span class="jumanne-card-desc">Video ya kawaida kwa ajili ya mashabiki na Likes, haina presha ya kura.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIFUNGO VYA KUSOGEA MBLE NA NYUMA (NAVIGATION BUTTONS) -->
+    <div class="jumanne-upload-btn-group" style="margin-top: 32px; gap: 12px; flex-direction: row;">
+        <button type="button" class="jumanne-btn-upload-back" id="jumanne-back-to-step1">
+            <i class="fas fa-chevron-left"></i> Rudi Nyuma
+        </button>
+        <button type="button" class="jumanne-btn-upload-next" id="jumanne-to-step3" style="flex: 1;">
+            Inayofuata <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+</div>
+
+<!-- ==========================================================================
+   UKURASA WA 3: MAELEZO, MTEGO WA ROBOT, HASHTAGS ZA TZ (STEP 3 OF 3)
+   ========================================================================== -->
+<div id="jumanne-upload-step-3" class="jumanne-upload-wizard-step" style="display: none;">
+    
+    <!-- MTEGO WA SIRI WA MA-ROBOT (HONEYPOT PROTECTION) -->
+    <!-- Binadamu haoni kitu kabisa kiooni, lakini robot akijaza tu mfumo unamkamata papo hapo -->
+    <div class="jumanne-video-pot-gate" style="display: none !important; visibility: hidden !important;">
+        <input type="text" id="jumanne-video-bot-input" name="video_bot_security" tabindex="-1" autocomplete="off">
+    </div>
+
+    <!-- 1. BOKSI LA MAELEZO YA VIDEO (CAPTION TEXTAREA) -->
+    <div class="jumanne-input-group">
+        <label for="jumanne-video-caption">Maelezo ya Video (Caption)</label>
+        <textarea id="jumanne-video-caption" name="video_caption" rows="4" placeholder="Andika jina la kazi yako au maelezo mafupi ya kipaji chako hapa..." required></textarea>
+    </div>
+
+    <!-- 2. MFUMO WA HASHTAGS 5 TU ZA RANGI ZA BENDERA YA TANZANIA -->
+    <div class="jumanne-input-group" style="margin-top: 20px;">
+        <label>Alama za Reli (Hashtags - Mwisho 5 Tu)</label>
+        <p style="font-size: 12px; color: #aaaaaa; margin: -4px 0 12px 0; text-align: left;">
+            Andika maneno yako yakitenganishwa na nafasi (space). Mfumo utaziremba kiotomatiki kwa rangi za uzalendo wa Tanzania!
+        </p>
+        
+        <!-- Input ya siri inayobeba hashtags zilizosafishwa kwenda kwenye database -->
+        <input type="hidden" id="jumanne-hashtags-hidden" name="video_hashtags">
+        
+        <!-- Boksi la kuandikia hashtags ghafi -->
+        <input type="text" id="jumanne-hashtags-input" placeholder="Mfano: Singeli KipajiMtwara Ushindi" autocomplete="off">
+        
+        <!-- Kontena ambapo JavaScript itachora zile hashtags 5 kwa rangi za bendera ya TZ -->
+        <div id="jumanne-hashtags-preview-container" class="jumanne-tz-tags-wrapper"></div>
+    </div>
+
+    <!-- VIFUNGO VYA CHINI KABISA VYA KUKAMILISHA USHAHIDI WA KIPAJI -->
+    <div class="jumanne-upload-btn-group" style="margin-top: 32px; gap: 12px; flex-direction: row;">
+        <button type="button" class="jumanne-btn-upload-back" id="jumanne-back-to-step2">
+            <i class="fas fa-chevron-left"></i> Rudi Nyuma
+        </button>
+        <button type="submit" class="jumanne-btn-upload-submit" id="jumanne-submit-video" style="flex: 1;">
+            <i class="fas fa-rocket"></i> Rusha Video Mtaani
+        </button>
+    </div>
+
+</div>
+
+
+            <!-- UKURASA WA 2 NA WA 3 ZITAFUATA HAPA CHINI MTIRIRIKO UKIELEWEKA -->
+
+        </form>
+
+    </div>
+<script>
+// ==========================================================================
+// INJINI YA MAJARIBIO MEPESI: PITILIZA KILA UKURASA BILA KUBANWA NA DATA
+// ==========================================================================
+
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Kamata kurasa zote tatu kupitia ID zao zilizopo kwenye HTML
+    const step1 = document.getElementById("jumanne-upload-step-1");
+    const step2 = document.getElementById("jumanne-upload-step-2");
+    const step3 = document.getElementById("jumanne-upload-step-3");
+
+    // --------------------------------------------------------------------------
+    // HATUA YA 1: KUTOKA UKURASA WA KWANZA KWENDA WA PILI
+    // --------------------------------------------------------------------------
+    document.getElementById("jumanne-to-step2").addEventListener("click", () => {
+        // Hakuna kukagua faili! Pitiliza moja kwa moja kwenda hatua ya pili
+        step1.style.setProperty("display", "none", "important");
+        step2.style.setProperty("display", "block", "important");
+    });
+
+    // KUTOKA UKURASA WA PILI KUBONYEZA "RUDI NYUMA" KWENDA WA KWANZA
+    document.getElementById("jumanne-back-to-step1").addEventListener("click", () => {
+        step2.style.setProperty("display", "none", "important");
+        step1.style.setProperty("display", "block", "important");
+    });
+
+    // --------------------------------------------------------------------------
+    // HATUA YA 2: KUTOKA UKURASA WA PILI KWENDA WA TATU
+    // --------------------------------------------------------------------------
+    document.getElementById("jumanne-to-step3").addEventListener("click", () => {
+        // Hakuna kukagua dropdown! Pitiliza moja kwa moja kwenda hatua ya tatu
+        step2.style.setProperty("display", "none", "important");
+        step3.style.setProperty("display", "block", "important");
+    });
+
+    // KUTOKA UKURASA WA TATU KUBONYEZA "RUDI NYUMA" KWENDA WA PILI
+    document.getElementById("jumanne-back-to-step2").addEventListener("click", () => {
+        step3.style.setProperty("display", "none", "important");
+        step2.style.setProperty("display", "block", "important");
+    });
+
+    // --------------------------------------------------------------------------
+    // HATUA YA 3: HITIMISHO - KUBONYEZA "RUSHA VIDEO MTAANI"
+    // --------------------------------------------------------------------------
+    document.getElementById("jumanne-upload-multi-form").addEventListener("submit", function(event) {
+        event.preventDefault(); // Zuia ukurasa usirefreshe kabisa
+        
+        // Mtoe hapa moja kwa moja mpeleke profile.html bila kujali kama amejaza maelezo au la
+        alert("🎯 Majaribio yamefanikiwa! Mfumo unakupeleka kwenye Profile sasa hivi mkuu.");
+        window.location.replace("index.html");
+    });
+});
+
+</script>
+</body>
+</html>

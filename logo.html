@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JUMANNETOK TZ - LOGO LAB V1</title>
+    <!-- Amsha FontAwesome kwa ajili ya kupiga alama za chuma [A] -->
+    <link rel="stylesheet" href="css/all.min.css">
+    
+    <style>
+        /* I. MAZINGIRA YA USIKU: Yale mazingira meusi ya JumanneTok TZ [A] */
+        body {
+            background-color: #0d0d0d;
+            color: #ffffff;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+
+        h1 {
+            color: #00e676;
+            text-shadow: 0 0 15px rgba(0, 230, 118, 0.6);
+            font-size: 22px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Kikapu kinachobeba kila nembo kiononi [A] */
+        .logo-container {
+            background: #141414;
+            border: 1px solid #222;
+            border-radius: 16px;
+            width: 300px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .logo-title {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        /* ==========================================================================
+           NEMBO YA 1: THE J-NOTI NEON GLITCH (UCHAWI WA TIKTOK ILIYOBORESHWA) [A]
+           ========================================================================== */
+        .logo-1-icon {
+            position: relative;
+            font-size: 75px;
+            font-weight: 900;
+            color: #00e676;
+            /* Mtambo wa siri unaopiga 3D Glitch ya rangi tatu kama TikTok kwa CSS text-shadow [A] */
+            text-shadow: 
+                -3px -3px 0 #00e5ff, 
+                 3px  3px 0 #ff007f,
+                 0 0 20px rgba(0, 230, 118, 0.6);
+            animation: pulseGlow 2s ease-in-out infinite alternate;
+        }
+
+        .text-style-1 {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: 800;
+            font-style: italic;
+            letter-spacing: -0.5px;
+        }
+        .text-style-1 span { 
+            color: #00e676; 
+            text-shadow: 0 0 10px rgba(0, 230, 118, 0.4);
+        }
+
+        /* Mtambo wa kuisogeza na kuwasha nembo polepole [A] */
+        @keyframes pulseGlow {
+            from { transform: scale(1); filter: drop-shadow(0 0 5px rgba(0, 230, 118, 0.4)); }
+            to { transform: scale(1.03); filter: drop-shadow(0 0 15px rgba(0, 230, 118, 0.7)); }
+        }
+                /* ==========================================================================
+           NEMBO YA 2: THE SPHERICAL AUDIO MESH (DUHARA LA MUZIKI)
+           ========================================================================== */
+        .logo-2-ring {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            border: 3px dashed #00e676;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 230, 118, 0.2);
+            animation: zungushaRing 8s linear infinite;
+        }
+        .logo-2-center {
+            width: 55px;
+            height: 55px;
+            background: #00e676;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px #00e676;
+            animation: zungushaKinyume 8s linear infinite;
+        }
+        .logo-2-center i {
+            color: #000000;
+            font-size: 24px;
+            font-style: normal;
+            font-weight: 900;
+        }
+        .text-style-2 {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Mitambo ya kuzungusha duhara kwa mseto wa kupishana */
+        @keyframes zungushaRing {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes zungushaKinyume {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+                /* ==========================================================================
+           NEMBO YA 3: THE DOUBLE EQUALIZER BAR SHIELD (MNARA WA VIPAJI) [A]
+           ========================================================================== */
+        .logo-3-box {
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+            height: 70px;
+            position: relative;
+        }
+        .bar {
+            width: 10px;
+            background: #00e676;
+            border-radius: 4px;
+            box-shadow: 0 0 15px #00e676;
+            animation: chezaEqualizer 1s ease-in-out infinite alternate;
+        }
+        /* Ma-bar yanapishana kasi na urefu kulinda mdundo [A] */
+        .bar-1 { height: 40px; animation-delay: 0.1s; }
+        .bar-2 { height: 70px; animation-delay: 0.4s; background: #00e5ff; box-shadow: 0 0 15px #00e5ff; }
+        .bar-3 { height: 55px; animation-delay: 0.2s; }
+        .bar-4 { height: 30px; animation-delay: 0.6s; }
+        
+        .logo-3-icon-overlay {
+            position: absolute;
+            font-size: 30px;
+            color: #ffffff;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-shadow: 0 2px 8px #000000;
+        }
+        .text-style-3 {
+            margin-top: 20px;
+            font-size: 21px;
+            font-weight: 700;
+            border-bottom: 2px solid #00e676;
+            padding-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Mtambo unaochezesha ma-bar juu na chini kitalamu [A] */
+        @keyframes chezaEqualizer {
+            from { transform: scaleY(0.4); }
+            to { transform: scaleY(1); }
+        }
+            /* ==========================================================================
+           NEMBO YA 4: THE TANZANIAN TIKTOK FUSION (TZ-TOK EMBLEM) [A]
+           ========================================================================== */
+        .logo-4-tz-tok {
+            position: relative;
+            font-size: 80px;
+            font-weight: 900;
+            /* 🟩 Kijani ya rutuba ya Tanzania kama rangi kuu ya mwili [A] */
+            color: #00e676;
+            
+            /* 🧠 UCHAWI WA UZALENDO: Glitch ya Njano ya dhahabu na Bluu ya bahari ya TZ! [A] */
+            text-shadow: 
+                -4px -4px 0 #ffd600, 
+                 4px  4px 0 #00b0ff,
+                 0 0 25px rgba(0, 230, 118, 0.5);
+            animation: mdundoWaTanzania 1.5s ease-in-out infinite alternate;
+        }
+
+        .text-style-4-tz {
+            margin-top: 15px;
+            font-size: 23px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            font-family: sans-serif;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        /* Kibandiko kidogo cha chapa ya nchi [A] */
+        .tz-flag-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #00e676 0%, #ffd600 50%, #00b0ff 100%);
+            color: #000000;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: bold;
+            margin-top: 5px;
+            box-shadow: 0 2px 8px rgba(0,230,118,0.3);
+        }
+
+        /* Mtambo unaochezesha nembo kama mapigo ya moyo ya Singeli [A] */
+        @keyframes mdundoWaTanzania {
+            from { transform: scale(1); filter: brightness(1); }
+            to { transform: scale(1.05); filter: brightness(1.2); }
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+        <!-- 4. THE TANZANIAN TIKTOK FUSION BOX -->
+    <div class="logo-container" style="border: 2px dashed #ffd600; box-shadow: 0 0 20px rgba(0,176,255,0.15);">
+        <div class="logo-title" style="color: #ffd600;">Nembo Na. 4 (The TZ-Tok Kizalendo)</div>
+        
+        <!-- Noti ya muziki iliyovikwa rangi za Bendera ya Taifa kitaifa [A] -->
+        <div class="logo-4-tz-tok">
+            <i class="fab fa-tiktok"></i>
+        </div>
+        
+        <div class="text-style-4-tz">
+            Jumanne<span style="color:#ffd600;">Tok</span> <span style="color:#00b0ff;">TZ</span>
+        </div>
+        <div class="tz-flag-badge">🇹🇿 ORIGINAL TZ VIBE</div>
+    </div>

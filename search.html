@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Tafuta</title>
+    
+    <!-- Link ya FontAwesome kwa ajili ya ikoni zote za mfumo -->
+    <link rel="stylesheet" href="https://cloudflare.com" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/all.min.css">
+
+</head>
+<body>
+
+    <!-- 1. SEHEMU YA JUU (SEARCH ENGINE SYSTEM WITH BACK BUTTON) -->
+    <header class="search-page-header">
+        <!-- Kitufe cha kurudi nyuma ukurasa uliotoka (Explore au Karibu Yangu) -->
+        <button class="btn-back-arrow" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        
+        <!-- Sanduku kuu la kuandika neno linalotafutwa -->
+        <div class="main-search-input-box">
+            <i class="fas fa-search inside-input-icon"></i>
+            <input type="text" id="live-search-field" placeholder="Andika mkoa, wilaya, mtaa au aina ya kipaji..." autofocus>
+        </div>
+    </header>
+
+    <!-- 2. SEHEMU KUU AMBAPO JAVASCRIPT ITAMWAGA MAJIBU YA VIDEO (GRID VIEW) -->
+    <main class="explore-grid-container" id="search-results-grid">
+        <!-- JAVASCRIPT ITAMWAGA MATOKEO YA VIDEO NA VIPAJI HAPA USER AKIANZA KUANDIKA -->
+    </main>
+
+    <!-- 3. SEHEMU YA CHINI (BOTTOM NAVIGATION BAR) -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+
+        <a href="explore.html" class="nav-item active">
+            <i class="fas fa-compass"></i>
+            <span>Explore</span>
+        </a>
+
+        <a href="upload.html" class="nav-item tz-upload-btn">
+            <div class="tz-layer green-layer"></div>
+            <div class="tz-layer blue-layer"></div>
+            <div class="upload-icon-center">
+                <i class="fas fa-plus"></i>
+            </div>
+        </a>
+
+        <a href="weekchallenge.html" class="nav-item">
+            <i class="fas fa-trophy"></i>
+            <span>WeekChallenge</span>
+        </a>
+
+        <a href="profile.html" class="nav-item" id="profile-nav-link">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Kuunganisha JavaScript maalum inayofanya kazi ya kutafuta live mtumiaji akiandika -->
+    <script src="search-engine.js"></script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Chagua Wilaya</title>
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/all.min.css">
+
+</head>
+<body>
+
+    <!-- KICHWA CHA JUU CHA KURUDI NYUMA -->
+       <header class="explore-header">
+       <div class="explore-search-container">
+
+                                            </div>
+                              </div>
+
+       </div>
+   </header>
+    
+    <header class="explore-header" style="justify-content: flex-start; gap: 15px;">
+        <a href="mikoa-challenge.html" style="color: #ffffff; font-size: 18px;"><i class="fas fa-arrow-left"></i></a>
+        <span style="font-size: 16px; font-weight: 600;">Chagua Wilaya Yako</span>
+    </header>
+
+    <main class="challenge-main-container" style="padding: 10px 15px; margin-top: 70px; padding-bottom: 90px;">
+        
+        <!-- 1. SEARCH ENGINE YA KUTAFUTA WILAYA (STICKY JUU) -->
+        <div class="region-search-wrapper" style="top: 0px;">
+                       <div class="region-search-box">
+               <i class="fas fa-search search-icon-left"></i>
+               <input type="text" id="wilaya-search-input" placeholder="Tafuta wilaya yako hapa..." onkeyup="tafutaWilaya()">
+           </div>
+        </div>
+
+        <!-- 2. GRIDI YA WILAYA (Mifano ya kwanza ya Wilaya za Dar es Salaam) -->
+        <div class="region-group-section">
+            <h3 class="group-title"><i class="fas fa-map-signs"></i> Wilaya za Mkoa Wako</h3>
+            <div class="mikoa-grid-container" id="wilaya-grid">
+                <button class="mkoa-item-btn" onclick="funguaWilaya('kinondoni')">Kinondoni</button>
+                <button class="mkoa-item-btn" onclick="funguaWilaya('ilala')">Ilala</button>
+                <button class="mkoa-item-btn" onclick="funguaWilaya('temeke')">Temeke</button>
+                <button class="mkoa-item-btn" onclick="funguaWilaya('ubungo')">Ubungo</button>
+                <button class="mkoa-item-btn" onclick="funguaWilaya('kigamboni')">Kigamboni</button>
+                <button class="mkoa-item-btn" onclick="funguaWilaya('karatu')">Karatu</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('monduli')">Monduli</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mbarali')">Mbarali</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kyela')">Kyela</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('tunduma')">Tunduma</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kahama')">Kahama</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('nzega')">Nzega</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kasulu')">Kasulu</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('wete')">Wete</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mkoani')">Mkoani</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('starehe')">Starehe</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('embakasi')">Embakasi</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('muheza')">Muheza</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('korogwe')">Korogwe</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('lushoto')">Lushoto</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kilosa')">Kilosa</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('ifakara')">Ifakara</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mvomero')">Mvomero</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('bagamoyo')">Bagamoyo</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('chalinze')">Chalinze</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kisarawe')">Kisarawe</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mafia')">Mafia</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kilwa')">Kilwa</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('nachingwea')">Nachingwea</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('masasi')">Masasi</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('newala')">Newala</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('tunduru')">Tunduru</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mbinga')">Mbinga</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('geita')">Geita Mjini</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('chato')">Chato</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('bukoba')">Bukoba Mjini</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('misenyi')">Misenyi</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('karagwe')">Karagwe</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('musoma')">Musoma Mjini</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('tarime')">Tarime</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('serengeti')">Serengeti</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('shinyanga')">Shinyanga Mjini</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kishapu')">Kishapu</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('bariadi')">Bariadi</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('maswa')">Maswa</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('tabora')">Tabora Mjini</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('urambo')">Urambo</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('igunga')">Igunga</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('singida')">Singida Mjini</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('manyoni')">Manyoni</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kondoa')">Kondoa</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mnyanjuni')">Mnyanjuni</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kigoma')">Kigoma Mjini</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kibondo')">Kibondo</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('iringa-mjini')">Iringa Mjini</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kilolo')">Kilolo</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mufindi')">Mufindi</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('njombe-mjini')">Njombe Mjini</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('makambako')">Makambako</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('ludewa')">Ludewa</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('wangingombe')">Wanging'ombe</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('songea')">Songea Mjini</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mpanda')">Mpanda Mjini</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mlele')">Mlele</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('sumbawanga')">Sumbawanga</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('nkasi')">Nkasi</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('babati')">Babati Mjini</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('hanang')">Hanang</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mbulu')">Mbulu</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('same')">Same</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mwanga')">Mwanga</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('rombo')">Rombo</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('hai')">Hai</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('siha')">Siha</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mombasa-island')">Mombasa Island</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('nyali')">Nyali</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('likoni')">Likoni</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('changamwe')">Changamwe</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kisumu-central')">Kisumu Central</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('nakuru-east')">Nakuru East</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('nakuru-west')">Nakuru West</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('eldoret-cbd')">Eldoret CBD</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('thika')">Thika Mjini</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('ruiru')">Ruiru</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kajiado-north')">Kajiado North</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('ongata-rongai')">Ongata Rongai</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('micheweni')">Micheweni</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mkoani-pemba')">Mkoani Pemba</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('handeni')">Handeni</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('pangani')">Pangani</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kilindi')">Kilindi</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mkinga')">Mkinga</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('morogoro-vijijini')">Morogoro Vijijini</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('ulanga')">Ulanga</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('malinyi')">Malinyi</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('gairo')">Gairo</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('rufiji')">Rufiji</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kibiti')">Kibiti</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mkuranga')">Mkuranga</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('liwale')">Liwale</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('ruangwa')">Ruangwa</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('nanyumbu')">Nanyumbu</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('tandahimba')">Tandahimba</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('namtumbo')">Namtumbo</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('nyasa')">Nyasa</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('madaba')">Madaba</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('itilima')">Itilima</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('busega')">Busega</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('meatu')">Meatu</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mbogwe')">Mbogwe</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('bukombe')">Bukombe</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('nyanghwale')">Nyang'hwale</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('ngara')">Ngara</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('biharamulo')">Biharamulo</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kyerwa')">Kyerwa</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('muleba')">Muleba</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('magu')">Magu</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kwimba')">Kwimba</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('ukerewe')">Ukerewe</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('buchosa')">Buchosa</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('bundas')">Bunda</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('rorya')">Rorya</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('butiama')">Butiama</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('sikonge')">Sikonge</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kaliua')">Kaliua</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('uyui')">Uyui</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('ikungi')">Ikungi</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mkalama')">Mkalama</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('chemba')">Chemba</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('chamwino')">Chamwino</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kongwa')">Kongwa</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mtera')">Mtera</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('uvinza')">Uvinza</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kakonko')">Kakonko</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('ileje')">Ileje</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('rungwe')">Rungwe</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('chunya')">Chunya</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('momba')">Momba</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kalambo')">Kalambo</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('lyamba')">Lyamba</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('simanjiro')">Simanjiro</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kiteto')">Kiteto</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('longido')">Longido</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('ngorongoro')">Ngorongoro</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kaskazini-a')">Kaskazini A (ZNZ)</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kaskazini-b')">Kaskazini B (ZNZ)</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kati-znz')">Kati (ZNZ)</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kusini-znz')">Kusini (ZNZ)</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('chake-chake')">Chake Chake (Pemba)</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mkoani-pemba')">Mkoani (Pemba)</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('wete-pemba')">Wete (Pemba)</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('micheweni')">Micheweni (Pemba)</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kilolo')">Kilolo</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('wangigombe')">Wanging'ombe</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('madaba')">Madaba</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('itilima')">Itilima</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('busega')">Busega</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('uhunja')">Uhunja</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mkinga')">Mkinga</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('gairo')">Gairo</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('malinyi')">Malinyi</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kibiti')">Kibiti</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('nanyamba')">Nanyamba Mji</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('ifakara')">Ifakara Mji</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('muda')">Mbulu Mji</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('dagoretti')">Dagoretti</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kamukunji')">Kamukunji</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('makadara')">Makadara</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('mathare')">Mathare</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('roysambu')">Roysambu</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('r先進-mvita')">Mvita (Mombasa)</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('kisauni')">Kisauni</button>
+<button class="mkoa-item-btn" onclick="funguaWilaya('jomvu')">Jomvu</button>
+
+
+            
+        </div>
+
+    </main>
+
+    <!-- (Sehemu ya Bottom Nav tutaiweka baada ya hii) -->
+    <!-- 4. SEHEMU YA CHINI (BOTTOM NAVIGATION BAR) -->
+<nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+    </a>
+    <a href="explore.html" class="nav-item">
+        <i class="fas fa-compass"></i>
+        <span>Explore</span>
+    </a>
+    <!-- Kitufe cha Kati cha Upload chenye Layer mbili nyuma -->
+    <a href="upload.html" class="nav-item tz-upload-btn">
+        <div class="tz-layer green-layer"></div>
+        <div class="tz-layer blue-layer"></div>
+        <div class="upload-icon-center">
+            <i class="fas fa-plus"></i>
+        </div>
+    </a>
+    <!-- Tab ya WeekChallenge ndiyo inakuwa Active hapa -->
+    <a href="weekchallenge.html" class="nav-item active">
+        <i class="fas fa-trophy"></i>
+        <span>WeekChallenge</span>
+    </a>
+    <a href="profile.html" class="nav-item" id="profile-nav-link">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+    </a>
+</nav>
+
+</body>
+</html>

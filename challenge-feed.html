@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Changamoto za Wilaya</title>
+    <!-- LINK YA FONT AWESOME KWA AJILI YA AIKONI ZA SEARCH NA MSHALE -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <link rel="stylesheet" href="css/all.min.css">
+    <style>
+    /* ==========================================================================
+   1. MISINGI YA UKURASA NA ULAYINI WA SCROLL (GLOBAL LAYOUT)
+   ========================================================================== */
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    background-color: #121212 !important; /* Nyeusi safi ya JumanneTok */
+    color: #ffffff !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    overflow-y: hidden !important; /* Kuzuia ukurasa mkuu usitikisike wakati wa scroll */
+    box-sizing: border-box !important;
+}
+
+*, *:before, *:after {
+    box-sizing: border-box !important;
+}
+
+.jumanne-challenge-wrapper {
+    width: 100% !important;
+    height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    position: relative !important;
+}
+
+/* ==========================================================================
+   2. UPAU WA JUU: KICHWA NA BOKSI LA SEARCH (TOP FIXED BOX)
+   ========================================================================== */
+.jumanne-feed-header-box {
+    width: 100% !important;
+    background-color: #121212 !important;
+    padding: 16px 16px 8px 16px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    z-index: 10 !important;
+}
+
+.jumanne-top-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    width: 100% !important;
+}
+
+/* Kitufe cha mshale wa kurudi nyuma */
+.jumanne-btn-back-explore {
+    background-color: transparent !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-size: 18px !important;
+    cursor: pointer !important;
+    padding: 4px 12px 4px 0 !important;
+    transition: color 0.2s !important;
+}
+
+.jumanne-btn-back-explore:active {
+    color: #00e676 !important; /* Inang'aa kijani ikiguszwa */
+}
+
+.jumanne-district-title {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
+    letter-spacing: -0.5px !important;
+}
+
+/* BOKSI LA SEARCH ENGINE */
+.jumanne-search-engine-bar {
+    width: 100% !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.jumanne-search-icon-inside {
+    position: absolute !important;
+    left: 14px !important;
+    color: #8a8a8a !important;
+    font-size: 14px !important;
+    z-index: 2 !important;
+}
+
+.jumanne-search-engine-bar input {
+    width: 100% !important;
+    background-color: #1e1e1e !important; /* Kijivu kizito cha kisasa */
+    border: 1px solid #2d2d2d !important;
+    border-radius: 20px !important; /* Pembe za duara kamili kama skrini yako */
+    padding: 10px 16px 10px 40px !important; /* Acha nafasi kushoto kwa ajili ya icon */
+    color: #ffffff !important;
+    font-size: 14px !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+    transition: border-color 0.2s !important;
+}
+
+.jumanne-search-engine-bar input:focus {
+    border-color: #00e676 !important;
+}
+
+/* ==========================================================================
+   3. UPAU WA KUCHUJA VIPAJI (HORIZONTAL SCROLL CATEGORIES)
+   ========================================================================== */
+.jumanne-categories-scroll-wrapper {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 8px !important;
+    padding: 4px 16px 12px 16px !important;
+    overflow-x: auto !important; /* Inaruhusu kutelezesha kidole kushoto na kulia */
+    white-space: nowrap !important; /* Inazuia vifungo visishuke mstari wa pili */
+    z-index: 10 !important;
+    -webkit-overflow-scrolling: touch !important; /* Inalainisha scroll kwenye simu */
+}
+
+/* Ficha upau wa scrollbar wa mfumo ili kioo kibaki safi kabisa */
+.jumanne-categories-scroll-wrapper::-webkit-scrollbar {
+    display: none !important;
+}
+
+/* VIFUNGO VYA FANI MOJA MOJA (CATEGORY TABS) */
+.jumanne-cat-tab {
+    background-color: #1e1e1e !important;
+    border: 1px solid #2d2d2d !important;
+    color: #ffffff !important;
+    padding: 6px 16px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    border-radius: 20px !important;
+    cursor: pointer !important;
+    display: inline-block !important;
+    transition: background-color 0.2s, border-color 0.2s !important;
+}
+
+/* KIFUNGO KILICHOCHAGULIWA (ACTIVE CATEGORY TAB) */
+.jumanne-cat-tab.jumanne-cat-active {
+    background-color: #00e676 !important; /* Kijani inayong'aa ya uzalendo */
+    color: #000000 !important; /* Herufi nyeusi juu ya kijani */
+    border-color: #00e676 !important;
+}
+
+/* ==========================================================================
+   4. GRID KUU YA MABOKSI MAWILI MAWILI (TIKTOK EXPLORE GRID)
+   ========================================================================== */
+.jumanne-tiktok-explore-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important; /* Maboksi mawili mawili kila mstari */
+    gap: 8px !important; /* Nafasi ndogo ya kisasa kati ya kadi */
+    padding: 8px 16px 100px 16px !important; /* Acha nafasi kubwa chini kwa ajili ya nav bar ya chini */
+    width: 100% !important;
+    overflow-y: auto !important; /* Inaruhusu kuteleza kwenda chini kwa ulaini */
+    box-sizing: border-box !important;
+    flex: 1 !important;
+}
+
+.jumanne-tiktok-explore-grid::-webkit-scrollbar {
+    display: none !important;
+}
+
+/* ==========================================================================
+   5. UREMBO WA KADI MOJA YA VIDEO (VIDEO THUMBNAIL CARD BASE)
+   ========================================================================== */
+.jumanne-explore-video-card {
+    width: 100% !important;
+    aspect-ratio: 3 / 4 !important; /* Muundo mrefu wa video za simu kama TikTok */
+    background-color: #1e1e1e !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+    border: 1px solid #2d2d2d !important;
+}
+
+/* ELEMENT YA VIDEO AU IMAGE YA MBELE */
+.jumanne-explore-video-card video,
+.jumanne-explore-video-card img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important; /* Faili lijae lote bila kukatika */
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 1 !important;
+}
+
+/* KIVULI CHEUSI CHA CHINI (STATS OVERLAY) */
+.jumanne-explore-stats-overlay {
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0)) !important; /* Kivuli cha kusomeka vizuri */
+    padding: 10px 8px !important;
+    z-index: 2 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+}
+
+.jumanne-explore-stats-overlay span {
+    font-size: 11px !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8) !important;
+}
+
+
+
+    </style>
+</head>
+<body>
+
+    <!-- CONTAINER KUU YA UKURASA WA VIDEO ZA WILAYA -->
+    <div class="jumanne-challenge-wrapper">
+
+        <!-- 1. UPAU WA JUU: KICHWA CHA WILAYA NA SEARCH ENGINE -->
+        <div class="jumanne-feed-header-box">
+            <div class="jumanne-top-row">
+                <!-- Kitufe cha mshale wa kurudi nyuma kwenye ukurasa wa WeekChallenge -->
+                <button type="button" class="jumanne-btn-back-explore" onclick="window.history.back()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <!-- Kichwa cha habari kinachojazwa na JavaScript kiotomatiki (Mfano: Changamoto za Temeke) -->
+                <h2 id="jumanne-challenge-title" class="jumanne-district-title"></h2>
+            </div>
+
+            <!-- SEARCH ENGINE: Boksi la kutafuta msanii au jina ndani ya wilaya hii -->
+            <div class="jumanne-search-engine-bar">
+                <i class="fas fa-search jumanne-search-icon-inside"></i>
+                <input type="text" id="jumanne-district-search" placeholder="Tafuta msanii wa wilaya hii..." autocomplete="off">
+            </div>
+        </div>
+
+        <!-- 2. UPAU WA KUCHUJA VIPAJI (HORIZONTAL SCROLL CATEGORIES) -->
+        <!-- Mstari unaoteleza kidole kwenda kushoto na kulia kama skrini yako -->
+        <div class="jumanne-categories-scroll-wrapper">
+            <button type="button" class="jumanne-cat-tab jumanne-cat-active" onclick="chujaFaniKienyeji('zote', this)">🔥 Zote</button>
+            <button type="button" class="jumanne-cat-tab" onclick="chujaFaniKienyeji('michezo', this)">⚽ Michezo</button>
+            <button type="button" class="jumanne-cat-tab" onclick="chujaFaniKienyeji('elimu', this)">📚 Elimu</button>
+            <button type="button" class="jumanne-cat-tab" onclick="chujaFaniKienyeji('biashara', this)">💼 Biashara</button>
+            <button type="button" class="jumanne-cat-tab" onclick="chujaFaniKienyeji('ususi', this)">💇 Ususi / Mitindo</button>
+            <button type="button" class="jumanne-cat-tab" onclick="chujaFaniKienyeji('singeli', this)">🎵 Singeli</button>
+        </div>
+
+        <!-- 3. KIOO CHA MABOKSI MAWILI MAWILI KAMA EXPLORE YA TIKTOK (2-COLUMN GRID) -->
+        <!-- Hapa ndipo database itakapomwaga picha za mbele za video zilizoshonwa na amri ya kwenda index.html -->
+        <div id="jumanne-district-video-grid" class="jumanne-tiktok-explore-grid"></div>
+
+    </div>
+
+</body>
+</html>

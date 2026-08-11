@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Profile ya Mtumiaji</title>
+    <style>
+/* ==========================================================================
+   CSS YA MFUMO WA MORE OPTIONS (NUKTA TATU JUU KULIA)
+   ========================================================================== */
+.jumanne-more-container {
+    position: relative !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: flex-end !important; /* Inasukuma nukta tatu upande wa kulia kabisa */
+    margin-bottom: -10px !important; /* Inasogeza picha ya duara ije karibu */
+    box-sizing: border-box !important;
+}
+
+.jumanne-btn-more {
+    background-color: transparent !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    padding: 8px !important;
+    transition: color 0.2s !important;
+}
+
+.jumanne-btn-more:active {
+    color: #00e676 !important; /* Inang'aa kijani ikibonyezwa kwa kidole */
+}
+
+/* BOX LA MENU YA SIRI (DROPDOWN POPUP) */
+/* BOX LA MENU YA SIRI LILILOWEKEWA INJINI YA SCROLL YA NDANI (INDEPENDENT SCROLL) */
+.jumanne-more-dropdown {
+    position: absolute !important;
+    top: 40px !important;
+    right: 0 !important;
+    background-color: #252525 !important; /* Kijivu cha ndani kama skrini yako */
+    border: 1px solid #333333 !important;
+    border-radius: 8px !important;
+    width: 220px !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.5) !important;
+    z-index: 100 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    
+    /* MAPINDUZI MAPYA YA SCROLL YA BOKSI PEKEE */
+    max-height: 240px !important; /* Inalazimisha boksi lisiwe refu kupita kiasi (Vipimo salama vya simu) */
+    overflow-y: auto !important; /* Inaruhusu kutelezesha kidole ndani ya boksi pekee kama vitufe ni vingi */
+    overflow-x: hidden !important; /* Inazuia maandishi yasicheze kwenda kushoto au kulia */
+    -webkit-overflow-scrolling: touch !important; /* Inalainisha scroll ya kidole ndani ya boksi kwa simu zote */
+}
+
+/* SAFU MOJA YA MENU (DROPDOWN ITEMS) */
+.jumanne-dropdown-item {
+    display: flex !important;
+    align-items: center !important;
+    padding: 12px 16px !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    border-bottom: 1px solid #1a1a1a !important;
+    transition: background-color 0.2s !important;
+    cursor: pointer !important;
+}
+
+.jumanne-dropdown-item i {
+    margin-right: 12px !important; /* Nafasi kati ya icon na maandishi */
+    font-size: 14px !important;
+    width: 18px !important;
+    text-align: center !important;
+    color: #00e676 !important; /* Icon zote ziwe na rangi ya kijani ya JumanneTok */
+}
+
+.jumanne-dropdown-item:active {
+    background-color: #2e2e2e !important;
+}
+
+/* Rangi nyekundu kwa ajili ya kitufe cha Report */
+.jumanne-item-danger i {
+    color: #ff5252 !important;
+}
+.jumanne-item-danger {
+    color: #ff5252 !important;
+}
+
+/* ==========================================================================
+   CSS YA PROFILE HEADER (AVATAR NA KITUFE CHA BADILISHA PICHA)
+   ========================================================================== */
+.jumanne-profile-header {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    margin-bottom: 20px !important;
+    width: 100% !important;
+}
+
+.jumanne-avatar-large {
+    width: 110px !important;
+    height: 110px !important;
+    border-radius: 50% !important;
+    border: 3px solid #00e676 !important;
+    background-color: #2a2a2a !important;
+    background-size: cover !important;
+    background-position: center !important;
+    margin-bottom: 12px !important;
+    box-sizing: border-box !important;
+}
+
+/* KITUFE CHA BADILISHA PICHA (KILICHOCHUSHWA CHINI YA DUARA) */
+.jumanne-btn-change-photo {
+    background-color: #2a2a2a !important;
+    border: 1px solid #444444 !important;
+    color: #aaaaaa !important;
+    padding: 6px 12px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    border-radius: 20px !important;
+    cursor: pointer !important;
+    margin-top: -4px !important; /* Inasogeza kitufe karibu zaidi na duara la picha */
+    margin-bottom: 14px !important; /* Nafasi kabla ya jina kuanza */
+    transition: background-color 0.2s, color 0.2s !important;
+}
+
+.jumanne-btn-change-photo i {
+    margin-right: 4px !important;
+}
+
+.jumanne-btn-change-photo:active {
+    background-color: #333333 !important;
+    color: #00e676 !important; /* Inang'aa kijani ikibonyezwa */
+}
+
+.jumanne-profile-fullname {
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    margin: 0 0 6px 0 !important;
+    letter-spacing: -0.5px !important;
+    color: #ffffff !important;
+}
+
+.jumanne-profile-location-text {
+    font-size: 14px !important;
+    color: #aaaaaa !important;
+    margin: 0 !important;
+    font-weight: 500 !important;
+}
+/* LAZIMISHA MENU YA SIRI IJIFICHE MAPEMA (HIDDEN STATE) */
+.jumanne-more-dropdown {
+    display: none !important; /* Inazuia isionekane kabisa ukurasa unapofunguka */
+}
+
+/* LAZIMISHA KITUFE CHA BADILISHA PICHA KIFICHWE MAPEMA */
+.jumanne-btn-change-photo {
+    display: none !important; /* Haking'ai kiooni hadi JavaScript ikiamshe */
+}
+
+
+    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/all.min.css">
+
+</head>
+<body>
+
+    <!-- CONTAINER KUU YA PROFILE YA MSANII -->
+    <!-- ==========================================================================
+     KIPENGELE CHA JUU: MENU YA SIRI (MORE OPTIONS) NA PROFILE HEADER
+     ========================================================================== -->
+
+<!-- 1. MFUMO WA NUKTA TATU JUU KULIA (MORE OPTIONS) -->
+<div class="jumanne-more-container">
+    <!-- Kitufe cha kubonyeza nukta tatu ambacho kimeshawashwa JavaScript -->
+    <button type="button" class="jumanne-btn-more" onclick="togglesemuyamore()">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- MENU YA SIRI INAYOSHUKA (DROPDOWN POPUP) -->
+    <div id="jumanne-more-menu" class="jumanne-more-dropdown" style="display: none;">
+        <!-- Kitufe cha Mapende akaunti -->
+        <a class="jumanne-dropdown-item" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+            <i class="fas fa-cog"></i> Mapende Account Yako
+        </a>
+        <!-- Kitufe cha kuomba Verification (Blue Tick) -->
+<a class="jumanne-dropdown-item" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+    <i class="fas fa-check-circle" style="color: #00b0ff !important;"></i> Thibitisha Kipaji (Verification)
+</a>
+
+<!-- Kitufe cha kubadili hadhi ya akaunti kuwa Skauti/Sponsor -->
+<a class="jumanne-dropdown-item" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+    <i class="fas fa-user-tie"></i> Mfumo wa Skauti / Sponsor
+</a>
+<!-- Kitufe cha kuangalia na kunakili Promo Code yako ya mwaliko -->
+<a class="jumanne-dropdown-item" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+    <i class="fas fa-user-plus" style="color: #00e676 !important;"></i> Alika Rafiki (Promo Code)
+</a>
+<!-- Kitufe cha kuangalia vigezo na sheria za kura za ushindi -->
+<a class="jumanne-dropdown-item" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+    <i class="fas fa-vote-yea" style="color: #00e676 !important;"></i> Sheria & Viwango vya Kura
+</a>
+<!-- Kitufe cha kulinda Haki Miliki ya kazi za wasanii -->
+<a class="jumanne-dropdown-item" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+    <i class="fas fa-copyright" style="color: #00e676 !important;"></i> Haki Miliki (Copyright)
+</a>
+<!-- Kitufe cha kuficha video usizozipenda papo hapo (Not Interested) -->
+<a class="jumanne-dropdown-item" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+    <i class="fas fa-heart-broken" style="color: #ff5252 !important;"></i> Sipendi Maudhui Haya
+</a>
+
+<!-- Kitufe cha kurekebisha mapendekezo na kuchagua aina ya vipaji unavyopenda -->
+<a class="jumanne-dropdown-item" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+    <i class="fas fa-sliders-h"></i> Mapendekezo ya Vipaji
+</a>
+
+<!-- Kitufe cha kufungua mfumo wa kuchagua Mood ya video (Challenge, Freestyle, au Local) -->
+<a class="jumanne-dropdown-item" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+    <i class="fas fa-smile"></i> Badili Mood ya Video
+</a>
+<!-- Kitufe cha kuwasha au kuzima Data Saver papo hapo -->
+<a class="jumanne-dropdown-item" onclick="badiliMfumoWaBando()">
+    <i class="fas fa-database" id="jumanne-datasaver-icon"></i> 
+    <span id="jumanne-datasaver-text">Kutunza Bando: IMEZIMWA</span>
+</a>
+
+
+        
+        <!-- Kitufe cha kubadili Dark/Light mode kilichounganishwa na JavaScript -->
+        <a class="jumanne-dropdown-item" onclick="badiliMuonekanoMode()">
+            <i class="fas fa-moon"></i> Badili Dark/Light
+        </a>
+        <a class="jumanne-dropdown-item jumanne-item-danger" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+    <i class="fas fa-exclamation-triangle"></i> Ripoti Ukiukaji wa Maadili
+</a>
+
+        
+        <!-- Kitufe cha Report akaunti -->
+        <a class="jumanne-dropdown-item jumanne-item-danger" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+            <i class="fas fa-flag"></i> Report Akaunti Hii
+        </a>
+        <!-- Kitufe cha kufunga maneno yasiyofaa au yasiyopendwa -->
+
+<a class="jumanne-dropdown-item" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+    <i class="fas fa-filter"></i> Funga Maneno/Keywords
+</a>
+<a class="jumanne-dropdown-item" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+    <i class="fas fa-phone"></i> wasiliana nasi
+</a>
+
+<!-- Kitufe cha kuangalia sheria na taratibu za matumizi ya App -->
+<a class="jumanne-dropdown-item" onclick="document.getElementById('jumanne-more-menu').style.display='none'">
+    <i class="fas fa-gavel" style="color: #00e676 !important;"></i> Sheria za JumanneTok
+</a>
+
+        <!-- Kitufe cha Log Out kilichounganishwa na JavaScript -->
+        <a class="jumanne-dropdown-item" onclick="ondokaKwenyeMfumo()">
+            <i class="fas fa-sign-out-alt"></i> Ondoka (Log Out)
+        </a>
+    </div>
+</div>
+
+<!-- 2. KIPENGELE CHA PICHA, JINA NA ENEO (PROFILE HEADER) -->
+<div class="jumanne-profile-header">
+    <!-- 1. MFUMO WA NUKTA TATU JUU KULIA (MORE OPTIONS) -->
+
+    
+    <!-- Duara kubwa la Picha ya Mtumiaji (Avatar) -->
+    
+
+
+    <div class="jumanne-profile-card">
+        
+        <!-- KIPENGELE CHA JUULI (PROFILE HEADER) -->
+        <div class="jumanne-profile-header">
+            
+            <!-- Duara kubwa la Picha ya Mtumiaji (Avatar) -->
+            <!-- JavaScript itajaza link ya picha hapa kutoka kwenye Database -->
+            <div id="jumanne-user-avatar" class="jumanne-avatar-large"></div>
+            <!-- Kitufe cha siri cha simu kufungua Gallery -->
+<input type="file" id="jumanne-change-avatar-input" accept="image/*" style="display: none;">
+
+<!-- Kitufe cha kubonyeza kubadilisha picha -->
+<button type="button" id="jumanne-btn-change-avatar" class="jumanne-btn-change-photo" onclick="document.getElementById('jumanne-change-avatar-input').click()">
+    📸 Badilisha Picha
+</button>
+
+            
+            <!-- Jina la Mtumiaji linalotoka kwenye Database -->
+            <h2 id="jumanne-user-name" class="jumanne-profile-fullname">Inapakia Jina...</h2>
+            
+            <!-- Eneo, Wilaya na Mkoa anaotokea msanii -->
+            <p id="jumanne-user-location" class="jumanne-profile-location-text">Inapakia Eneo...</p>
+            
+        </div>
+        <!-- KIPENGELE CHA PILI: HADHI YA AKAUNTI NA MATAJI (ROLE & BADGES SHOWCASE) -->
+<div class="jumanne-profile-badges-section">
+    
+    <!-- Hadhi ya Akaunti iliyotolewa na Database (Mfano: Msanii, Mshabiki, au Sponsor) -->
+    <!-- JavaScript itabadilisha neno hili na rangi kulingana na account type -->
+    <span id="jumanne-user-role" class="jumanne-badge-role">Hadhi ya Akaunti</span>
+
+    <!-- Sanduku la Mataji / Mafanikio ya Msanii mtaani -->
+    <div id="jumanne-user-trophies" class="jumanne-trophies-container">
+        <!-- Beji hizi zitaamshwa au kuongezwa na JavaScript kulingana na data ya Database -->
+        <span class="jumanne-badge-trophy" title="Ameshinda kura nyingi mtaani kwake">🏅 Mfalme wa Mtaa</span>
+        <span class="jumanne-badge-trophy" title="Ameingia Top 10 ya Mkoa">🔥 Mkali wa Wiki</span>
+        <!-- <span class="jumanne-badge-trophy">👑 Kiboko wa Mkoa</span> -->
+    </div>
+    
+</div>
+<!-- KIPENGELE CHA TATU: SHAJARA YA MTAA (DAY STORY TEXT BOX) -->
+<div class="jumanne-shajara-section">
+    <!-- Kichwa kidogo cha Shajara -->
+    <div class="jumanne-shajara-title">
+        <span>📢 Shajara ya Mtaa (Masaa 24)</span>
+    </div>
+    
+    <!-- Boksi la Maandishi litakalojazwa na JavaScript kutoka kwenye Database -->
+    <div class="jumanne-shajara-content">
+        <p id="jumanne-user-story">Inapakia taarifa za leo...</p>
+    </div>
+</div>
+<!-- KIPENGELE CHA NNE: TAKWIMU ZA USHINDANI (ANALYTICS GRID) -->
+<div class="jumanne-stats-grid">
+    
+    <!-- Boksi la 1: Followers -->
+    <div class="jumanne-stat-box">
+        <span id="jumanne-count-followers" class="jumanne-stat-number">0</span>
+        <span class="jumanne-stat-label">Mashabiki</span>
+    </div>
+
+    <!-- Boksi la 2: Following -->
+    <div class="jumanne-stat-box">
+        <span id="jumanne-count-following" class="jumanne-stat-number">0</span>
+        <span class="jumanne-stat-label">Anaofuata</span>
+    </div>
+
+    <!-- Boksi la 3: Likes -->
+    <div class="jumanne-stat-box">
+        <span id="jumanne-count-likes" class="jumanne-stat-number">0</span>
+        <span class="jumanne-stat-label">Likes</span>
+    </div>
+
+    <!-- Boksi la 4: Kura Zote (Votes) - Hii ndio kete ya ushindi! -->
+    <div class="jumanne-stat-box jumanne-votes-highlight">
+        <span id="jumanne-count-votes" class="jumanne-stat-number">0</span>
+        <span class="jumanne-stat-label">Kura</span>
+    </div>
+
+</div>
+<!-- KIPENGELE CHA TANO: VIFUNGO VYA KIBIASHARA NA LINK ZILIZOFUNGWA -->
+<div class="jumanne-business-section">
+    
+    <!-- Kitufe cha Skauti/Sponsor kuomba au kuona Namba ya Simu halisi ya Msanii -->
+    <!-- JavaScript itakagua Token: Kama ni Sponsor ikibonyezwa inafungua namba, kama ni mshabiki inakataa -->
+    <button type="button" id="jumanne-btn-contact-talent" class="jumanne-btn-contact">
+        📞 Sajili / Wasiliana na Kipaji
+    </button>
+
+    <!-- Maboksi ya Links za Mitandao ya Kijamii zilizofungwa kwa usalama -->
+    <div class="jumanne-social-links-container">
+        
+        <!-- Link ya TikTok -->
+        <a id="jumanne-link-tiktok" href="#" class="jumanne-social-icon jumanne-tiktok-disabled" target="_blank" title="TikTok ya Msanii">
+            🎵 <span class="jumanne-icon-label">TikTok</span>
+        </a>
+
+        <!-- Link ya Instagram -->
+        <a id="jumanne-link-instagram" href="#" class="jumanne-social-icon jumanne-instagram-disabled" target="_blank" title="Instagram ya Msanii">
+           📸 <span class="jumanne-icon-label">Instagram</span>
+        </a>
+
+        <!-- Link ya YouTube -->
+        <a id="jumanne-link-youtube" href="#" class="jumanne-social-icon jumanne-youtube-disabled" target="_blank" title="YouTube ya Msanii">
+            📺 <span class="jumanne-icon-label">YouTube</span>
+        </a>
+
+    </div>
+
+</div>
+
+<!-- KIPENGELE CHA SITA: TABS SWITCHER NA GRID YA VIDEO -->
+<div class="jumanne-videos-wrapper">
+    
+    <!-- 1. VIFUNGO VYA KUCHUJA VIDEO (TABS SYSTEM) -->
+    <div class="jumanne-tabs-container">
+        <button type="button" id="jumanne-tab-challenge" class="jumanne-tab-btn jumanne-tab-active">
+            🏆 Video za Challenge
+        </button>
+        <button type="button" id="jumanne-tab-freestyle" class="jumanne-tab-btn">
+            🎤 Free Style / Mazoezi
+        </button>
+    </div>
+
+    <!-- 2. GRID KUU YA MABOKSI YA VIDEO (3-COLUMN GRID) -->
+    <!-- JavaScript itasoma orodha ya video kutoka Database na kuzidondosha hapa kiotomatiki -->
+    <div id="jumanne-profile-video-grid" class="jumanne-video-grid">
+        
+        <!-- Mfano wa boksi moja la video linavyotakiwa kuwa ki-HTML (Hapa limewekwa tupu ili Database ijazie) -->
+        <!-- <div class="jumanne-video-item">
+            <div class="jumanne-video-thumbnail" style="background-image: url('LINK_YA_PICHA_KUTOKA_DATABASE');">
+                <div class="jumanne-video-stats-overlay">
+                    <span>🔥 4.2K Views</span>
+                    <span>🗳️ 850 Kura</span>
+                </div>
+            </div>
+        </div> -->
+        
+    </div>
+
+</div>
+
+
+    </div>
+            <!-- VIPENGELE VINGINE VYA PROFILE VITAFUATA HAPA CHINI HATUA KWA HATUA -->
+        <!-- 3. SEHEMU YA CHINI (BOTTOM NAVIGATION BAR - MULTI-PAGE LINKS) -->
+<nav class="bottom-nav">
+    <!-- Kiunganishi cha Home (Ukurasa huu huu) -->
+    <a href="index.html" class="nav-item active">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+    </a>
+
+    <!-- Kitufe cha Friends kimebadilika kuwa Explore na kinaenda explore.html -->
+    <a href="explore.html" class="nav-item">
+        <i class="fas fa-compass"></i>
+        <span>Explore</span>
+    </a>
+
+    <!-- KITUFE CHA UPLOAD CHENYE RANGI ZA BENDERA YA TZ -->
+    <a href="upload.html" class="nav-item tz-upload-btn">
+        <div class="tz-layer green-layer"></div>
+        <div class="tz-layer blue-layer"></div>
+        <div class="upload-icon-center">
+            <i class="fas fa-plus"></i>
+        </div>
+    </a>
+
+    <!-- Kitufe cha Inbox kimebadilika kuwa Week Challenge na kinaenda weekchallenge.html -->
+    <a href="weekchallenge.html" class="nav-item">
+        <i class="fas fa-trophy"></i>
+        <span>WeekChallenge</span>
+    </a>
+
+    <!-- Kitufe cha Profile kinachodhibitiwa na JS kwenda register.html au profile.html -->
+    <a href="profile.html" class="nav-item" id="profile-nav-link">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+    </a>
+</nav>
+
+
+<script>
+// INJINI YA KUDHIBITI MENU YA SIRI (OPEN, CLOSE & CLICK OUTSIDE)
+function togglesemuyamore() {
+    const menu = document.getElementById("jumanne-more-menu");
+    
+    // Angalia kama menu imefichwa au la kupitia muonekano halisi wa kioo
+    const mtindoWaSasa = window.getComputedStyle(menu).display;
+
+    if (mtindoWaSasa === "none") {
+        menu.style.setProperty("display", "flex", "important"); // Fungua menu fasta
+    } else {
+        menu.style.setProperty("display", "none", "important"); // Funga menu fasta
+    }
+}
+
+// NGOME YA ULINZI: Funga menu kiotomatiki mtumiaji akibonyeza pembeni
+document.addEventListener("click", (event) => {
+    const menu = document.getElementById("jumanne-more-menu");
+    const kitufeChaNukta = document.querySelector(".jumanne-btn-more");
+
+    // Kama menu ipo wazi kiooni kwa wakati huo
+    if (menu && window.getComputedStyle(menu).display !== "none") {
+        
+        // Kagua kama kidole kimegusa pembeni (siyo kwenye menu wala siyo kwenye button ya nukta tatu)
+        if (!menu.contains(event.target) && !kitufeChaNukta.contains(event.target)) {
+            menu.style.setProperty("display", "none", "important"); // Ifiche menu upya mkuu
+        }
+    }
+});
+
+</script>
+</body>
+</html>

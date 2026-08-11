@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Orodha ya Mikoa</title>
+    
+    <!-- Link ya FontAwesome kwa ajili ya ikoni zote za mfumo -->
+    <link rel="stylesheet" href="https://cloudflare.com" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/all.min.css">
+
+</head>
+<body>
+<!-- 1. SEHEMU YA JUU (SEARCH ENGINE YA KUTAFUTA MKOA NDANI KWA NDANI) -->
+<header class="explore-header">
+    <div class="explore-search-container">
+        <i class="fas fa-search search-inside-icon"></i>
+        <!-- Nimeondoa 'onclick' ya nje na kuweka msikilizaji wa JavaScript -->
+        <input type="text" id="mikoa-search-trigger" placeholder="Tafuta jina la mkoa au wilaya...">
+    </div>
+</header>
+
+   
+
+    <!-- KICHWA CHA HABARI CHA UKURASA -->
+    <div class="page-title-section" style="margin-top: 70px; padding: 0 15px;">
+        <h2 style="font-size: 16px; color: #ffffff;"><i class="fas fa-map-marked-alt"></i> Chagua Mkoa wa Ushindani</h2>
+        <p style="font-size: 12px; color: #8a8a8f;">Bonyeza mkoa wowote kuona na kuchuja vipaji vya eneo hilo</p>
+    </div>
+
+    <!-- 2. ORODHA YA MIKOA YOTE 31 YA TANZANIA KWA MUUNDO WA CATEGORIES/GRID -->
+    <main class="mikoa-grid-container">
+<!-- ==========================================================================
+     MIKOA YA BARA: VIUNGANISHI VYA KISASA KWENDA NYUMBA MOJA YA KIOLEZO
+     ========================================================================== -->
+<a href="challenge-feed.html?mkoa=Arusha" class="mkoa-card-btn">Arusha</a>
+<a href="challenge-feed.html?mkoa=Dar es Salaam" class="mkoa-card-btn">Dar es Salaam</a>
+<a href="challenge-feed.html?mkoa=Dodoma" class="mkoa-card-btn">Dodoma</a>
+<a href="challenge-feed.html?mkoa=Geita" class="mkoa-card-btn">Geita</a>
+<a href="challenge-feed.html?mkoa=Iringa" class="mkoa-card-btn">Iringa</a>
+<a href="challenge-feed.html?mkoa=Kagera" class="mkoa-card-btn">Kagera</a>
+<a href="challenge-feed.html?mkoa=Katavi" class="mkoa-card-btn">Katavi</a>
+<a href="challenge-feed.html?mkoa=Kigoma" class="mkoa-card-btn">Kigoma</a>
+<a href="challenge-feed.html?mkoa=Kilimanjaro" class="mkoa-card-btn">Kilimanjaro</a>
+<a href="challenge-feed.html?mkoa=Lindi" class="mkoa-card-btn">Lindi</a>
+<a href="challenge-feed.html?mkoa=Manyara" class="mkoa-card-btn">Manyara</a>
+<a href="challenge-feed.html?mkoa=Mara" class="mkoa-card-btn">Mara</a>
+<a href="challenge-feed.html?mkoa=Mbeya" class="mkoa-card-btn">Mbeya</a>
+<a href="challenge-feed.html?mkoa=Morogoro" class="mkoa-card-btn">Morogoro</a>
+<a href="challenge-feed.html?mkoa=Mtwara" class="mkoa-card-btn">Mtwara</a>
+<!-- ==========================================================================
+     MIKOA ILIYOBAKI YA BARA: KWENDA NYUMBA MOJA YA KIOLEZO (CHALLENGE FEED)
+     ========================================================================== -->
+<a href="challenge-feed.html?mkoa=Mwanza" class="mkoa-card-btn">Mwanza</a>
+<a href="challenge-feed.html?mkoa=Njombe" class="mkoa-card-btn">Njombe</a>
+<a href="challenge-feed.html?mkoa=Pwani" class="mkoa-card-btn">Pwani</a>
+<a href="challenge-feed.html?mkoa=Rukwa" class="mkoa-card-btn">Rukwa</a>
+<a href="challenge-feed.html?mkoa=Ruvuma" class="mkoa-card-btn">Ruvuma</a>
+<a href="challenge-feed.html?mkoa=Shinyanga" class="mkoa-card-btn">Shinyanga</a>
+<a href="challenge-feed.html?mkoa=Simiyu" class="mkoa-card-btn">Simiyu</a>
+<a href="challenge-feed.html?mkoa=Singida" class="mkoa-card-btn">Singida</a>
+<a href="challenge-feed.html?mkoa=Songwe" class="mkoa-card-btn">Songwe</a>
+<a href="challenge-feed.html?mkoa=Tabora" class="mkoa-card-btn">Tabora</a>
+<a href="challenge-feed.html?mkoa=Tanga" class="mkoa-card-btn">Tanga</a>
+
+<!-- ==========================================================================
+     MIKOA YA ZANZIBAR: KWENDA NYUMBA MOJA YA KIOLEZO (CHALLENGE FEED)
+     ========================================================================== -->
+<a href="challenge-feed.html?mkoa=Mjini Magharibi" class="mkoa-card-btn">Mjini Magharibi (Unguja)</a>
+<a href="challenge-feed.html?mkoa=Kaskazini Unguja" class="mkoa-card-btn">Kaskazini Unguja</a>
+<a href="challenge-feed.html?mkoa=Kusini Unguja" class="mkoa-card-btn">Kusini Unguja</a>
+<a href="challenge-feed.html?mkoa=Kaskazini Pemba" class="mkoa-card-btn">Kaskazini Pemba</a>
+<a href="challenge-feed.html?mkoa=Kusini Pemba" class="mkoa-card-btn">Kusini Pemba</a>
+<!-- ==========================================================================
+     MIKOA (COUNTIES) YA KENYA: KWENDA NYUMBA MOJA YA KIOLEZO (CHALLENGE FEED)
+     ========================================================================== -->
+<a href="challenge-feed.html?mkoa=Nairobi" class="mkoa-card-btn">Nairobi County</a>
+<a href="challenge-feed.html?mkoa=Mombasa" class="mkoa-card-btn">Mombasa County</a>
+<a href="challenge-feed.html?mkoa=Kisumu" class="mkoa-card-btn">Kisumu County</a>
+<a href="challenge-feed.html?mkoa=Nakuru" class="mkoa-card-btn">Nakuru County</a>
+<a href="challenge-feed.html?mkoa=Uasin Gishu" class="mkoa-card-btn">Uasin Gishu County</a>
+<a href="challenge-feed.html?mkoa=Kiambu" class="mkoa-card-btn">Kiambu County</a>
+<a href="challenge-feed.html?mkoa=Kakamega" class="mkoa-card-btn">Kakamega County</a>
+<a href="challenge-feed.html?mkoa=Machakos" class="mkoa-card-btn">Machakos County</a>
+<a href="challenge-feed.html?mkoa=Kilifi" class="mkoa-card-btn">Kilifi County</a>
+<a href="challenge-feed.html?mkoa=Kajiado" class="mkoa-card-btn">Kajiado County</a>
+<a href="challenge-feed.html?mkoa=Garissa" class="mkoa-card-btn">Garissa County</a>
+<!-- ==========================================================================
+     MIKOA (COUNTIES) YA KENYA - SEHEMU YA PILI YA HITIMISHO
+     ========================================================================== -->
+<a href="challenge-feed.html?mkoa=Kericho" class="mkoa-card-btn">Kericho County</a>
+<a href="challenge-feed.html?mkoa=Nandi" class="mkoa-card-btn">Nandi County</a>
+<a href="challenge-feed.html?mkoa=Bomet" class="mkoa-card-btn">Bomet County</a>
+<a href="challenge-feed.html?mkoa=Bungoma" class="mkoa-card-btn">Bungoma County</a>
+<a href="challenge-feed.html?mkoa=Busia" class="mkoa-card-btn">Busia County</a>
+<a href="challenge-feed.html?mkoa=Vihiga" class="mkoa-card-btn">Vihiga County</a>
+<a href="challenge-feed.html?mkoa=Nyeri" class="mkoa-card-btn">Nyeri County</a>
+<a href="challenge-feed.html?mkoa=Muranga" class="mkoa-card-btn">Murang'a County</a>
+<a href="challenge-feed.html?mkoa=Kitui" class="mkoa-card-btn">Kitui County</a>
+<a href="challenge-feed.html?mkoa=Makueni" class="mkoa-card-btn">Makueni County</a>
+<a href="challenge-feed.html?mkoa=Meru Kenya" class="mkoa-card-btn">Meru County (KE)</a>
+<a href="challenge-feed.html?mkoa=Kwale" class="mkoa-card-btn">Kwale County</a>
+<a href="challenge-feed.html?mkoa=Turkana" class="mkoa-card-btn">Turkana County</a>
+<a href="challenge-feed.html?mkoa=Narok" class="mkoa-card-btn">Narok County</a>
+<a href="challenge-feed.html?mkoa=Laikipia" class="mkoa-card-btn">Laikipia County</a>
+<a href="challenge-feed.html?mkoa=Marsabit" class="mkoa-card-btn">Marsabit County</a>
+<a href="challenge-feed.html?mkoa=Wajir" class="mkoa-card-btn">Wajir County</a>
+<a href="challenge-feed.html?mkoa=Mandera" class="mkoa-card-btn">Mandera County</a>
+<a href="challenge-feed.html?mkoa=Isiolo" class="mkoa-card-btn">Isiolo County</a>
+<a href="challenge-feed.html?mkoa=Tharaka Nithi" class="mkoa-card-btn">Tharaka-Nithi County</a>
+<a href="challenge-feed.html?mkoa=Samburu" class="mkoa-card-btn">Samburu County</a>
+<a href="challenge-feed.html?mkoa=Tana River" class="mkoa-card-btn">Tana River County</a>
+<a href="challenge-feed.html?mkoa=Nyamira" class="mkoa-card-btn">Nyamira County</a>
+<a href="challenge-feed.html?mkoa=Migori" class="mkoa-card-btn">Migori County</a>
+<a href="challenge-feed.html?mkoa=Siaya" class="mkoa-card-btn">Siaya County</a>
+<a href="challenge-feed.html?mkoa=Homa Bay" class="mkoa-card-btn">Homa Bay County</a>
+<a href="challenge-feed.html?mkoa=Kisii" class="mkoa-card-btn">Kisii County</a>
+<a href="challenge-feed.html?mkoa=Embu" class="mkoa-card-btn">Embu County</a>
+<a href="challenge-feed.html?mkoa=Nyandarua" class="mkoa-card-btn">Nyandarua County</a>
+<a href="challenge-feed.html?mkoa=Kirinyaga" class="mkoa-card-btn">Kirinyaga County</a>
+<a href="challenge-feed.html?mkoa=Taita Taveta" class="mkoa-card-btn">Taita Taveta County</a>
+<a href="challenge-feed.html?mkoa=Lamu" class="mkoa-card-btn">Lamu County</a>
+<!-- ==========================================================================
+     4 COUNTIES ZA KENYA ZILIZOKUWA ZIMEBAKI (HITIMISHO LA RAMANI KUU)
+     ========================================================================== -->
+<a href="challenge-feed.html?mkoa=Nyamira" class="mkoa-card-btn">Nyamira County</a>
+<a href="challenge-feed.html?mkoa=Migori" class="mkoa-card-btn">Migori County</a>
+<a href="challenge-feed.html?mkoa=Nyandarua" class="mkoa-card-btn">Nyandarua County</a>
+<a href="challenge-feed.html?mkoa=Samburu" class="mkoa-card-btn">Samburu County</a>
+<!-- ==========================================================================
+     MIKOA YA MWISHO ILIYOBAKI YA TANZANIA BARA: KWENDA CHALLENGE FEED
+     ========================================================================== -->
+<a href="challenge-feed.html?mkoa=Katavi" class="mkoa-card-btn">Katavi</a>
+<a href="challenge-feed.html?mkoa=Kigoma" class="mkoa-card-btn">Kigoma</a>
+<a href="challenge-feed.html?mkoa=Lindi" class="mkoa-card-btn">Lindi</a>
+<a href="challenge-feed.html?mkoa=Manyara" class="mkoa-card-btn">Manyara</a>
+<a href="challenge-feed.html?mkoa=Mara" class="mkoa-card-btn">Mara</a>
+
+    </main>
+
+    <!-- 3. SEHEMU YA CHINI (BOTTOM NAVIGATION BAR) -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+
+        <a href="explore.html" class="nav-item">
+            <i class="fas fa-compass"></i>
+            <span>Explore</span>
+        </a>
+
+        <a href="upload.html" class="nav-item tz-upload-btn">
+            <div class="tz-layer green-layer"></div>
+            <div class="tz-layer blue-layer"></div>
+            <div class="upload-icon-center">
+                <i class="fas fa-plus"></i>
+            </div>
+        </a>
+
+        <!-- Kitufe cha Week Challenge kinabaki active kwasababu bado tupo kwenye kapu lake -->
+        <a href="weekchallenge.html" class="nav-item active">
+            <i class="fas fa-trophy"></i>
+            <span>WeekChallenge</span>
+        </a>
+
+        <a href="profile.html" class="nav-item" id="profile-nav-link">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+<script>
+// INJINI MPYA YA KUTAFUTA JINA LA MKOA AU WILAYA NDANI KWA NDANI (LIVE FILTER)
+document.addEventListener("DOMContentLoaded", () => {
+    
+    // Kamata lile boksi lako la search la mikoa na wilaya
+    const boksiLaMikoaSearch = document.getElementById("mikoa-search-trigger");
+    if (!boksiLaMikoaSearch) return;
+
+    // Sikiliza vidole vya mtumiaji kila anapoandika herufi kiooni
+    boksiLaMikoaSearch.addEventListener("input", function() {
+        
+        // Geuza herufi zote kuwa ndogo (Lower Case) na uondoe nafasi za ziada
+        const nenoLinalotafutwa = this.value.toLowerCase().trim();
+        
+        // Kamata vifungo vyote vya mikoa na wilaya vilivyopo kwenye grid yako
+        const vifungoVyaMaeneo = document.querySelectorAll(".mkoa-card-btn");
+
+        vifungoVyaMaeneo.forEach(kifungo => {
+            // Soma jina halisi lililoandikwa juu ya kitufe (mfano: Temeke, Kinondoni)
+            const jinaLaEneo = (kifungo.textContent || kifungo.innerText).toLowerCase();
+
+            // KAGUA: Kama jina la eneo lina herufi zinazofanana na zilizoandikwa kwenye search bar
+            if (jinaLaEneo.includes(nenoLinalotafutwa)) {
+                // Kama neno lipo, kiache kitufe kionekane vizuri kiooni
+                kifungo.style.setProperty("display", "inline-block", "important");
+            } else {
+                // Kama halipo, kifiche kitufe kabisa kisivuruge kioo cha mtumiaji
+                kifungo.style.setProperty("display", "none", "important");
+            }
+        });
+    });
+});
+
+</script>
+</body>
+</html>

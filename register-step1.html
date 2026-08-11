@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JumanneTok TZ - Usajili Hatua ya 1</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Faili la ikoni za FontAwesome -->
+    <link rel="stylesheet" href="css/all.min.css">
+</head>
+<body>
+
+    <!-- CONTAINER KUU YA USAJILI -->
+    <div class="jumanne-auth-container">
+        
+        <!-- BAR YA MAENDELEO (PROGRESS BAR) -->
+        <div class="jumanne-progress-bar">
+            <div class="jumanne-progress-fill" style="width: 14.2%;"></div>
+        </div>
+        <p class="jumanne-step-text">Hatua: <strong>1</strong> kati ya 7</p>
+
+        <!-- FOMU YA USAJILI -->
+        <form id="jumanne-step1-form">
+            
+            <!-- SEHEMU YA 1: MAJINA -->
+            <div class="jumanne-form-step" id="jumanne-step-1">
+                
+                <!-- BOKSI LA SAA YA USALAMA (VISUAL COUNTDOWN TIMER) -->
+                <div class="jumanne-timer-box">
+                    <i class="fas fa-clock-rotate-left"></i>
+                    Muda wa Usalama: <span id="jumanne-countdown-clock">03:00</span>
+                </div>
+
+                <h2 class="jumanne-step-title">Tufahamishe Jina Lako</h2>
+                <p class="jumanne-step-subtitle">Andika majina yako halisi ya ushindani (Herufi 8 tu).</p>
+
+                <!-- Mfumo wa Kuzuia Ma-robot (Honeypot Field) -->
+                <div class="jumanne-pot-field">
+                    <input type="text" id="jumanne-honey-username" name="honey_username" tabindex="-1" autocomplete="off">
+                </div>
+
+<!-- Sehemu ya Jina la Kwanza yenye mrija wa Kofia ya Rangi Nne -->
+<div class="jumanne-input-group" style="position: relative;">
+    <label for="jumanne-firstname">Jina la Kwanza</label>
+    <div style="position: relative; width: 100%;">
+        <!-- 🔥 Mlinzi wa Nyuma: Hiki ndicho chumba cha siri ambacho JavaScript inakipaka rangi nne -->
+        <div id="jumanne-fn-color-box" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 12px; font-size: 15px; font-weight: bold; pointer-events: none; white-space: pre; background: transparent; display: flex; align-items: center; box-sizing: border-box; letter-spacing: 0.5px;"></div>
+        <!-- 🔥 Mlinzi wa Mbele: Hiki ndicho kisanduku unachokwenda kuandika (Kimefanywa kiwe giza/transparent herufi zake) -->
+        <input type="text" id="jumanne-firstname" placeholder="Mfano: Juma" maxlength="20" required autocomplete="given-name" style="width: 100%; padding: 12px; font-size: 15px; font-weight: bold; background: #111; border: 1px solid #222; border-radius: 6px; color: transparent; caret-color: #fff; box-sizing: border-box; letter-spacing: 0.5px;">
+    </div>
+</div>
+
+<!-- Sehemu ya Jina la Pili yenye mrija wa Kofia ya Rangi Nne -->
+<div class="jumanne-input-group" style="position: relative; margin-top: 15px;">
+    <label for="jumanne-lastname">Jina la Pili</label>
+    <div style="position: relative; width: 100%;">
+        <!-- 🔥 Mlinzi wa Nyuma -->
+        <div id="jumanne-ln-color-box" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 12px; font-size: 15px; font-weight: bold; pointer-events: none; white-space: pre; background: transparent; display: flex; align-items: center; box-sizing: border-box; letter-spacing: 0.5px;"></div>
+        <!-- 🔥 Mlinzi wa Mbele -->
+        <input type="text" id="jumanne-lastname" placeholder="Mfano: Joseph" maxlength="20" required autocomplete="family-name" style="width: 100%; padding: 12px; font-size: 15px; font-weight: bold; background: #111; border: 1px solid #222; border-radius: 6px; color: transparent; caret-color: #fff; box-sizing: border-box; letter-spacing: 0.5px;">
+    </div>
+</div>
+
+                <!-- Sehemu ya Kuchagua Aina ya Kipaji -->
+                <div class="jumanne-input-group">
+                    <label for="jumanne-talent-type">Aina ya Kipaji Chako</label>
+                    <select id="jumanne-talent-type" required>
+                        <option value="">-- Chagua Kipaji... --</option>
+                        <option value="singeli">Singeli</option>
+                        <option value="bongo-fleva">Bongo Fleva</option>
+                        <option value="mpira">Mpira wa Miguu</option>
+                        <option value="ucheshi">Ucheshi (Comedy)</option>
+                        <option value="uchoraji">Uchoraji / Sanaa</option>
+                        <option value="mshabiki">Mshabiki / Jaji wa Mtaa</option>
+                    </select>
+                </div>
+
+                <!-- Sehemu ya Kuchagua Hadhi ya Akaunti -->
+                <div class="jumanne-input-group">
+                    <label for="jumanne-account-role">Unajiunga kama nani?</label>
+                    <select id="jumanne-account-role" required>
+                        <option value="">-- Chagua Hadhi yako... --</option>
+                        <option value="creator">Kipaji / Msanii (Creator)</option>
+                        <option value="viewer">Mshabiki / Mtazamaji (Viewer)</option>
+                        <option value="scout">Skauti / Mdhamini (Sponsor)</option>
+                    </select>
+                </div>
+
+                <!-- Kitufe cha Next (Kinachofungua faili linalofuata la HTML) -->
+                <button type="button" class="jumanne-btn-next" id="jumanne-btn-to-step2">Inayofuata</button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- KUUNGINISHA JAVASCRIPT YA UKURASA HUU PEKEE -->
+    <script src="register-step1.js"></script>
+</body>
+</html>

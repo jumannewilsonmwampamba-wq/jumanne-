@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="sw">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JumanneTok TZ - Pakia Video (Hatua ya 2)</title>
+  <!-- CSS NA FONTAWESOME VINAPACHIKWA HAPA MNYOFU -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/all.min.css">
+</head>
+
+<body class="jumanne-dark-mode" style="background-color: #121212; color: #ffffff; font-family: sans-serif; margin: 0; padding: 0;">
+  
+  <!-- CONTAINER KUU YA MCHAKATO WA UPLOAD -->
+  <div class="jumanne-upload-container" style="padding: 15px; box-sizing: border-box;">
+    
+    <!-- 1. MUUNDO WA JUU: UPAU WA KICHWA -->
+    <div class="jumanne-upload-header" style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+      <button type="button" class="jumanne-btn-back-arrow" onclick="window.history.back()" style="background: none; border: none; color: #fff; font-size: 18px; cursor: pointer;">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <h2 class="jumanne-upload-title" style="margin: 0; font-size: 20px; font-weight: bold;">Chagua Kipaji Chako</h2>
+    </div>
+    
+    <!-- 🔥 INJINI YA PREVIEW YA STEP 2: Video ya Blob inacheza hapa juu nadhifu bila kusukuma fomu chini [A] -->
+    <div id="jumanne-step2-preview-container" style="width: 100%; display: flex; justify-content: center; box-sizing: border-box; margin-bottom: 20px;">
+      <video id="jumanne-local-preview-player-step2" controls autoplay muted playsinline style="width: 100%; max-height: 240px; aspect-ratio: 16/9; border-radius: 10px; border: 2px solid #00e676; background: #000; object-fit: cover;">
+      </video>
+    </div>
+            <!-- FOMU KUU YA MAPINDUZI YA UPLOAD (HATUA YA 2) -->
+        <form id="jumanne-upload-form-step2" novalidate>
+
+            <!-- MTEGO WA SIRI WA MA-ROBOT (HONEYPOT ACCELERATION) -->
+            <div class="jumanne-video-pot-gate" style="display: none !important; visibility: hidden !important;">
+                <input type="text" id="jumanne-video-bot-input-step2" name="video_bot_security" tabindex="-1" autocomplete="off">
+            </div>
+
+            <!-- 2. BOKSI LA KUCHAGUA AINA YA KIPAJI (TALENT CATEGORY) -->
+            <div class="jumanne-input-group" style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 8px;">
+                <label for="jumanne-video-category" style="font-size: 14px; font-weight: bold; color: #00e676; text-align: left;">Aina ya Kipaji Chako</label>
+                <select id="jumanne-video-category" name="video_category" required style="width: 100%; padding: 12px; background: #111; border: 1px solid #222; border-radius: 8px; color: #fff; font-size: 14px; box-sizing: border-box;">
+                    <option value="">-- Chagua Aina ya Kipaji... --</option>
+                    
+                    <!-- KUNDI LA SANAA YA MUZIKI NA SAUTI -->
+                    <option value="singeli">Singeli (Kuchana / Miziki ya Kasi)</option>
+                    <option value="bongofleva">Bongo Fleva / Rap / Hip Hop</option>
+                    <option value="gospel">Muziki wa Injili / Kwaya</option>
+                    <option value="utongaji">Utongaji Mashairi / Spoken Word</option>
+
+                    <!-- KUNDI LA MICHEZO NA MAZOEZI -->
+                    <option value="soka">Michezo (Mpira wa Miguu / Chenga)</option>
+                    <option value="basket">Mpira wa Kikapu / Wavu / Netiboli</option>
+                    <option value="ngumi">Ngumi za Mchanganyiko / Kareti</option>
+                    <option value="riadha">Riadha / Kukimbia / Sarakasi</option>
+
+                    <!-- KUNDI LA IGIZO NA BURUDANI (CREATIVE ARTS) -->
+                    <option value="ucheshi">Ucheshi / Vichekesho / Stand-up</option>
+                    <option value="uigizaji">Uigizaji wa Filamu / Maigizaji Mfupi</option>
+                    <option value="dansi">Dansi (Kucheza Shalo / Mitindo ya Sasa)</option>
+                    <option value="mafumbo">Viini Macho / Mazingaombwe</option>
+                    
+                    <!-- KUNDI LA SANAA YA MIKONO NA UBUNIFU -->
+                    <option value="uchoraji">Uchoraji / Uchongaji / Usanii</option>
+                    <option value="mitindo">Ubunifu wa Mavazi / Mitindo</option>
+                    <option value="dj_production">Udj (DJing) / Kutengeneza Beat</option>
+                    
+                    <!-- KUNDI LA TAMADUNI NA UTAMADUNI WA NYUMBANI -->
+                    <option value="ngoma_za_kienyeji">Ngoma za Kienyeji (Asili / Mila)</option>
+                    <option value="taarab">Mduara / Taarab ya Pwani</option>
+                    <option value="mantz">Mchiriku / Mnanda (Vigoma)</option>
+                    
+                    <!-- KUNDI LA MICHEZO YA AKILI NA GAMING -->
+                    <option value="gaming">Ma-Gamers (Video Games / E-Sports)</option>
+                    <option value="michezo_ya_bodi">Michezo ya Akili (Bao / Drafti)</option>
+                    
+                    <!-- KUNDI LA MAUDHUI YA KIDIJITALI -->
+                    <option value="content_creation">Waandishi wa Maudhui / Vlogs</option>
+                    <option value="maiga_sauti">Kuiga Sauti (Viongozi / Wanyama)</option>
+                    <option value="vipaji_vya_ajabu">Vipaji vya Kipekee (Nguvu / Sokota)</option>
+                </select>
+            </div>
+            <!-- ==========================================================================
+            3. SEHEMU YA KUCHAGUA HALI YA VIDEO (CHALLENGE VS FREESTYLE)
+            ========================================================================== -->
+            <div class="jumanne-input-group" style="margin-top: 25px; display: flex; flex-direction: column; gap: 4px;">
+              <label style="font-size: 14px; font-weight: bold; color: #00e676; text-align: left;">Utaratibu wa Video Hii</label>
+              <p style="font-size: 12px; color: #aaaaaa; margin: 0 0 12px 0; text-align: left;">Chagua kama unataka kuingia kwenye ushindani rasmi wa kura au unaweka ya kawaida.</p>
+              
+              <!-- Input za siri za redio zinazofanya kazi nyuma ya pazia -->
+              <input type="radio" id="jumanne-radio-challenge" name="video_type" value="challenge" checked style="display: none;">
+              <input type="radio" id="jumanne-radio-freestyle" name="video_type" value="freestyle" style="display: none;">
+              
+              <div class="jumanne-video-type-grid" style="display: flex; flex-direction: column; gap: 12px; box-sizing: border-box;">
+                
+                <!-- Kadi ya 1: Challenge ya Wilaya (Icon ya Font Awesome ya Trophy) [A] -->
+                <div id="jumanne-card-challenge" class="jumanne-type-card jumanne-card-active" onclick="chaguaHaliYaVideo('challenge')" style="background: #111; border: 2px solid #00e676; padding: 15px; border-radius: 10px; cursor: pointer; text-align: left; box-sizing: border-box;">
+                  <div style="display: flex; align-items: center; gap: 15px;">
+                    <i class="fas fa-trophy" style="font-size: 24px; color: #00e676; width: 30px; text-align: center;"></i>
+                    <div style="display: flex; flex-direction: column; gap: 2px;">
+                      <span style="font-size: 14px; font-weight: bold; color: #fff;">Challenge ya Wilaya</span>
+                      <span style="font-size: 12px; color: #666; line-height: 1.4;">Ingia rasmi kwenye ushindani wa wiki ili uombewe Kura mtaani kwako.</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Kadi ya 2: Freestyle Entry (Icon ya Font Awesome ya Microphone) [A] -->
+                <div id="jumanne-card-freestyle" class="jumanne-type-card" onclick="chaguaHaliYaVideo('freestyle')" style="background: #111; border: 1px solid #222; padding: 15px; border-radius: 10px; cursor: pointer; text-align: left; box-sizing: border-box;">
+                  <div style="display: flex; align-items: center; gap: 15px;">
+                    <i class="fas fa-microphone" style="font-size: 24px; color: #888; width: 30px; text-align: center;"></i>
+                    <div style="display: flex; flex-direction: column; gap: 2px;">
+                      <span style="font-size: 14px; font-weight: bold; color: #fff;">Free Style / Mazoezi</span>
+                      <span style="font-size: 12px; color: #666; line-height: 1.4;">Video ya kawaida kwa ajili ya mashabiki na Likes, haina presha ya kura.</span>
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+            
+            <!-- VIFUNGO VYA NAVIGATION (BACK NA NEXT) -->
+            <div class="jumanne-upload-btn-group" style="margin-top: 30px; display: flex; gap: 12px;">
+              <button type="button" onclick="window.location.href='upload-step1.html'" style="width: 45%; padding: 12px; background: #222; color: #fff; border: 1px solid #333; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                <i class="fas fa-chevron-left"></i> Nyuma
+              </button>
+              <button type="button" id="jumanne-to-step3" style="flex: 1; padding: 12px; background: #00e676; color: #000; border: none; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                Inayofuata <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+            
+            </form>
+            </div> <!-- CONTAINER KUU END -->
+            
+            <!-- INAUNGANISHA JAVASCRIPT YA STEP 2 NYUMA YAKE -->
+            <script src="upload-step2.js"></script>
+            </body>
+            
+            </html>
