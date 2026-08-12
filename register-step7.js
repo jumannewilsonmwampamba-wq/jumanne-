@@ -283,7 +283,7 @@
     if (btnBack) {
         btnBack.addEventListener("click", () => {
             clearInterval(mtamboWaSaa);
-            window.location.href = "register-step5.html";
+            window.location.href = "register-step6.html";
         });
     }
 
@@ -334,7 +334,7 @@
                     
                     clearInterval(mtamboWaSaa);
                     // Mtoe mnyofu akamalizie mkataba wa mwisho mtaani!
-                    window.location.href = "index.html"; 
+                    window.location.href = "register-step9.html"; 
                 };
 
                 ombiLaza.onerror = function() {
