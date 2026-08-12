@@ -337,25 +337,197 @@
                 ombiDaka2.onsuccess = function () {
                     console.log("💾 Wasifu Umelock: Original Blob ghafi imelazwa IndexedDB salama!");
                     sessionStorage.setItem("jumannetok_avatar_meta", JSON.stringify({ hasBlobDraft: true }));
-                    
-                    clearInterval(mtamboWaSaa);
-                    window.location.href = "register-step9.html";
+                        function applyImageTransformations() {
+        if (!avatarPreviewBox) return;
+        const imgElement = avatarPreviewBox.querySelector("img");
+        if (imgElement) {
+            imgElement.style.transform = `translate(${transformState.translateX}px, ${transformState.translateY}px) scale(${transformState.scale})`;
+        }
+    }
 
+    // Amsha uwezo wa kukokota picha kwa kidole au mouse (Drag & Pan Setup Fixed)
+    function wekaMitamboYaKukokota(img) {
+        img.style.cursor = "move";
+        img.style.transformOrigin = "center center";
+        img.style.transition = "transform 0.05s ease-out";
+
+        // COMPUTER MOUSE INPUT
+        img.addEventListener("mousedown", (e) => {
+            transformState.isDragging = true;
+            transformState.startX = e.clientX - transformState.translateX;
+            transformState.startY = e.clientY - transformState.translateY;
+            e.preventDefault();
+        });
+
+        window.addEventListener("mousemove", (e) => {
+            if (!transformState.isDragging) return;
+            transformState.translateX = e.clientX - transformState.startX;
+            transformState.translateY = e.clientY - transformState.startY;
+            applyImageTransformations();
+        });
+
+        window.addEventListener("mouseup", () => {
+            transformState.isDragging = false;
+        });
+
+        // 🔥 FIX YA GITHUB MOBILE TOUCH: Weka index [0] ya kidole cha kwanza kuzuia crash
+        img.addEventListener("touchstart", (e) => {
+            if (e.touches.length === 1) {
+                transformState.isDragging = true;
+                transformState.startX = e.touches[0].clientX - transformState.translateX;
+                transformState.startY = e.touches[0].clientY - transformState.translateY;
+            }
+        });
+
+        img.addEventListener("touchmove", (e) => {
+            if (!transformState.isDragging || e.touches.length !== 1) return;
+            transformState.translateX = e.touches[0].clientX - transformState.startX;
+            transformState.translateY = e.touches[0].clientY - transformState.startY;
+            applyImageTransformations();
+            e.preventDefault(); 
+        });
+
+        img.addEventListener("touchend", () => {
+            transformState.isDragging = false;
+        });
+    }
+
+    function wekaPichaKioni(fileOrBlob) {
+        if (!avatarPreviewBox) return;
+        try {
+            const pichaZamani = avatarPreviewBox.querySelector("img");
+            if (pichaZamani && pichaZamani.src) {
+                URL.revokeObjectURL(pichaZamani.src);
+                pichaZamani.remove();
+            }
+
+            const urlYaPicha = URL.createObjectURL(fileOrBlob);
+            if (placeholderIcon) placeholderIcon.style.display = "none";
+
+            const imgElement = document.createElement("img");
+            imgElement.src = urlYaPicha;
+            imgElement.style.cssText = "width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; user-select: none; -webkit-user-drag: none;";
+            
+            avatarPreviewBox.appendChild(imgElement);
+
+            transformState.scale = 1;
+            transformState.translateX = 0;
+            transformState.translateY = 0;
+            if (zoomSlider) zoomSlider.value = "1";
+
+            injectZoomSlider();
+            wekaMitamboYaKukokota(imgElement);
+            applyImageTransformations();
+        } catch (err) {
+            console.error("Mkwamo wa kuchora preview ya picha:", err);
+        }
+    }
+
+    if (avatarInput) {
+        avatarInput.addEventListener("change", (e) => {
+            const faili = e.target.files && e.target.files.length > 0 ? e.target.files[0] : null;
+            if (!faili) return;
+
+            if (!faili.type.startsWith("image/")) {
+                alert("Makosa: Tafadhali chagua faili la picha halisi pekee!");
+                e.target.value = "";
+                return;
+            }
+
+            const kikomoChaMb5 = 5 * 1024 * 1024;
+            if (faili.size > kikomoChaMb5) {
+                alert("Picha yako ni nzito mno! Mfumo unaruhusu mwisho wa MB 5 pekee.");
+                e.target.value = "";
+                return;
+            }
+
+            failiLaPichaAsili = faili;
+            wekaPichaKioni(faili);
+        });
+    }
+
+    function rejeshaAvatarKamaIpo() {
+        if (!dbIndexedAkiba) return;
+        const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readonly");
+        const duka = muamala.objectStore("jumannetok_feed_cache");
+        const ombiDaka = duka.get("jumanne_current_avatar_draft");
+
+        ombiDaka.onsuccess = function (e) {
+            const data = e.target.result;
+            if (data && data.avatarBlobData) {
+                console.log("♻️ State Restored: Picha ya wasifu imepatikana ghafi kwenye IndexedDB!");
+                failiLaPichaAsili = data.avatarBlobData;
+                wekaPichaKioni(data.avatarBlobData);
+            }
+        };
+    }
+
+    const btnBack = document.getElementById("jumanne-back-to-step5");
+    const btnNext = document.getElementById("jumanne-btn-to-step7");
+
+    if (btnBack) {
+        btnBack.addEventListener("click", () => {
+            clearInterval(mtamboWaSaa);
+            window.location.href = "register-step5.html";
+        });
+    }
+
+    if (btnNext) {
+        btnNext.addEventListener("click", () => {
+            const honeyInput = document.getElementById("jumanne-honey-avatar");
+            if (honeyInput && honeyInput.value.length > 0) {
+                sessionStorage.clear();
+                window.location.reload();
+                return;
+            }
+
+            if (!failiLaPichaAsili) {
+                alert("Tafadhali pakia picha yako ya wasifu kwanza! Ni lazima ili mashabiki wakutambue mtaani.");
+                return;
+            }
+
+            if (dbIndexedAkiba) {
+                const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readwrite");
+                const duka = muamala.objectStore("jumannetok_feed_cache");
+
+                const dataYaAvatarDraft = {
+                    id: "jumanne_current_avatar_draft",
+                    jinaLaPicha: failiLaPichaAsili.name || "avatar.jpg",
+                    ukubwaWaPicha: failiLaPichaAsili.size,
+                    avatarBlobData: failiLaPichaAsili,
+                    panX: transformState.translateX,
+                    panY: transformState.translateY,
+                    zoomScale: transformState.scale,
+                    tareheSajili: Date.now()
                 };
 
-                setTimeout(() => {
+                // 🔥 SULUHISHO KUU: Weka amri ya kuokoa na kusafiri ndani ya onsuccess ya duka mnyofu!
+                const ombiLaza = duka.put(dataYaAvatarDraft);
+                
+                ombiLaza.onsuccess = function() {
+                    console.log("💾 Wasifu Umelock: Original Blob ghafi imelazwa IndexedDB salama!");
+                    sessionStorage.setItem("jumannetok_avatar_meta", JSON.stringify({ hasBlobDraft: true }));
+                    
                     clearInterval(mtamboWaSaa);
-                    window.location.href = "register-step9.html";
-                }, 100);
+                    // Hapa kabadilishe kulingana na jina la ukurasa wako wa mbele (Mkataba/Final Step)
+                    window.location.href = "register-step7.html"; 
+                };
+
+                ombiLaza.onerror = function() {
+                    clearInterval(mtamboWaSaa);
+                    window.location.href = "register-step7.html";
+                };
+
             } else {
                 window.location.href = "register-step1.html";
             }
         });
     }
 
-    // Anza kuwasha mitambo yote ki-hardware RAM inapowaka
-    amshaDukaLaAvatarLocal();
-    wekaJinaLaMsaniiChini();
+    // 🔥 SULUHISHO: Amsha mitambo kwa usalama mara tu ukurasa unapomaliza kusoma HTML
+    document.addEventListener("DOMContentLoaded", function() {
+        amshaDukaLaAvatarLocal();
+        wekaJinaLaMsaniiChini();
+    });
 })();
-
-
+                
