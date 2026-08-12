@@ -9,19 +9,43 @@
     <link rel="stylesheet" href="css/all.min.css">
 
     <!-- 🔥 KUFULI LA SEKUNDE SIFURU: Mlinzi Mkuu wa Lango (Auth Gate Script) -->
-    <script>
-        (function () {
-            "use strict";
-            // Kagua token ya siri kwenye diski ya kudumu ya simu kabla HTML haijajengeka
-            const tokenSiri = localStorage.getItem("jumannetok_user_token");
+      <script>
+        
+
+(function () {
+    "use strict";
+
+    // 1. ANZA UKAGUZI MARA TU KIVINJARI KINAPOMALIZA KUSOMA HTML NZIMA
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("🚀 Mlinzi mkuu wa lango la JumanneTok umezinduka...");
+        
+        // Washa injini ya dharura ya kukagua mtumiaji
+        kaguaHaliYaMtumiajiMtaani();
+    });
+
+    // 2. INJINI KUU YA UKAGUZI WA TOKEN (AUTH GATE)
+    function kaguaHaliYaMtumiajiMtaani() {
+        // Vuta ufunguo wa siri wa Token kutoka kwenye diski ya kudumu ya simu
+        const tokenMwenyeji = localStorage.getItem("jumannetok_user_token");
+
+        // 🔥 SHALAWADU: Kama token haipo kabisa, huyu ni mgeni!
+        if (!tokenMwenyeji || tokenMwenyeji.trim() === "") {
+            console.log("🚨 Auth Gate: Umegundulika kuwa mgeni! Unatupwa kwenye usajili sasa hivi...");
             
-            // Kama mtumiaji hana token, mtoe mnyofu kwenda register step 1 instantly!
-            if (!tokenSiri || tokenSiri.trim() === "") {
-                console.log("🚨 Auth Gate: Umegundulika kuwa mgeni! Unahamishwa kwenda usajili...");
-                window.location.href = "register-step1.html";
-            }
-        })();
-    </script>
+            // Msukumie mtumiaji ukurasa wa register-step1.html kibashara bila kuchelewa
+            window.location.href = "register-step1.html";
+            return;
+        }
+
+        // 3. KAMBA YA MWENYEJI: Kama token ipo, mruhusu kubaki uwanjani
+        console.log("✅ Auth Gate: Karibu sana Mwenyeji! Token ipo imara:", tokenMwenyeji);
+        
+        
+    }
+
+})();
+            
+      </script>
 </head>
 <!-- 🔥 KUFULI LA SEVA: Zima refresh ya kuvuta kioo chini (Pull-to-Refresh) kwa CSS ili bando na server zilindwe -->
 <body class="jumanne-dark-mode" style="background-color: #000000; color: #ffffff; font-family: sans-serif; margin: 0; padding: 0; overscroll-behavior-y: contain; overflow: hidden;">
