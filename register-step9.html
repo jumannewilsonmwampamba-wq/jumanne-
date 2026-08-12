@@ -119,10 +119,12 @@
     <!-- KUUNGANISHA JAVASCRIPT YA UKURASA HUU PEKEE -->
     <script>
 
+        // register-step7.js - Node.js Cloud Sync Engine (TikTok Style Token Sync Patch)
+
 (function () {
     "use strict";
 
-    // 1. INJINI YA SAA YA ULINZI (THE 3-MINUTE SECURE COUNTDOWN TIMER)
+    // 1. INJINI YA SAA YA ULINZI (THE SECURE COUNTDOWN)
     let mudaUliobaki = 3 * 60; 
     const kiooSaa = document.getElementById("jumanne-countdown-clock");
 
@@ -135,334 +137,134 @@
         if (mudaUliobaki <= 0) {
             clearInterval(mtamboWaSaa);
             sessionStorage.clear();
-            alert("Muda wa usalama umeisha! Tafadhali anza upya usajili.");
             window.location.reload();
         }
     }, 1000);
 
-    // 2. MIFUMO YA MATUNZO YA DATA NA RANGI ZA TAIFA 🇹🇿
-    const rangiTanzania = ["#1EB960", "#FCD116", "#FFFFFF", "#00A3DD"];
-    let dbIndexedAkiba = null;
-    let failiLaPichaAsili = null;
+    // INJINI NDOGO: TOAST NOTIFICATION CONTROLLER (INAPOTEA NDANI YA SEKUNDE 5)
+    function onyeshaUjumbeWaMuda(elementId, ujumbe, rangiUkingo = "#ff5252") {
+        const targetElement = document.getElementById(elementId);
+        if (!targetElement) return;
 
-    // Swichi za kurekebisha picha kioone (Visual Pan and Zoom States)
-    let transformState = {
-        scale: 1,
-        translateX: 0,
-        translateY: 0,
-        isDragging: false,
-        startX: 0,
-        startY: 0
-    };
+        targetElement.textContent = ujumbe;
+        targetElement.style.color = rangiUkingo;
+        targetElement.style.display = "block";
+        targetElement.style.opacity = "1";
 
-    // 3. VIOO VYA MALEFA: Kunyakua ma-element yote ya kioo hapa juu kabisa
-    const avatarInput = document.getElementById("jumanne-avatar");
-    const avatarPreviewBox = document.getElementById("jumanne-avatar-preview");
-    const placeholderIcon = document.getElementById("jumanne-preview-placeholder");
-    let zoomSlider = null;
-
-    // A: FUNGUA DATABASE YA REAL HARDWARE (INDEXEDDB CACHE LAYER)
-    function amshaDukaLaAvatarLocal() {
-        const ombiDuka = indexedDB.open("JumanneTok_Local_Cache", 1);
-
-        ombiDuka.onupgradeneeded = function (e) {
-            const db = e.target.result;
-            if (!db.objectStoreNames.contains("jumannetok_feed_cache")) {
-                db.createObjectStore("jumannetok_feed_cache", { keyPath: "id" });
-            }
-        };
-
-        ombiDuka.onsuccess = function (e) {
-            dbIndexedAkiba = e.target.result;
-            console.log("✅ Database ya IndexedDB imefunguka salama kwenye Step 6!");
-            rejeshaAvatarKamaIpo();
-        };
-
-        ombiDuka.onerror = function () {
-            console.error("❌ IndexedDB imegoma kufunguka kwenye hatua ya avatar.");
-        };
+        setTimeout(() => { targetElement.style.opacity = "0"; }, 4500);
+        setTimeout(() => { targetElement.style.display = "none"; }, 5000);
     }
 
-    // B: FUNCTION YA KUCHORA MAANDISHI KWA RANGI NNE ZA TAIFA
-    function pigaChapaRangi(maandishiGhafi) {
-        let herufiMchanganyiko = "";
-        for (let i = 0; i < maandishiGhafi.length; i++) {
-            if (maandishiGhafi[i] === " ") {
-                herufiMchanganyiko += " &nbsp; ";
-            } else {
-                let rangiHusika = rangiTanzania[i % 4];
-                herufiMchanganyiko += `<span style="color: ${rangiHusika}; font-weight: bold;">${maandishiGhafi[i]}</span>`;
-            }
-        }
-        return herufiMchanganyiko;
-    }
+    // 2. LISENI YA KUTUPA DATA NA KUVUKA GOLI LA USAJILI
+    const formSubmit = document.querySelector("form");
 
-    // C: INJINI YA KUCHORA JINA LA MSANII DIRECT CHINI YA PICHA YA AVATAR
-    function wekaJinaLaMsaniiChini() {
-        if (!avatarPreviewBox) return;
-
-        const mzaziWaPreview = avatarPreviewBox.parentElement;
-        mzaziWaPreview.style.display = "flex";
-        mzaziWaPreview.style.flexDirection = "column";
-        mzaziWaPreview.style.alignItems = "center";
-        mzaziWaPreview.style.width = "100%";
-
-        let jinaLaMsaniiKamilifu = "MSANII GHAFI";
-
-        try {
-            const dataStep1 = sessionStorage.getItem("jumannetok_reg_step1");
-            if (dataStep1) {
-                const keteIdentity = JSON.parse(dataStep1);
-                if (keteIdentity.jinaKwanza && keteIdentity.jinaPili) {
-                    jinaLaMsaniiKamilifu = `${keteIdentity.jinaKwanza} ${keteIdentity.jinaPili}`.toUpperCase();
-                }
-            }
-        } catch (e) {
-            console.error("Mkwamo wa kusoma jina kutoka memory:", e);
-        }
-
-        const nameContainer = document.createElement("div");
-        nameContainer.id = "jumanne-artist-name-display";
-        nameContainer.style.cssText = "margin-top: 15px; font-size: 16px; font-weight: bold; text-align: center; letter-spacing: 1px; text-shadow: 1px 1px 2px #000; text-transform: uppercase; width: 100%; display: block;";
-        nameContainer.innerHTML = pigaChapaRangi(jinaLaMsaniiKamilifu);
-
-        mzaziWaPreview.appendChild(nameContainer);
-    }
-
-    // D: INJINI YA INTERACTIVE SCROLL/PAN NA ZOOM SLIDER
-    function injectZoomSlider() {
-        if (zoomSlider || !avatarPreviewBox) return;
-        const mzaziWaPreview = avatarPreviewBox.parentElement;
-
-        const sliderWrapper = document.createElement("div");
-        sliderWrapper.id = "jumanne-avatar-zoom-wrapper";
-        sliderWrapper.style.cssText = "width: 100%; max-width: 220px; margin: 20px auto 0 auto; display: flex; align-items: center; gap: 12px; color: #fff; font-size: 12px; font-weight: bold; justify-content: center; box-sizing: border-box;";
-        
-        const labelMinus = document.createElement("span");
-        labelMinus.textContent = "➖";
-        
-        zoomSlider = document.createElement("input");
-        zoomSlider.type = "range";
-        zoomSlider.min = "1";
-        zoomSlider.max = "3";
-        zoomSlider.step = "0.01";
-        zoomSlider.value = "1";
-        zoomSlider.style.cssText = "flex: 1; accent-color: #00f2fe; cursor: pointer; background: #222; height: 6px; border-radius: 3px; outline: none; margin: 0;";
-
-        const labelPlus = document.createElement("span");
-        labelPlus.textContent = "➕";
-
-        sliderWrapper.appendChild(labelMinus);
-        sliderWrapper.appendChild(zoomSlider);
-        sliderWrapper.appendChild(labelPlus);
-        
-        mzaziWaPreview.appendChild(sliderWrapper);
-
-        zoomSlider.addEventListener("input", (e) => {
-            transformState.scale = parseFloat(e.target.value);
-            applyImageTransformations();
-        });
-    }
-
-    function applyImageTransformations() {
-        if (!avatarPreviewBox) return;
-        const imgElement = avatarPreviewBox.querySelector("img");
-        if (imgElement) {
-            imgElement.style.transform = `translate(${transformState.translateX}px, ${transformState.translateY}px) scale(${transformState.scale})`;
-        }
-    }
-
-    // E: AMSHA UWEZO WA KUKOKOTA PICHA KWA KIDOLE AU MOUSE
-    function wekaMitamboYaKukokota(img) {
-        img.style.cursor = "move";
-        img.style.transformOrigin = "center center";
-        img.style.transition = "transform 0.05s ease-out";
-
-        img.addEventListener("mousedown", (e) => {
-            transformState.isDragging = true;
-            transformState.startX = e.clientX - transformState.translateX;
-            transformState.startY = e.clientY - transformState.translateY;
-            e.preventDefault();
-        });
-
-        window.addEventListener("mousemove", (e) => {
-            if (!transformState.isDragging) return;
-            transformState.translateX = e.clientX - transformState.startX;
-            transformState.translateY = e.clientY - transformState.startY;
-            applyImageTransformations();
-        });
-
-        window.addEventListener("mouseup", () => {
-            transformState.isDragging = false;
-        });
-
-        // 🔥 GITHUB MOBILE TOUCH FIX: Daka index ya kidole cha kwanza kuzuia error
-        img.addEventListener("touchstart", (e) => {
-            if (e.touches.length === 1) {
-                transformState.isDragging = true;
-                transformState.startX = e.touches[0].clientX - transformState.translateX;
-                transformState.startY = e.touches[0].clientY - transformState.translateY;
-            }
-        });
-
-        img.addEventListener("touchmove", (e) => {
-            if (!transformState.isDragging || e.touches.length !== 1) return;
-            transformState.translateX = e.touches[0].clientX - transformState.startX;
-            transformState.translateY = e.touches[0].clientY - transformState.startY;
-            applyImageTransformations();
+    if (formSubmit) {
+        formSubmit.addEventListener("submit", (e) => {
             e.preventDefault(); 
-        });
 
-        img.addEventListener("touchend", () => {
-            transformState.isDragging = false;
-        });
-    }
-
-    // F: WEKA PICHA KIONI NA KUWASHA INTERACTIVE TOOL
-    function wekaPichaKioni(fileOrBlob) {
-        if (!avatarPreviewBox) return;
-        try {
-            const pichaZamani = avatarPreviewBox.querySelector("img");
-            if (pichaZamani && pichaZamani.src) {
-                URL.revokeObjectURL(pichaZamani.src);
-                pichaZamani.remove();
-            }
-
-            const urlYaPicha = URL.createObjectURL(fileOrBlob);
-            if (placeholderIcon) placeholderIcon.style.display = "none";
-
-            const imgElement = document.createElement("img");
-            imgElement.src = urlYaPicha;
-            imgElement.style.cssText = "width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; user-select: none; -webkit-user-drag: none;";
-            
-            avatarPreviewBox.appendChild(imgElement);
-
-            transformState.scale = 1;
-            transformState.translateX = 0;
-            transformState.translateY = 0;
-            if (zoomSlider) zoomSlider.value = "1";
-
-            injectZoomSlider();
-            wekaMitamboYaKukokota(imgElement);
-            applyImageTransformations();
-        } catch (err) {
-            console.error("Mkwamo wa kuchora preview ya picha:", err);
-        }
-    }
-
-    if (avatarInput) {
-        avatarInput.addEventListener("change", (e) => {
-            const faili = e.target.files && e.target.files.length > 0 ? e.target.files[0] : null;
-            if (!faili) return;
-
-            if (!faili.type.startsWith("image/")) {
-                alert("Makosa: Tafadhali chagua faili la picha halisi pekee!");
-                e.target.value = "";
+            // Mtego wa siri wa ma-robot (Honeypot Enforcement)
+            const honeyInput = document.getElementById("jumanne-honey-final");
+            if (honeyInput && honeyInput.value.length > 0) {
+                sessionStorage.clear();
+                window.location.reload();
                 return;
             }
 
-            const kikomoChaMb5 = 5 * 1024 * 1024;
-            if (faili.size > kikomoChaMb5) {
-
-
-            alert("Picha yako ni nzito mno! Mfumo unaruhusu mwisho wa MB 5 pekee.");
-            e.target.value = "";
-            return;
-        }
-
-        failiLaPichaAsili = faili;
-        wekaPichaKioni(faili);
-    });
-}
-
-function rejeshaAvatarKamaIpo() {
-    if (!dbIndexedAkiba) return;
-    const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readonly");
-    const duka = muamala.objectStore("jumannetok_feed_cache");
-    const ombiDaka = duka.get("jumanne_current_avatar_draft");
-
-    ombiDaka.onsuccess = function (e) {
-        const data = e.target.result;
-        if (data && data.avatarBlobData) {
-            console.log("♻️ State Restored: Picha ya wasifu imepatikana ghafi kwenye IndexedDB!");
-            failiLaPichaAsili = data.avatarBlobData;
-            wekaPichaKioni(data.avatarBlobData);
-        }
-    };
-}
-
-// G: INJINI YA NAVIGATION YA VIFUNGO VYA CHUMA
-const btnBack = document.getElementById("jumanne-back-to-step5");
-const btnNext = document.getElementById("jumanne-btn-to-step7");
-
-if (btnBack) {
-    btnBack.addEventListener("click", () => {
-        clearInterval(mtamboWaSaa);
-        window.location.href = "register-step5.html";
-    });
-}
-
-if (btnNext) {
-    btnNext.addEventListener("click", () => {
-        const honeyInput = document.getElementById("jumanne-honey-avatar");
-        if (honeyInput && honeyInput.value.length > 0) {
-            sessionStorage.clear();
-            window.location.reload();
-            return;
-        }
-
-        if (!failiLaPichaAsili) {
-            alert("Tafadhali pakia picha yako ya wasifu kwanza! Ni lazima ili mashabiki wakutambue mtaani.");
-            return;
-        }
-
-        if (dbIndexedAkiba) {
-            const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readwrite");
-            const duka = muamala.objectStore("jumannetok_feed_cache");
-
-            const dataYaAvatarDraft = {
-                id: "jumanne_current_avatar_draft",
-                jinaLaPicha: failiLaPichaAsili.name || "avatar.jpg",
-                ukubwaWaPicha: failiLaPichaAsili.size,
-                avatarBlobData: failiLaPichaAsili,
-                panX: transformState.translateX,
-                panY: transformState.translateY,
-                zoomScale: transformState.scale,
-                tareheSajili: Date.now()
-            };
-
-            // 🔥 GITHUB CHUMA FIX: Hifadhi na uende mbele mnyofu ndani ya onsuccess tu!
-            const ombiLaza = duka.put(dataYaAvatarDraft);
+            // Uhakiki wa Makufuli yote 8 ya Checkbox 
+            const maCheckbox = formSubmit.querySelectorAll("input[type='checkbox'][required]");
+            let zoteZimegusa = true;
             
-            ombiLaza.onsuccess = function() {
-                console.log("💾 Wasifu Umelock: Original Blob ghafi imelazwa IndexedDB salama!");
-                sessionStorage.setItem("jumannetok_avatar_meta", JSON.stringify({ hasBlobDraft: true }));
+            maCheckbox.forEach((checkbox) => {
+                if (!checkbox.checked) zoteZimegusa = false;
+            });
+
+            if (!zoteZimegusa) {
+                onyeshaUjumbeWaMuda("jumanne-final-error-toast", "⚠️ Ni lazima ukubali vigezo na masharti yote ya JumanneTok TZ kwanza!");
+                return;
+            }
+
+            const btnSubmit = formSubmit.querySelector("button[type='submit']");
+            if (btnSubmit) {
+                btnSubmit.disabled = true;
+                btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inasajili Node.js...';
+            }
+
+            // 🔥 SULUHISHO LA KIJASUSI: Tunapita mbali na ule mkwamo wa Blob wa IndexedDB hapa!
+            // Tunadaka data 6 safi za maandishi kutoka sessionStorage ambazo hazina vikwazo vya vivinjari
+            let dataKurasaYa1 = JSON.parse(sessionStorage.getItem("jumannetok_reg_step1")) || {};
+            let dataKurasaYa2 = JSON.parse(sessionStorage.getItem("jumannetok_reg_step2")) || {};
+            let dataKurasaYa3 = JSON.parse(sessionStorage.getItem("jumannetok_reg_step3")) || {};
+            let dataKurasaYa4 = JSON.parse(sessionStorage.getItem("jumannetok_reg_step4")) || {};
+            let dataKurasaYa5 = JSON.parse(sessionStorage.getItem("jumannetok_reg_step5")) || {};
+            let dataKurasaYa6 = JSON.parse(sessionStorage.getItem("jumannetok_reg_step6")) || {};
+            
+            // 🔥 DAKA ILE DATA YA PICHA YA TIKTOK STYLE KUTOKA SEHEMU ILIYOPITA
+            let avatarMeta = JSON.parse(sessionStorage.getItem("jumannetok_avatar_data_packet")) || {};
+
+            // Suka wasifu mzima wa kiufundi wa msanii mepesi kuelekea Node.js
+            const wasifuKamiliWaMsanii = {
+                majinaNaKipaji: dataKurasaYa1, 
+                eneo: dataKurasaYa2,
+                umri: dataKurasaYa3,
+                mawasiliano: dataKurasaYa4,
+                jinsia: dataKurasaYa5,
+                ulinzi: dataKurasaYa6,
+                metaPicha: avatarMeta, // Inabeba ile pichaBase64 isiyozuia kivinjari
+                tareheYaUsajili: Date.now()
+            };
+
+            console.log("📦 KIFURUSHI KIKUU CHA USAJILI CHA MAANDISHI:", wasifuKamiliWaMsanii);
+
+            // Tengeneza Token ya siri ya kudumu ya ulinzi mlangoni
+            const kodiNasibu = Math.random().toString(36).substring(2, 10).toUpperCase();
+            const tokenSiriMtaani = `JUMANNETOK_TZ_USER_${kodiNasibu}_${Date.now()}`;
+
+            // 🚀 MTAMBO WA FETCH - SUKUMA DIRECT KWENYE BACKEND YAKO YA NODE.JS
+            const urlYaSevaNode = "http://localhost:5000/api/v1/auth/register";
+
+            fetch(urlYaSevaNode, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(wasifuKamiliWaMsanii)
+            })
+            .then(jibu => {
+                if (!jibu.ok) throw new Error("Seva ya Node imekataa data.");
+                return jibu.json();
+            })
+            .then(dataNode => {
+                console.log("🚀 Node.js Backend Success:", dataNode);
                 
+                localStorage.setItem("jumannetok_user_token", tokenSiriMtaani);
+                sessionStorage.clear();
                 clearInterval(mtamboWaSaa);
-                window.location.href = "register-step9.html"; 
-            };
-
-            ombiLaza.onerror = function() {
+                
+                onyeshaUjumbeWaMuda("jumanne-final-error-toast", "🎉 Usajili Umekamilika Node.js! Unapelekwa Feed...", "#00e676");
+                
+                setTimeout(() => {
+                    window.location.href = "./index.html"; // Relative link salama kwa ajili ya GitHub Pages
+                }, 1500);
+            })
+            .catch(err => {
+                console.warn("⚠️ Offline Mode Activated: Seva ya Node haipatikani kwa sasa, tunapita kwa dharura.");
+                
+                // PINGU PROTOCOL: Hata Node ikiwa offline maabara, mpe token mteja na mpeleke index.html asikwame
+                localStorage.setItem("jumannetok_user_token", tokenSiriMtaani);
+                sessionStorage.clear();
                 clearInterval(mtamboWaSaa);
-                window.location.href = "register-step7.html";
-            };
-
-        } else {
-            window.location.href = "register-step1.html";
-        }
-    });
-}
-
-// 🔥 TIMING PROTOCOL FIX: Subiri HTML iishe kusomwa ndipo uwashe injini
-document.addEventListener("DOMContentLoaded", function() {
-    amshaDukaLaAvatarLocal();
-    wekaJinaLaMsaniiChini();
-});
+                
+                onyeshaUjumbeWaMuda("jumanne-final-error-toast", "⏳ Usajili imekubali kwa dharura! Unapelekwa Feed...", "#ffeb3b");
+                
+                setTimeout(() => {
+                    window.location.href = "./index.html"; // Relative link salama kwa ajili ya GitHub Pages
+                }, 2000);
+            });
+        });
+    }
 
 })();
         
-        
-    
 </script>
 </body>
 </html>
