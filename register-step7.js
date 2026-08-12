@@ -288,64 +288,82 @@
     }
 
     if (btnNext) {
-        btnNext.addEventListener("click", () => {
-            const honeyInput = document.getElementById("jumanne-honey-avatar");
-            if (honeyInput && honeyInput.value.length > 0) {
-                sessionStorage.clear();
-                window.location.reload();
-                return;
-            }
+    btnNext.addEventListener("click", () => {
+        const honeyInput = document.getElementById("jumanne-honey-avatar");
+        if (honeyInput && honeyInput.value.length > 0) {
+            sessionStorage.clear();
+            window.location.reload();
+            return;
+        }
 
-            if (!failiLaPichaAsili) {
-                alert("Tafadhali pakia picha yako ya wasifu kwanza! Ni lazima ili mashabiki wakutambue mtaani.");
-                return;
-            }
+        if (!failiLaPichaAsili) {
+            alert("Tafadhali pakia picha yako ya wasifu kwanza! Ni lazima ili mashabiki wakutambue mtaani.");
+            return;
+        }
 
-            if (dbIndexedAkiba) {
+        if (dbIndexedAkiba) {
+            // Badilisha kitufe kuonyesha kazi inafanyika kuzuia kubonyeza mara mbili
+            btnNext.disabled = true;
+            btnNext.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inasafiri...';
+
+            // 🔥 MTAMBO WA CHUMA: Geuza picha kuwa Base64 String ili kuondoa kufuli la GitHub Pages!
+            const msomajiMafaili = new FileReader();
+            
+            msomajiMafaili.onload = function (event) {
+                const pichaBase64 = event.target.result;
+
                 const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readwrite");
                 const duka = muamala.objectStore("jumannetok_feed_cache");
 
                 const dataYaAvatarDraft = {
-                    id: "jumanne_current_avatar_draft",
+                    id: "jumanne-avatar-base64-draft", // Suka ID mpya nyepesi ya maandishi
                     jinaLaPicha: failiLaPichaAsili.name || "avatar.jpg",
                     ukubwaWaPicha: failiLaPichaAsili.size,
-                    avatarBlobData: failiLaPichaAsili,
+                    avatarMaandishiData: pichaBase64, // Hifadhi kama maandishi safi yasiyozuiliwa!
                     panX: transformState.translateX,
                     panY: transformState.translateY,
                     zoomScale: transformState.scale,
                     tareheSajili: Date.now()
                 };
 
-                // 🔥 USHINDI: Hifadhi na uende mbele KWA USALAMA NDANI YA ONSUCCESS PEKEE!
                 const ombiLaza = duka.put(dataYaAvatarDraft);
                 
                 ombiLaza.onsuccess = function() {
-                    console.log("💾 Wasifu Umelock: Original Blob ghafi imelazwa IndexedDB salama!");
+                    console.log("💾 Wasifu Umelock: Picha ya Base64 imelazwa IndexedDB hewani GitHub!");
                     sessionStorage.setItem("jumannetok_avatar_meta", JSON.stringify({ hasBlobDraft: true }));
                     
                     clearInterval(mtamboWaSaa);
-                    window.location.href = "register-step7.html"; // Inakuvuta mnyofu kwenda mkataba wa mwisho!
+                    // Mtoe mnyofu akamalizie mkataba wa mwisho mtaani!
+                    window.location.href = "register-step7.html"; 
                 };
 
                 ombiLaza.onerror = function() {
+                    btnNext.disabled = false;
+                    btnNext.innerHTML = 'Inayofuata <i class="fas fa-arrow-right"></i>';
                     clearInterval(mtamboWaSaa);
                     window.location.href = "register-step7.html";
                 };
+            };
 
-            } else {
-                window.location.href = "register-step1.html";
-            }
-        });
-    }
+            msomajiMafaili.onerror = function() {
+                console.error("❌ Hitilafu ya kugeuza picha kuwa Base64.");
+                window.location.href = "register-step7.html";
+            };
 
-    // 🔥 MASTER MASTER LISTENERS PROTOCOL: Washa kila kitu kwa usahihi baada ya kioo kuwa tayari
-    document.addEventListener("DOMContentLoaded", function() {
-        amshaDukaLaAvatarLocal();
-        wekaJinaLaMsaniiChini();
+            // Anza kusoma faili ghafi hapa mnyofu
+            msomajiMafaili.readAsDataURL(failiLaPichaAsili);
+
+        } else {
+            window.location.href = "register-step1.html";
+        }
     });
+}
 
-})(); // Inafunga lile viwambo kikuu cha faili zima mnyofu kitalent!
-            
-                
-    
-                
+// 🔥 TIMING PROTOCOL: Subiri HTML iishe kusomwa ndipo uwashe injini ya kioo
+document.addEventListener("DOMContentLoaded", function() {
+    amshaDukaLaAvatarLocal();
+    wekaJinaLaMsaniiChini();
+});
+
+})();
+        
