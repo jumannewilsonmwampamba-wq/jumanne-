@@ -287,83 +287,63 @@
         });
     }
 
-    if (btnNext) {
-    btnNext.addEventListener("click", () => {
-        const honeyInput = document.getElementById("jumanne-honey-avatar");
-        if (honeyInput && honeyInput.value.length > 0) {
-            sessionStorage.clear();
-            window.location.reload();
-            return;
-        }
+        if (btnNext) {
+        btnNext.addEventListener("click", () => {
+            const honeyInput = document.getElementById("jumanne-honey-avatar");
+            if (honeyInput && honeyInput.value.length > 0) {
+                sessionStorage.clear();
+                window.location.reload();
+                return;
+            }
 
-        if (!failiLaPichaAsili) {
-            alert("Tafadhali pakia picha yako ya wasifu kwanza! Ni lazima ili mashabiki wakutambue mtaani.");
-            return;
-        }
+            if (!failiLaPichaAsili) {
+                alert("Tafadhali pakia picha yako ya wasifu kwanza! Ni lazima ili mashabiki wakutambue mtaani.");
+                return;
+            }
 
-        if (dbIndexedAkiba) {
-            // Badilisha kitufe kuonyesha kazi inafanyika kuzuia kubonyeza mara mbili
+            // Badilisha kitufe kuonyesha kasi ya kazi
             btnNext.disabled = true;
-            btnNext.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inasafiri...';
+            btnNext.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inasafiri TikTok Style...';
 
-            // 🔥 MTAMBO WA CHUMA: Geuza picha kuwa Base64 String ili kuondoa kufuli la GitHub Pages!
-            const msomajiMafaili = new FileReader();
+            // 🔥 BINU YA TIKTOK: Geuza picha kuwa Base64 na itupie sessionStorage kama maandishi mepesi!
+            const msomajiTikTok = new FileReader();
             
-            msomajiMafaili.onload = function (event) {
-                const pichaBase64 = event.target.result;
+            msomajiTikTok.onload = function (event) {
+                const pichaMaandishiBase64 = event.target.result;
 
-                const muamala = dbIndexedAkiba.transaction(["jumannetok_feed_cache"], "readwrite");
-                const duka = muamala.objectStore("jumannetok_feed_cache");
-
-                const dataYaAvatarDraft = {
-                    id: "jumanne-avatar-base64-draft", // Suka ID mpya nyepesi ya maandishi
+                // Funga kete nyepesi ya picha ndani ya sessionStorage (Bypass IndexedDB Lock!)
+                const keteYaPichaMeta = {
                     jinaLaPicha: failiLaPichaAsili.name || "avatar.jpg",
-                    ukubwaWaPicha: failiLaPichaAsili.size,
-                    avatarMaandishiData: pichaBase64, // Hifadhi kama maandishi safi yasiyozuiliwa!
                     panX: transformState.translateX,
                     panY: transformState.translateY,
                     zoomScale: transformState.scale,
-                    tareheSajili: Date.now()
+                    pichaGhafiData: pichaMaandishiBase64 // Maandishi hayana vizuizi vya usalama GitHub!
                 };
 
-                const ombiLaza = duka.put(dataYaAvatarDraft);
+                sessionStorage.setItem("jumannetok_avatar_data_packet", JSON.stringify(keteYaPichaMeta));
+                console.log("💾 TikTok Switch: Picha imefungwa salama kwenye sessionStorage!");
+
+                clearInterval(mtamboWaSaa);
                 
-                ombiLaza.onsuccess = function() {
-                    console.log("💾 Wasifu Umelock: Picha ya Base64 imelazwa IndexedDB hewani GitHub!");
-                    sessionStorage.setItem("jumannetok_avatar_meta", JSON.stringify({ hasBlobDraft: true }));
-                    
-                    clearInterval(mtamboWaSaa);
-                    // Mtoe mnyofu akamalizie mkataba wa mwisho mtaani!
-                    window.location.href = "register-step9.html"; 
-                };
-
-                ombiLaza.onerror = function() {
-                    btnNext.disabled = false;
-                    btnNext.innerHTML = 'Inayofuata <i class="fas fa-arrow-right"></i>';
-                    clearInterval(mtamboWaSaa);
-                    window.location.href = "register-step9.html";
-                };
+                // 🔥 RELATIVE PATHING: Weka nukta na mkwaju mwanzoni ili GitHub isipotee njia!
+                window.location.href = "./register-step7.html"; 
             };
 
-            msomajiMafaili.onerror = function() {
-                console.error("❌ Hitilafu ya kugeuza picha kuwa Base64.");
-                window.location.href = "register-step7.html";
+            msomajiTikTok.onerror = function() {
+                console.error("❌ Hitilafu ya kusoma picha.");
+                window.location.href = "./register-step7.html";
             };
 
-            // Anza kusoma faili ghafi hapa mnyofu
-            msomajiMafaili.readAsDataURL(failiLaPichaAsili);
+            // Washa mtambo wa kusoma faili ghafi
+            msomajiTikTok.readAsDataURL(failiLaPichaAsili);
+        });
+    }
 
-        } else {
-            window.location.href = "register-step1.html";
-        }
+    // 🔥 TIMING PROTOCOL: Subiri HTML iishe kusomwa ndipo uwashe injini ya kioo
+    document.addEventListener("DOMContentLoaded", function() {
+        amshaDukaLaAvatarLocal();
+        wekaJinaLaMsaniiChini();
     });
-}
 
-// 🔥 TIMING PROTOCOL: Subiri HTML iishe kusomwa ndipo uwashe injini ya kioo
-document.addEventListener("DOMContentLoaded", function() {
-    amshaDukaLaAvatarLocal();
-    wekaJinaLaMsaniiChini();
-});
-
-})();
-        
+})(); // <--- HILI NDILO BANO LA MWISHO KABISA LINAFUNGA FILE ZIMA!
+    
