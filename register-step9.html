@@ -94,13 +94,7 @@
                         </span>
                     </label>
 
-                    <!-- Sharti la 8 (La Dhahabu): Zawadi Papo Hapo M-Pesa/Tigo Pesa -->
-                    <label class="jumanne-checkbox-container">
-                        <input type="checkbox" id="jumanne-instant-payout-consent" required>
-                        <span class="jumanne-checkbox-text" style="color: #00e676; font-weight: 600;">
-                            💰 Ninakubali kuwa mshindi wa Challenge Week atapatikana kwa kura za haki na zawadi zote zitatumwa papo hapo kwa namba ya simu niliyosajili (M-Pesa, Airtel Money, au Tigo Pesa) ndani ya masaa 24.
-                        </span>
-                    </label>
+                    
 
                 </div>
 
@@ -124,14 +118,10 @@
 
     <!-- KUUNGANISHA JAVASCRIPT YA UKURASA HUU PEKEE -->
     <script>
-// ==========================================================================
-// JUMANNETOK TZ - REGISTER STEP 7 (INSTANT EVACUATION & CACHE persistence)
-// ==========================================================================
-
 (function () {
     "use strict";
 
-    // 1. INJINI YA SAA YA ULINZI (THE SECURE TIMER)
+    // 1. INJINI YA SAA YA ULINZI (THE SECURE COUNTDOWN)
     let mudaUliobaki = 3 * 60; 
     const kiooSaa = document.getElementById("jumanne-countdown-clock");
 
@@ -144,27 +134,32 @@
         if (mudaUliobaki <= 0) {
             clearInterval(mtamboWaSaa);
             sessionStorage.clear();
-            alert("Muda wa usalama umeisha! Tafadhali anza upya usajili.");
             window.location.reload();
         }
     }, 1000);
 
-    // 2. LISENI YA KUVUKA GOLI LA USAJILI KWA DAKIKA YA SIFURI (THE PERSISTENCE LOCK)
-    const btnBack = document.getElementById("jumanne-back-to-step6");
-    const formSubmit = document.getElementById("jumanne-step7-form");
+    // INJINI NDOGO: TOAST NOTIFICATION CONTROLLER (INAPOTEA NDANI YA SEKUNDE 5)
+    function onyeshaUjumbeWaMuda(elementId, ujumbe, rangiUkingo = "#ff5252") {
+        const targetElement = document.getElementById(elementId);
+        if (!targetElement) return;
 
-    if (btnBack) {
-        btnBack.addEventListener("click", () => {
-            clearInterval(mtamboWaSaa);
-            window.location.href = "register-step6.html";
-        });
+        targetElement.textContent = ujumbe;
+        targetElement.style.color = rangiUkingo;
+        targetElement.style.display = "block";
+        targetElement.style.opacity = "1";
+
+        setTimeout(() => { targetElement.style.opacity = "0"; }, 4500);
+        setTimeout(() => { targetElement.style.display = "none"; }, 5000);
     }
+
+    // 2. LISENI YA KUTUPA DATA NA KUVUKA USAJILI
+    const formSubmit = document.querySelector("form");
 
     if (formSubmit) {
         formSubmit.addEventListener("submit", (e) => {
-            e.preventDefault(); // Zuia fomu isipige page reload kienyeji mlangoni
+            e.preventDefault(); 
 
-            // Mtego wa siri wa ma-robot (Honeypot Enforcement)
+            
             const honeyInput = document.getElementById("jumanne-honey-final");
             if (honeyInput && honeyInput.value.length > 0) {
                 sessionStorage.clear();
@@ -172,7 +167,7 @@
                 return;
             }
 
-            // Uhakiki wa Makufuli yote 8 ya Checkbox (Must check all options)
+            // Uhakiki wa Makufuli yote 8 ya Checkbox 
             const maCheckbox = formSubmit.querySelectorAll("input[type='checkbox'][required]");
             let zoteZimegusa = true;
             
@@ -181,25 +176,89 @@
             });
 
             if (!zoteZimegusa) {
-                alert("Ni lazima ukubali vigezo na masharti yote ya JumanneTok TZ kabla ya kuingia feed!");
+                onyeshaUjumbeWaMuda("jumanne-final-error-toast", "⚠️ Ni lazima ukubali vigezo na masharti yote ya JumanneTok TZ kwanza!");
                 return;
             }
 
-            // 🔥 PIGO LA USHINDI WA ASILI: Hakuna Fetch wala XHR hapa!
-            // Mtambo unachoma chapa fupi kwenye sessionStorage kuashiria kuwa huyu ni user mpya anaingia foleni
-            sessionStorage.setItem("jumannetok_pipeline_trigger", "READY_FOR_BATCH_INGESTION");
+            const btnSubmit = formSubmit.querySelector("button[type='submit']");
+            if (btnSubmit) {
+                btnSubmit.disabled = true;
+                btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inasajili Node.js...';
+            }
 
-            // Tokomeza saa ya ulinzi mlangoni upesi
-            clearInterval(mtamboWaSaa);
-
-            console.log("✈️ Data persistence secure! Mtumiaji anarushwa index.html kwa dakika ya sifuri.");
             
-            // Mvute msanii sekunde hii mnyofu ndani ya uwanja wa video wa Home Feed
-            window.location.href = "index.html";
+            // Tunadaka data 6 safi za maandishi kutoka sessionStorage ambazo hazina vikwazo vya vivinjari
+            let dataKurasaYa1 = JSON.parse(sessionStorage.getItem("jumannetok_reg_step1")) || {};
+            let dataKurasaYa2 = JSON.parse(sessionStorage.getItem("jumannetok_reg_step2")) || {};
+            let dataKurasaYa3 = JSON.parse(sessionStorage.getItem("jumannetok_reg_step3")) || {};
+            let dataKurasaYa4 = JSON.parse(sessionStorage.getItem("jumannetok_reg_step4")) || {};
+            let dataKurasaYa5 = JSON.parse(sessionStorage.getItem("jumannetok_reg_step5")) || {};
+            let dataKurasaYa6 = JSON.parse(sessionStorage.getItem("jumannetok_reg_step6")) || {};
+            let avatarMeta = JSON.parse(sessionStorage.getItem("jumannetok_avatar_meta")) || {};
+
+            // wasifu mzima wa kiufundi wa msanii  kuelekea Node.js
+            const wasifuKamiliWaMsanii = {
+                majinaNaKipaji: dataKurasaYa1, 
+                eneo: dataKurasaYa2,
+                umri: dataKurasaYa3,
+                mawasiliano: dataKurasaYa4,
+                jinsia: dataKurasaYa5,
+                ulinzi: dataKurasaYa6,
+                metaPicha: avatarMeta,
+                tareheYaUsajili: Date.now()
+            };
+
+            console.log("📦 KIFURUSHI KIKUU CHA USAJILI CHA MAANDISHI:", wasifuKamiliWaMsanii);
+
+            // Tengeneza Token ya siri ya kudumu ya ulinzi mlangoni
+            const kodiNasibu = Math.random().toString(36).substring(2, 10).toUpperCase();
+            const tokenSiriMtaani = `JUMANNETOK_TZ_USER_${kodiNasibu}_${Date.now()}`;
+
+            // 🚀 MTAMBO WA FETCH - SUKUMA DIRECT KWENYE BACKEND YAKO YA NODE.JS
+            const urlYaSevaNode = "http://localhost:5000/api/v1/auth/register";
+
+            fetch(urlYaSevaNode, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(wasifuKamiliWaMsanii)
+            })
+            .then(jibu => {
+                if (!jibu.ok) throw new Error("Seva ya Node imekataa data.");
+                return jibu.json();
+            })
+            .then(dataNode => {
+                console.log("🚀 Node.js Backend Success:", dataNode);
+                
+                localStorage.setItem("jumannetok_user_token", tokenSiriMtaani);
+                sessionStorage.clear();
+                clearInterval(mtamboWaSaa);
+                
+                onyeshaUjumbeWaMuda("jumanne-final-error-toast", "🎉 Usajili Umekamilika Node.js! Unapelekwa Feed...", "#00e676");
+                
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 1500);
+            })
+            .catch(err => {
+                console.warn("⚠️ Offline Mode Activated: Seva ya Node haipatikani kwa sasa, tunapita kwa dharura.");
+                
+                // PINGU PROTOCOL: Hata Node ikiwa offline maabara, mpe token mteja na mpeleke index.html asikwame
+                localStorage.setItem("jumannetok_user_token", tokenSiriMtaani);
+                sessionStorage.clear();
+                clearInterval(mtamboWaSaa);
+                
+                onyeshaUjumbeWaMuda("jumanne-final-error-toast", "⏳ Usajili imekubali kwa dharura! Unapelekwa Feed...", "#ffeb3b");
+                
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 2000);
+            });
         });
     }
-})();
 
+})();
 
     </script>
 </script>
