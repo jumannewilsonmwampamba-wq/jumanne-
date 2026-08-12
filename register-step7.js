@@ -345,7 +345,7 @@
 
                 setTimeout(() => {
                     clearInterval(mtamboWaSaa);
-                    window.location.href = "register-step7.html";
+                    window.location.href = "register-step9.html";
                 }, 100);
             } else {
                 window.location.href = "register-step1.html";
