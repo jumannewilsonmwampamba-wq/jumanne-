@@ -334,7 +334,7 @@
                     
                     clearInterval(mtamboWaSaa);
                     // Mtoe mnyofu akamalizie mkataba wa mwisho mtaani!
-                    window.location.href = "register-step7.html"; 
+                    window.location.href = "register-step9.html"; 
                 };
 
                 ombiLaza.onerror = function() {
