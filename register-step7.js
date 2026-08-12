@@ -341,7 +341,7 @@
                     btnNext.disabled = false;
                     btnNext.innerHTML = 'Inayofuata <i class="fas fa-arrow-right"></i>';
                     clearInterval(mtamboWaSaa);
-                    window.location.href = "register-step7.html";
+                    window.location.href = "register-step9.html";
                 };
             };
 
