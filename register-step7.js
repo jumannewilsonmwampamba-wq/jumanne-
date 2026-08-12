@@ -326,7 +326,7 @@
                 clearInterval(mtamboWaSaa);
                 
                 // 🔥 RELATIVE PATHING: Weka nukta na mkwaju mwanzoni ili GitHub isipotee njia!
-                window.location.href = "./register-step7.html"; 
+                window.location.href = "./register-step9.html"; 
             };
 
             msomajiTikTok.onerror = function() {
