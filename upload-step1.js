@@ -188,24 +188,30 @@
         }
 
         const btnNext = document.getElementById("jumanne-btn-force-next-step2");
-        if (btnNext) {
-            btnNext.addEventListener("click", function (event) {
-                event.preventDefault();
-                
-                const jumlaYaVipandeStr = sessionStorage.getItem("jumannetok_total_chunks");
-                if (!jumlaYaVipandeStr) {
-                    alert("Tafadhali chagua video kwanza kabla ya kwenda hatua inayofuata!");
-                    return;
-                }
-
-                btnNext.disabled = true;
-                btnNext.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inasonga mbele...';
-
-                // 🔥 RELATIVE PATH FIXED: Weka ./ kuzuia asipotee njia GitHub Pages!
-                window.location.href = "./upload-step2.html";
-            });
+        // 🔥 REKEBISHA TU HII SEHEMU YA KITUFE CHA NEXT NDANI YA upload-step1.js MKUU WANGU:
+if (btnNext) {
+    btnNext.addEventListener("click", function (event) {
+        event.preventDefault();
+        
+        const jumlaYaVipandeStr = sessionStorage.getItem("jumannetok_total_chunks");
+        if (!jumlaYaVipandeStr) {
+            alert("Tafadhali chagua video kwanza kabla ya kwenda hatua inayofuata!");
+            return;
         }
-    });
 
+        btnNext.disabled = true;
+        btnNext.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inasonga mbele...';
+
+        // 🛡️ SULUHISHO: Funga database ya Step 1 kinguvu hapa hapa kabla ya kuhama ukurasa!
+        if (typeof dbIndexedAkiba !== "undefined" && dbIndexedAkiba !== null) {
+            dbIndexedAkiba.close();
+            console.log("🔒 Step 1: Database imefungwa kwa usalama ili kuachia kumbukumbu ya Step 2.");
+        }
+
+        // Sasa hama kurasa kwa amri salama ya relative path
+        window.location.href = "./upload-step2.html";
+    });
+}
+        
 })();
                               
