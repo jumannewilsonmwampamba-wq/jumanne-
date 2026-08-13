@@ -1,126 +1,59 @@
-// upload-step2.js - Core Receiver & Transition Framework (Fixed Storage Pipeline)
+// upload-step2.js - Core Receiver & Transition Framework (TikTok Media Stream Cache Hack)
 
 (function () {
     "use strict";
 
-    let dbIndexedAkiba = null;
     let haliYaVideoIliyochaguliwa = "challenge"; // Thamani ya dharura (Default)
 
-    // ==========================================================================
-    // 1. FUNGUA DATABASE ILE ILE YA VIPANDE KUTOKA STEP 1
-    // ==========================================================================
+    // 🔥 TIMING PROTOCOL LOCK: Subiri HTML imalizike kusomwa ndipo uwashe mitambo ya kioo
     document.addEventListener("DOMContentLoaded", function () {
-        const ombiDuka = indexedDB.open("JumanneTok_Chunk_Storage", 1);
+        console.log("✅ Step 2: Mtambo wa kivita umezinduka hewani GitHub Pages!");
+        
+        // 1. Washa preview ya kioo cha uwongo bila kufungua kabisa database ya IndexedDB!
+        vutaPreviewKutokaKwenyeStreamCache();
 
-        ombiDuka.onsuccess = function (e) {
-            dbIndexedAkiba = e.target.result;
-            console.log("✅ Step 2: Database ya vipande imefunguka vizuri!");
-            
-            // Amsha mtambo wa kuvuta vipande na kuwasha video kioni upande huu
-            vutaVipandeKutokaKwenyeDiski();
-        };
-
-        ombiDuka.onerror = function () {
-            console.error("❌ Step 2: Imeshindikana kufungua database.");
-            alert("Mfumo umepata hitilafu ya diski. Tafadhali rudi nyuma.");
-        };
-
-        // Washa usimamizi wa kadi za Challenge vs Freestyle
+        // 2. Washa usimamizi wa kadi za Challenge vs Freestyle
         amshaUsimamiziWaKadiZaAina();
-        // Washa kitufe cha kusonga mbele Hatua ya 3
+
+        // 3. Washa kitufe cha kusonga mbele Hatua ya 3
         washaKitufeChaKuvukaHatuaYaPili();
     });
 
     // ==========================================================================
-    // 2. MTAMBO WA KUVUTA VIPANDE KUTOKA INDEXEDDB (MCHWA CONTROLLER)
+    // 2. INJINI YA KIVITA: VUTA PREVIEW NYEPESI KUTOKA KWENYE RAM (0% DISK USAGE)
     // ==========================================================================
-    function vutaVipandeKutokaKwenyeDiski() {
-        const jumlaYaVipandeStr = sessionStorage.getItem("jumannetok_total_chunks");
-        
-        if (!jumlaYaVipandeStr || !dbIndexedAkiba) {
-            alert("Hitilafu: Mfumo haujapata video kutoka Hatua ya 1. Tafadhali rudi nyuma uichague upya!");
-            window.location.href = "./upload-step1.html"; 
+    function vutaPreviewKutokaKwenyeStreamCache() {
+        const localStreamUrl = sessionStorage.getItem("jumannetok_preview_stream_url");
+        const playerStep2 = document.getElementById("jumanne-step2-preview-player");
+
+        if (!localStreamUrl) {
+            console.warn("⚠️ Mfumo haujapata kamba ya preview, unarudi nyuma kwa usalama.");
+            alert("Tafadhali chagua video kwanza mkuu!");
+            window.location.href = "./upload-step1.html";
             return;
         }
 
-        const jumlaYaVipande = parseInt(jumlaYaVipandeStr, 10);
-        console.log(`🎬 Step 2: Mfumo unavuta vipande ${jumlaYaVipande} kutoka kwenye diski...`);
-
-        const muamala = dbIndexedAkiba.transaction(["jumannetok_chunks"], "readonly");
-        const duka = muamala.objectStore("jumannetok_chunks");
-        
-        let mfululizoWaVipande = [];
-        let index = 0;
-
-        function dakaKipandeKwenyeDiski() {
-            if (index >= jumlaYaVipande) {
-                // Tumeshavuta vipande vyote salama! Sasa tunaviunganisha kuwa video moja
-                unganishaVipandeNaWashaPlayer(mfululizoWaVipande);
-                return;
-            }
-
-            const ombi = duka.get(index);
-            ombi.onsuccess = function (e) {
-                // 🔥 FIX 1: Hakikisha variable ya maandishi ipo thabiti ndipo uisukume kwenye orodha
-                if (e.target.result && e.target.result.maandishi_base64) {
-                    mfululizoWaVipande.push(e.target.result.maandishi_base64);
-                }
-                index++;
-                dakaKipandeKwenyeDiski();
-            };
-
-            ombi.onerror = function () {
-                console.error(`❌ Mkwamo wa kusoma kipande namba ${index}`);
-                window.location.href = "./upload-step1.html"; 
-            };
-        }
-
-        dakaKipandeKwenyeDiski();
-    }
-
-    // ==========================================================================
-    // 3. INJINI YA GEUZA MAANDISHI KUWA VIDEO GHAFI (BLOB CONCATENATION FIXED)
-    // ==========================================================================
-    function unganishaVipandeNaWashaPlayer(vipandeVyaMaandishi) {
-        try {
-            if (vipandeVyaMaandishi.length === 0) {
-                window.location.href = "./upload-step1.html";
-                return;
-            }
-
-            // 🔥 FIX 2: Ng'oa kabisa amri ya split! Soma Base64 ghafi mnyofu kuzuia crash ya koma
-            const maBlobYote = vipandeVyaMaandishi.map(base64Str => {
-                const byteCharacters = atob(base64Str); 
-                const byteNumbers = new Array(byteCharacters.length);
-                for (let i = 0; i < byteCharacters.length; i++) {
-                    byteNumbers[i] = byteCharacters.charCodeAt(i);
-                }
-                const byteArray = new Uint8Array(byteNumbers);
-                return new Blob([byteArray], { type: "video/mp4" });
-            });
-
-            const videoKamiliBlob = new Blob(maBlobYote, { type: "video/mp4" });
-            const playerStep2 = document.getElementById("jumanne-step2-preview-player");
-            
-            if (playerStep2) {
-                playerStep2.src = URL.createObjectURL(videoKamiliBlob);
-                
-                // 🔥 FIX 3: Washa video kwa usalama bila kulazimisha load ya dharura inayocrash memory
+        if (playerStep2) {
+            try {
+                // 🔥 CHOMEKA KAMBA NYEPESI DIRECT KWENYE PLAYER (MILISEKUNDE SIFURI!)
+                playerStep2.src = localStreamUrl;
                 playerStep2.play().catch(function() {
-                    console.log("Autoplay ilizuiliwa na kivinjari kisa ukosefu wa mguso.");
+                    console.log("Autoplay ilizuiliwa na kivinjari, inasubiri mguso wa mteja.");
                 });
-                console.log("🏆 Ushindi: Video ya Step 2 imelupuka kioni salama!");
+                console.log("🏆 Ushindi wa Kivita: Video imelupuka kioni Step 2 bila kugusa IndexedDB!");
+            } catch (err) {
+                console.error("❌ Mkwamo wa kuwasha player, tunawasha ulinzi wa dharura:", err);
+                // Mbinu ya 2: Kama simu ni ya mzee na imegoma kabisa, ficha player, usiigandishe app!
+                const previewContainer = document.getElementById("jumanne-step2-preview-container");
+                if (previewContainer) {
+                    previewContainer.innerHTML = `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#111; color:#888; font-weight:bold; font-size:14px; text-align:center; padding:20px;">🎬 Video imeshapakiwa diski salama!<br>Tunaandaa mdundo wako...</div>`;
+                }
             }
-
-        } catch (err) {
-            console.error("❌ Mkwamo wa kuunganisha vipande Step 2:", err);
-            alert("Hitilafu ya kumbukumbu. Tafadhali jaribu tena.");
-            window.location.href = "./upload-step1.html"; 
         }
     }
 
     // ==========================================================================
-    // 4. USIMAMIZI WA KADI (CHALLENGE VS FREESTYLE) KUGUSA NA KUBADILI COLOR
+    // 3. USIMAMIZI WA KADI (CHALLENGE VS FREESTYLE) KUGUSA NA KUBADILI COLOR
     // ==========================================================================
     function amshaUsimamiziWaKadiZaAina() {
         const kadiChallenge = document.getElementById("jumanne-card-challenge");
@@ -161,7 +94,7 @@
     }
 
     // ==========================================================================
-    // 5. INJINI YA KITUFE CHA INAYOFUATA (KUKUSANYA DATA NA KUVUKA STEP 3)
+    // 4. INJINI YA KITUFE CHA INAYOFUATA (KUKUSANYA DATA NA KUVUKA STEP 3)
     // ==========================================================================
     function washaKitufeChaKuvukaHatuaYaPili() {
         const btnNextStep3 = document.getElementById("jumanne-to-step3");
@@ -195,15 +128,11 @@
             };
 
             sessionStorage.setItem("jumannetok_step2_data", JSON.stringify(dataZaHatuaYaPili));
+            console.log("💾 Step 2: Data zimefungwa salama:", dataZaHatuaYaPili);
 
-            if (dbIndexedAkiba) {
-                dbIndexedAkiba.close();
-                console.log("🛡️ Database imefungwa salama Step 2 ili kuruhusu Step 3 kusoma.");
-            }
-
+            // Mtoe mnyofu akatafute bando la kizalendo kuelekea Step 3
             window.location.href = "./upload-step3.html";
         });
     }
 
 })();
-                    
