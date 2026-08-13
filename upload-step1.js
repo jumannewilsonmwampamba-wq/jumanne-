@@ -81,8 +81,14 @@
                 const base64Ghafi = event.target.result;
                 const base64Safi = base64Ghafi.replace(/^data:video\/[a-zA-Z0-9]+;base64,/, "");
 
-                const xhr = new XMLHttpRequest();
-                xhr.open("POST", `${urlYaSevaMaster}/upload/chunk`, true);
+                // 🔥 BADILISHA TU HII SEHEMU YA CHUNK XHR NDANI YA UPLOAD-STEP1.JS MKUU WANGU:
+const xhr = new XMLHttpRequest();
+xhr.open("POST", `${urlYaSevaMaster}/upload/chunk`, true);
+
+// 🛡️ SULUHISHO LA KIVITA LA SEKUNDE 23:
+xhr.timeout = 0; // 0 inamaanisha Unlimited Time (Subiri sekunde mamilioni hadi seva ijibu!)
+xhr.keepalive = true; // Inalazimisha mrija wa mtandao usikate pumzi wakati Render inasindika video hewani!
+                
 
                 xhr.setRequestHeader("Content-Type", "application/octet-stream");
                 xhr.setRequestHeader("x-chunk-index", nambaYaKipande);
