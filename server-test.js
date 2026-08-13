@@ -217,12 +217,14 @@ const masterServer = http.createServer((req, res) => {
             return;
         }
 
-        // 1. KEEP-ALIVE HEARTBEAT ROUTE (MTEGO WA PING)
-        if (req.url === '/' || req.url === '/api/ping') {
+                // 1. KEEP-ALIVE HEARTBEAT ROUTE (MTEGO WA PING ULIOKAZWA SHERIA)
+        // 🔥 FIX KUU: Ongeza chujio la '/ping' mnyofu kuzuia proxy za Render zisikatishe mawasiliano!
+        if (req.url === '/' || req.url === '/api/ping' || req.url === '/ping') {
             res.writeHead(200, { 'Content-Type': 'text/plain' });
             res.end("JUMANNETOK_MASTER_CORE_LIVE_AND_KICKING");
             return;
         }
+    
 
         // 2. MIFUMO YA MA-UPLOAD YA VIDEO (CHUNKED VIDEO INGESTION)
         if (req.url === '/api/upload/chunk' && req.method === 'POST') {
