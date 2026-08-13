@@ -205,11 +205,14 @@ if (!isMainThread) {
 } else {
     checkAndRollAllPartitions();
 
+// 🔥 BADILISHA TU HII SEHEMU YA CORS JUU KABISA YA MASTERSERVER MKUU WANGU:
 const masterServer = http.createServer((req, res) => {
-        // 🔥 A: CORS PROTOCOL - Ruhusu kurasa zote za GitHub Pages ziongee na Node bila kuzuiliwa
+        // Ruhusu kurasa zote za nje ziongee na Node bila vizuizi vya browsers
         res.setHeader("Access-Control-Allow-Origin", "*");
-        res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
-        res.setHeader("Access-Control-Allow-Headers", "Content-Type, x-chunk-index, x-total-chunks, x-video-uuid");
+        res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
+        
+        // 🔥 FIX KUU YA CHUMA: Ruhusu headers zote zote za siri za kienyeji tulizozitwanga kwenye XHR!
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, x-chunk-index, x-total-chunks, x-video-uuid, x-ai-status");
 
         if (req.method === "OPTIONS") {
             res.writeHead(204);
@@ -217,8 +220,7 @@ const masterServer = http.createServer((req, res) => {
             return;
         }
 
-                // 1. KEEP-ALIVE HEARTBEAT ROUTE (MTEGO WA PING ULIOKAZWA SHERIA)
-        // 🔥 FIX KUU: Ongeza chujio la '/ping' mnyofu kuzuia proxy za Render zisikatishe mawasiliano!
+        // 1. KEEP-ALIVE HEARTBEAT ROUTE (MTEGO WA PING ULIOKAZWA SHERIA)
         if (req.url === '/' || req.url === '/api/ping' || req.url === '/ping') {
             res.writeHead(200, { 'Content-Type': 'text/plain' });
             res.end("JUMANNETOK_MASTER_CORE_LIVE_AND_KICKING");
