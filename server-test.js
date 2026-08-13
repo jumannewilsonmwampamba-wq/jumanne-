@@ -205,13 +205,10 @@ if (!isMainThread) {
 } else {
     checkAndRollAllPartitions();
 
-// 🔥 BADILISHA TU HII SEHEMU YA CORS JUU KABISA YA MASTERSERVER MKUU WANGU:
 const masterServer = http.createServer((req, res) => {
-        // Ruhusu kurasa zote za nje ziongee na Node bila vizuizi vya browsers
+        // 🛡️ SHETANI WA CORS AMESHAULIWA: Ruhusu kwanza kurasa zote za nje ziongee na Node!
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
-        
-        // 🔥 FIX KUU YA CHUMA: Ruhusu headers zote zote za siri za kienyeji tulizozitwanga kwenye XHR!
         res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, x-chunk-index, x-total-chunks, x-video-uuid, x-ai-status");
 
         if (req.method === "OPTIONS") {
@@ -220,15 +217,16 @@ const masterServer = http.createServer((req, res) => {
             return;
         }
 
-        // 1. KEEP-ALIVE HEARTBEAT ROUTE (MTEGO WA PING ULIOKAZWA SHERIA)
-                // 1. KEEP-ALIVE HEARTBEAT ROUTE (MTEGO WA PING ULIOKAZWA SHERIA MAREKEBISHO YA FAIZ)
-        // 🔥 FIX KUU: Ruhusu njia zote tatu zikubaliwe mlangoni ili proxies za Render zikikata neno lisiishe nguvu!
+        // 🔥 PROXY BYPASS CORE: Inapokea kila aina ya mchanganyiko wa njia ya ping kuzuia proxies za Render zisikatishe mawasiliano!
         const njiaYaSasa = req.url.toLowerCase();
         if (njiaYaSasa === '/' || njiaYaSasa === '/ping' || njiaYaSasa === '/api/ping' || njiaYaSasa === '/api/') {
             res.writeHead(200, { 'Content-Type': 'text/plain' });
             res.end("JUMANNETOK_MASTER_CORE_LIVE_AND_KICKING");
             return;
         }
+
+        // 2. MIFUMO YA MA-UPLOAD YA VIDEO (CHUNKED VIDEO INGESTION) - Inaendelea chini...
+    
     
     
 
