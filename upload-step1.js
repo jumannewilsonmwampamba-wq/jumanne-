@@ -208,7 +208,7 @@
 
                 if (!urushajiUmekamilikaSeva) {
                     btnNext.disabled = true;
-                    btnNext.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inasubiri Seva...';
+                    btnNext.innerHTML = '<i class="Inasubiri Seva...';
                     
                     onyeshaUjumbeWaMuda("jumanne-caption-error-toast", `⏳ Kipaji Chako Kinasafiri Kwenda Kwenye Seva Kuu: ${asilimiaYaSasa}%... Tafadhali Subiri Sekunde Chache!`, "#ffeb3b");
                     return;
