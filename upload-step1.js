@@ -1,18 +1,19 @@
-// upload-step1.js - Toleo la Kimkakati: Base64 Chunking Engine (Step 1)
+// upload-step1.js - Kamili: Base64 Chunking Engine & State Restoration (Fixed Pipeline)
 
 (function () {
     "use strict";
 
     let dbIndexedAkiba = null;
-    const UKUBWA_WA_KIPANDE = 1 * 1024 * 1024; // Megabyte 1 kwa kila kipande cha maandishi
+    const UKUBWA_WA_KIPANDE = 1 * 1024 * 1024; // Megabyte 1 kamili kwa kila kipande cha maandishi
 
-    // 1. FUNGUA DATABASE YA NDANI MARA TU UKURASA UNAPOWAKA
+    // ==========================================================================
+    // 1. INJINI YA DATABASE (INDEXEDDB CHUNK STORAGE)
+    // ==========================================================================
     function amshaDukaLaUploadLocal() {
         const ombiDuka = indexedDB.open("JumanneTok_Chunk_Storage", 1);
 
         ombiDuka.onupgradeneeded = function (e) {
             const db = e.target.result;
-            // Duka hili litahifadhi vipande vyote vya video kwa namba zao
             if (!db.objectStoreNames.contains("jumannetok_chunks")) {
                 db.createObjectStore("jumannetok_chunks", { keyPath: "kipande_id" });
             }
@@ -31,40 +32,12 @@
         };
     }
 
-    amshaDukaLaUploadLocal();
-
-    // 2. MTAMBO WA KUKAMATA VIDEO NA KUIKATAKATA VIPANDE (THE CHUNKING PROCESS)
-    const videoInput = document.getElementById("jumanne-video-file-input");
-
-    if (videoInput) {
-        videoInput.addEventListener("change", function (e) {
-            if (!e.target.files || e.target.files.length === 0) return;
-            const failiLaVideo = e.target.files[0];
-
-            // Kagua ukubwa (Mwisho MB 45)
-            const kikomoChaMb45 = 45 * 1024 * 1024;
-            if (failiLaVideo.size > kikomoChaMb45) {
-                alert("Video ni nzito mno! Mfumo unaruhusu mwisho wa video ya MB 45 pekee.");
-                videoInput.value = "";
-                return;
-            }
-
-            // Hifadhi jina na habari za video kwenye sessionStorage kwa ajili ya kurasa zinazofuata
-            sessionStorage.setItem("jumannetok_video_name", failiLaVideo.name);
-
-            // Washa kicheza preview cha hapa hapo haraka kwa kutumia RAM ya muda
-            washaPreviewYaMudaKioni(failiLaVideo);
-
-            // 🚀 ANZA MKAKATI WA MCHWA: Vunja video vipande vidogo na uvitunze kwenye diski
-            vunjaVideoKuwaVipandeVyaMaandishi(failiLaVideo);
-        });
-    }
-
-    // 3. INJINI YA KUKATA VIDEO NA KUHIFADHI KWENYE INDEXEDDB
+    // ==========================================================================
+    // 2. INJINI YA KUKATA VIDEO NA KUHIFADHI BILA TAKATAKA ZA HEADER
+    // ==========================================================================
     function vunjaVideoKuwaVipandeVyaMaandishi(faili) {
         if (!dbIndexedAkiba) return;
 
-        // Safisha kwanza vipande vya zamani kama vilikuwepo ili visichanganyike
         const muamalaSafisha = dbIndexedAkiba.transaction(["jumannetok_chunks"], "readwrite");
         muamalaSafisha.objectStore("jumannetok_chunks").clear();
 
@@ -81,37 +54,39 @@
                 return;
             }
 
-            // Kata kipande cha Megabyte 1 kutoka kwenye video nzima
             const kipandeGhafi = faili.slice(nafasiYaSasa, nafasiYaSasa + UKUBWA_WA_KIPANDE);
-            
             const msomaji = new FileReader();
+
             msomaji.onload = function (event) {
                 const muamala = dbIndexedAkiba.transaction(["jumannetok_chunks"], "readwrite");
                 const duka = muamala.objectStore("jumannetok_chunks");
 
+                // Ng'oa maneno ya utangulizi ya Base64 ili diski ibaki na byte safi za video tu
+                const base64Ghafi = event.target.result;
+                const base64Safi = base64Ghafi.replace(/^data:video\/[a-zA-Z0-9]+;base64,/, "");
+
                 const dataYaKipande = {
-                    kipande_id: nambaYaKipande, // Mfano: 0, 1, 2, 3...
-                    maandishi_base64: event.target.result // Kipande kikiwa katika muundo wa maandishi mepesi
+                    kipande_id: nambaYaKipande,
+                    maandishi_base64: base64Safi
                 };
 
                 duka.put(dataYaKipande);
 
-                // Sogeza mbele hesabu kwa ajili ya kipande kinachofuata
                 nafasiYaSasa += UKUBWA_WA_KIPANDE;
                 nambaYaKipande++;
 
-                // Endelea kukata kipande kinachofuata (Mbinu ya recursion)
                 somaKipandeKinachofuata();
             };
 
             msomaji.readAsDataURL(kipandeGhafi);
         }
 
-        // Anza kukata kipande cha kwanza kabisa
         somaKipandeKinachofuata();
     }
 
-    // 4. INJINI YA KUREJESHA VIDEO IKIWA USER AMEREFRESH UKURASA WA STEP 1
+    // ==========================================================================
+    // 3. INJINI YA STATE RESTORATION (UREJESHAJI WA VIDEO BAADA YA REFRESH)
+    // ==========================================================================
     function kaguaNaUunganisheVipandeKioni() {
         const jumlaYaVipandeStr = sessionStorage.getItem("jumannetok_total_chunks");
         if (!jumlaYaVipandeStr || !dbIndexedAkiba) return;
@@ -127,14 +102,13 @@
 
         function dakaKipandeKwenyeDiski() {
             if (index >= jumlaYaVipande) {
-                // Tumeshavuta vipande vyote! Sasa tunaviunganisha kuwa video moja
                 unganishaVipandeKuwaVideoMoja(mfululizoWaVipande);
                 return;
             }
 
             const ombi = duka.get(index);
             ombi.onsuccess = function (e) {
-                if (e.target.result) {
+                if (e.target.result && e.target.result.maandishi_base64) {
                     mfululizoWaVipande.push(e.target.result.maandishi_base64);
                 }
                 index++;
@@ -147,10 +121,9 @@
 
     function unganishaVipandeKuwaVideoMoja(vipandeVyaMaandishi) {
         try {
-            // Geuza ma-string ya Base64 kurudi kuwa ma-Blob ghafi ya video
+            // 🔥 FIXED PROTOCOL: Data zetu ni Base64 safi sasa hivi, tunasoma mnyofu bila split!
             const maBlobYote = vipandeVyaMaandishi.map(base64Str => {
-                const sehemu = base64Str.split(',');
-                const byteCharacters = atob(sehemu[1]);
+                const byteCharacters = atob(base64Str);
                 const byteNumbers = new Array(byteCharacters.length);
                 for (let i = 0; i < byteCharacters.length; i++) {
                     byteNumbers[i] = byteCharacters.charCodeAt(i);
@@ -159,7 +132,6 @@
                 return new Blob([byteArray], { type: "video/mp4" });
             });
 
-            // Unganisha vipande vyote vya blob kuwa faili moja kubwa la video
             const videoKamiliBlob = new Blob(maBlobYote, { type: "video/mp4" });
             washaPreviewYaMudaKioni(videoKamiliBlob);
 
@@ -186,25 +158,54 @@
         }
     }
 
-    // 5. INJINI YA KITUFE CHA INAYOFUATA: Kazi yake sasa ni kuvuka tu ukurasa kibashara
-    const btnNext = document.getElementById("jumanne-btn-force-next-step2");
-    if (btnNext) {
-        btnNext.addEventListener("click", function (event) {
-            event.preventDefault();
-            
-            const jumlaYaVipandeStr = sessionStorage.getItem("jumannetok_total_chunks");
-            if (!jumlaYaVipandeStr) {
-                alert("Tafadhali chagua video kwanza kabla ya kwenda hatua inayofuata!");
-                return;
-            }
+    // ==========================================================================
+    // 4. TIMING PROTOCOL & ROUTER LOGIC (NEXT BUTTON GATE)
+    // ==========================================================================
+    document.addEventListener("DOMContentLoaded", function () {
+        amshaDukaLaUploadLocal();
 
-            btnNext.disabled = true;
-            btnNext.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inasonga mbele...';
+        const videoInput = document.getElementById("jumanne-video-file-input");
+        if (videoInput) {
+            videoInput.addEventListener("change", function (e) {
+                if (!e.target.files || e.target.files.length === 0) return;
+                const failiLaVideo = e.target.files[0];
 
-            // Hamisha ukurasa kibashara kwenda Step 2. Data yetu tayari ipo vipande-vipande kwenye diski!
-            window.location.href = "upload-step2.html";
-        });
-    }
+                const kikomoChaMb45 = 45 * 1024 * 1024;
+                if (failiLaVideo.size > kikomoChaMb45) {
+                    alert("Video ni nzito mno! Mfumo unaruhusu mwisho wa video ya MB 45 pekee.");
+                    videoInput.value = "";
+                    return;
+                }
+
+                sessionStorage.setItem("jumannetok_video_name", failiLaVideo.name);
+                
+                // Washa preview ya kwanza instantly kwa kutumia RAM ya muda
+                washaPreviewYaMudaKioni(failiLaVideo);
+                
+                // Kukata katakata faili
+                vunjaVideoKuwaVipandeVyaMaandishi(failiLaVideo);
+            });
+        }
+
+        const btnNext = document.getElementById("jumanne-btn-force-next-step2");
+        if (btnNext) {
+            btnNext.addEventListener("click", function (event) {
+                event.preventDefault();
+                
+                const jumlaYaVipandeStr = sessionStorage.getItem("jumannetok_total_chunks");
+                if (!jumlaYaVipandeStr) {
+                    alert("Tafadhali chagua video kwanza kabla ya kwenda hatua inayofuata!");
+                    return;
+                }
+
+                btnNext.disabled = true;
+                btnNext.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inasonga mbele...';
+
+                // 🔥 RELATIVE PATH FIXED: Weka ./ kuzuia asipotee njia GitHub Pages!
+                window.location.href = "./upload-step2.html";
+            });
+        }
+    });
 
 })();
-                    
+                              
