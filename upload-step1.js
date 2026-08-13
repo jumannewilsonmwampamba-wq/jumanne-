@@ -1,4 +1,4 @@
-// upload-step1.js - TikTok-Style Instant Streaming & Progress UI (Fixed Framework)
+// upload-step1.js - Advanced Stream-on-Select Ingestion Engine & Keep-Alive Loop (Production Fix)
 
 (function () {
     "use strict";
@@ -6,7 +6,7 @@
     const UKUBWA_WA_KIPANDE = 1 * 1024 * 1024; // Megabyte 1 kamili kwa kila kipande cha binary
     const urlYaSevaMaster = "http://localhost:3000/api"; // Link ya Seva Kuu ya Render
     
-    let failiLaVideoAsili = null;
+    let failiLaPichaAsili = null;
     let videoUuidMtaani = "";
     let asilimiaYaSasa = 0;
     let urushajiUmekamilikaSeva = false;
@@ -71,7 +71,7 @@
                         "x-total-chunks": jumlaYaVipande,
                         "x-video-uuid": videoUuidMtaani
                     },
-                    body: new TextEncoder().encode(base64Safi) // Tupa byte ghafi tupu diski!
+                    body: new TextEncoder().encode(base64Safi)
                 })
                 .then(res => res.json())
                 .then(jibuSeva => {
@@ -106,7 +106,6 @@
         const btnNext = document.getElementById("jumanne-btn-force-next-step2");
         
         if (urushajiUmekamilikaSeva) {
-            // 🛡️ GOLI LA USHINDI LA SEKUNDE 5: Lupusha neno sahihi mlangoni pa kijani!
             onyeshaUjumbeWaMuda("jumanne-caption-error-toast", "🎉 Data Inserted Successfully! Mdundo Umetua Seva Kuu.", "#00e676");
             const toastKioo = document.getElementById("jumanne-caption-error-toast");
             if (toastKioo) toastKioo.style.fontWeight = "bold";
@@ -114,11 +113,10 @@
             setTimeout(() => {
                 if (btnNext) {
                     btnNext.disabled = false;
-                    btnNext.innerHTML = 'Inayofuata <i class="fas fa-arrow-right"></i>';
+                    btnNext.innerHTML = 'Inayofuata < i class="fas fa-arrow-right">< /i>';
                 }
-                // Mtoe mnyofu akajaze ma-category Step 2 kibashara!
                 window.location.href = "./upload-step2.html";
-            }, 1500); // Mpe sekunde 1.5 aone ujumbe, kisha fomu inasafiri mbele
+            }, 1500); 
         }
     }
 
@@ -132,13 +130,11 @@
         if (localPlayer && previewContainer) {
             const localUrl = URL.createObjectURL(faili);
             
-            // Funga kamba ya siri kwenye sessionStorage ili Step 2 iisome bila IndexedDB!
             sessionStorage.setItem("jumannetok_preview_stream_url", localUrl);
 
             localPlayer.src = localUrl;
             previewContainer.style.display = "flex";
             
-            // 🔥 MFUMO WA TIKTOK: Lazimisha video ijiseti kuplay kwa kurudia rudia (Loop) kioni!
             localPlayer.loop = true;
             localPlayer.muted = true;
             localPlayer.setAttribute("playsinline", "true");
@@ -162,6 +158,8 @@
         if (videoInput) {
             videoInput.addEventListener("change", function (e) {
                 if (!e.target.files || e.target.files.length === 0) return;
+                
+                // 🔥 FIX: Daka index ya kwanza ya faili halisi la video kuzuia object crash
                 const failiLaVideo = e.target.files[0];
 
                 const kikomoChaMb45 = 45 * 1024 * 1024;
@@ -174,10 +172,10 @@
                 failiLaPichaAsili = failiLaVideo;
                 sessionStorage.setItem("jumannetok_video_name", failiLaVideo.name);
                 
-                // 1. Washa kicheza preview ya loop hapo hapo kioni
-                washapreviewYaMudaKioni(failiLaVideo);
+                // 🔥 FIX: Jina limesasishwa kuwa P kuu kulingana na muundo wa juu!
+                washaPreviewYaMudaKioni(failiLaVideo);
                 
-                // 2. 🔥 RIPUKA: Anza kurusha vipande direct seva ya Node nyuma ya pazia sekunde hiyo hiyo!
+                // Anza kurusha vipande direct seva ya Node nyuma ya pazia
                 anzaKurushaVipandeMnyofuHewani(failiLaVideo);
             });
         }
@@ -191,28 +189,21 @@
                     return;
                 }
 
-                // Kama urushaji wa chunks bado unaendelea hewani, mkamate mteja na uwishe urembo wa loop
                 if (!urushajiUmekamilikaSeva) {
                     btnNext.disabled = true;
                     btnNext.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inasubiri Seva...';
                     
-                    // Lupusha ujumbe ule wa chuma unaosoma asilimia mubashara kioone!
                     onyeshaUjumbeWaMuda("jumanne-caption-error-toast", `⏳ Kipaji Chako Kinasafiri Kwenda Kwenye Seva Kuu: ${asilimiaYaSasa}%... Tafadhali Subiri Sekunde Chache!`, "#ffeb3b");
                     return;
                 }
 
-                // Kama ulikuwa umeshamaliza kitambo, mpeleke mbele mnyofu
-                            // Kama ulikuwa umeshamaliza kitambo, mpeleke mbele mnyofu
                 kaguaUshindiNaUhamisheKurasa();
             });
         }
     });
 
-    // ==========================================================================
-    // 🛡️ MTAMBO WA HARAKATI: SENSOR YA KULINDA UKURASA USIFUNGWE GHAFLA
-    // ==========================================================================
+    // SENSOR YA KULINDA UKURASA USIFUNGWE GHAFLA WAKATI WA UPLOAD
     window.addEventListener("beforeunload", function (e) {
-        // Kama mteja anajaribu kukimbia wakati video bando lake bado linasafiri hewani
         if (failiLaPichaAsili && !urushajiUmekamilikaSeva) {
             e.preventDefault();
             e.returnValue = "Mkuu, usiondoke! Mdundo wako bado unasafiri kwenda seva kuu ya JumanneTok TZ.";
@@ -220,5 +211,5 @@
         }
     });
 
-})(); // <--- HILI NDILO BANO LA MWISHO KABISA LINAFUNGA FILE ZIMA MAZIMA!
-                
+})();
+            
