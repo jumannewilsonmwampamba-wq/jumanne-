@@ -1,17 +1,32 @@
-// jumanne-master-server.js - Unified Monolith Backend Server with AI Moderation & CDN Cloudflare R2 Push
-// Gharama ya Matumizi: Shilingi Sifuri ($0 Forever Render Patch) | Kiwango cha 5G 🇹🇿
+// jumanne-master-server.js - Ngome Kuu ya Kanzidata Tano Zilizounganishwa (Unified Backend Server)
+// 🛡️ SECURITY PATCH: Amsha dotenv instantly mlangoni pa mstari wa kwanza kabisa!
+require('dotenv').config();
 
 const fs = require('fs');
 const path = require('path');
 const http = require('http');
 const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
 
+// ==========================================================================
+// CONFIGURATION & ENVIRONMENT VARIABLES (MIPANGILIO YA SIRI YA .ENV)
+// ==========================================================================
 const PORT = process.env.PORT || 3000; 
-const PYTHON_AI_URL = "http://localhost:5001/api/v1/ai/moderate-and-compress"; // Anwani ya askari wetu wa Python
+
+// 🔥 LOCK YA USHINDI: Sasa tunasoma URL ya askari wetu wa Python mnyofu kutoka kwenye .env!
+const PYTHON_AI_URL = process.env.PYTHON_AI_URL || "http://localhost:5001/api/v1/ai/moderate-and-compress"; 
+
+// Ngome ya siri ya Cloudflare R2 (Inasomwa salama kutoka kwenye .env bila hackers kuiona)
+const R2_CONFIG = {
+    bucketName: process.env.R2_BUCKET_NAME || "jumannetok-db-bucket",
+    accountId: process.env.R2_ACCOUNT_ID,
+    accessKeyId: process.env.R2_ACCESS_KEY_ID,
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY
+};
 
 let autoIncrementVideoId = 8739170;
 let currentFolders = { video: "", profile: "", search: "", stats: "", social: "" };
 let ledgerPaths = { videoRegistry: "", profileRegistry: "", searchRegistry: "", statsRegistry: "", socialRegistry: "" };
+
 
 // ==========================================================================
 // 1. INJINI YA MIEZI: TIME-SERIES PARTITIONING DRIVER
