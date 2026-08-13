@@ -2,7 +2,7 @@
   "name": "jumannetok-master-backend",
   "version": "1.0.0",
   "description": "JumanneTok TZ Core Monolith Backend Server with AI Moderation & CDN Cloudflare R2 Sync",
-  "main": "jumanne-master-server.js",
+  "main": "server-test.js",
   "scripts": {
     "start": "node jumanne-master-server.js",
     "ai-guard": "python3 jumanne_ai_compressor.py"
