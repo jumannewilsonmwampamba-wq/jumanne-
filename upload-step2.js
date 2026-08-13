@@ -1,4 +1,4 @@
-// upload-step2.js - Core Receiver & Transition Framework (Ushindi 100%)
+// upload-step2.js - Core Receiver & Transition Framework (Fixed Pipeline)
 
 (function () {
     "use strict";
@@ -39,7 +39,7 @@
         
         if (!jumlaYaVipandeStr || !dbIndexedAkiba) {
             alert("Hitilafu: Mfumo haujapata video kutoka Hatua ya 1. Tafadhali rudi nyuma uichague upya!");
-            window.location.href = "upload-step1.html";
+            window.location.href = "./upload-step1.html"; 
             return;
         }
 
@@ -61,7 +61,7 @@
 
             const ombi = duka.get(index);
             ombi.onsuccess = function (e) {
-                if (e.target.result) {
+                if (e.target.result && e.target.result.maandishi_base64) {
                     mfululizoWaVipande.push(e.target.result.maandishi_base64);
                 }
                 index++;
@@ -70,7 +70,7 @@
 
             ombi.onerror = function () {
                 console.error(`❌ Mkwamo wa kusoma kipande namba ${index}`);
-                window.location.href = "upload-step1.html";
+                window.location.href = "./upload-step1.html"; 
             };
         }
 
@@ -78,13 +78,13 @@
     }
 
     // ==========================================================================
-    // 3. INJINI YA GEUZA MAANDISHI KUWA VIDEO GHAFI (BLOB CONCATENATION)
+    // 3. INJINI YA GEUZA MAANDISHI KUWA VIDEO GHAFI (BLOB CONCATENATION FIXED)
     // ==========================================================================
     function unganishaVipandeNaWashaPlayer(vipandeVyaMaandishi) {
         try {
+            // 🔥 FIX: Data zetu ni Base64 safi, tunasoma mnyofu bila split wala koma kuzuia crash!
             const maBlobYote = vipandeVyaMaandishi.map(base64Str => {
-                const sehemu = base64Str.split(',');
-                const byteCharacters = atob(sehemu[1]); 
+                const byteCharacters = atob(base64Str); 
                 const byteNumbers = new Array(byteCharacters.length);
                 for (let i = 0; i < byteCharacters.length; i++) {
                     byteNumbers[i] = byteCharacters.charCodeAt(i);
@@ -94,8 +94,6 @@
             });
 
             const videoKamiliBlob = new Blob(maBlobYote, { type: "video/mp4" });
-            
-            // Daka kicheza video cha ID yetu mpya niliyoisawazisha kwenye HTML yako
             const playerStep2 = document.getElementById("jumanne-step2-preview-player");
             
             if (playerStep2) {
@@ -110,7 +108,7 @@
         } catch (err) {
             console.error("Mkwamo wa kuunganisha vipande Step 2:", err);
             alert("Hitilafu ya kumbukumbu. Tafadhali jaribu tena.");
-            window.location.href = "upload-step1.html";
+            window.location.href = "./upload-step1.html"; 
         }
     }
 
@@ -136,9 +134,8 @@
                 kadiFreestyle.style.border = "1px solid #222";
                 kadiFreestyle.classList.remove("jumanne-card-active");
                 
-                // Badilisha rangi ya icon ya mbele ya Challenge kuwa ya kijani
-                kadiChallenge.querySelector("i").style.color = "#00e676";
-                kadiFreestyle.querySelector("i").style.color = "#888";
+                if (kadiChallenge.querySelector("i")) kadiChallenge.querySelector("i").style.color = "#00e676";
+                if (kadiFreestyle.querySelector("i")) kadiFreestyle.querySelector("i").style.color = "#888";
             });
 
             // Mtumiaji akigusa Kadi ya Freestyle
@@ -152,16 +149,13 @@
                 kadiChallenge.style.border = "1px solid #222";
                 kadiChallenge.classList.remove("jumanne-card-active");
                 
-                kadiFreestyle.querySelector("i").style.color = "#00e676";
-                kadiChallenge.querySelector("i").style.color = "#888";
+                if (kadiFreestyle.querySelector("i")) kadiFreestyle.querySelector("i").style.color = "#00e676";
+                if (kadiChallenge.querySelector("i")) kadiChallenge.querySelector("i").style.color = "#888";
             });
         }
     }
 
     // ==========================================================================
-    // 5. INJINI YA KITUFE CHA INAYOFUATA (KUKUSANYA DATA NA KUVUKA STEP 3)
-    // ==========================================================================
-        // ==========================================================================
     // 5. INJINI YA KITUFE CHA INAYOFUATA (KUKUSANYA DATA NA KUVUKA STEP 3) - FIXED 🛡️
     // ==========================================================================
     function washaKitufeChaKuvukaHatuaYaPili() {
@@ -208,9 +202,10 @@
                 console.log("🛡️ Database imefungwa salama Step 2 ili kuruhusu Step 3 kusoma.");
             }
 
-            // Swaga mtumiaji kwenda Hatua ya Tatu kibashara!
-            window.location.href = "upload-step3.html";
+            // 🔥 FIXED: Weka ./ kuzuia asipotee njia GitHub Pages!
+            window.location.href = "./upload-step3.html";
         });
     }
 
 })();
+        
