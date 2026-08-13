@@ -4,7 +4,7 @@
     "use strict";
 
     const UKUBWA_WA_KIPANDE = 1 * 1024 * 1024; // Megabyte 1 kamili kwa kila kipande cha binary
-    const urlYaSevaMaster = "https://mwampamba.onrender.com"; // Link ya Seva Kuu ya Render
+    const urlYaSevaMaster = "https://mwampamba.onrender.com/api"; // Link ya Seva Kuu ya Render
     
     let failiLaVideoGhafi = null;
     let videoUuidMtaani = "";
