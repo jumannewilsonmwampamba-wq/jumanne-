@@ -1,4 +1,4 @@
-// upload-step2.js - Core Receiver & Transition Framework (Fixed Pipeline)
+// upload-step2.js - Core Receiver & Transition Framework (Fixed Storage Pipeline)
 
 (function () {
     "use strict";
@@ -61,6 +61,7 @@
 
             const ombi = duka.get(index);
             ombi.onsuccess = function (e) {
+                // 🔥 FIX 1: Hakikisha variable ya maandishi ipo thabiti ndipo uisukume kwenye orodha
                 if (e.target.result && e.target.result.maandishi_base64) {
                     mfululizoWaVipande.push(e.target.result.maandishi_base64);
                 }
@@ -82,7 +83,12 @@
     // ==========================================================================
     function unganishaVipandeNaWashaPlayer(vipandeVyaMaandishi) {
         try {
-            // 🔥 FIX: Data zetu ni Base64 safi, tunasoma mnyofu bila split wala koma kuzuia crash!
+            if (vipandeVyaMaandishi.length === 0) {
+                window.location.href = "./upload-step1.html";
+                return;
+            }
+
+            // 🔥 FIX 2: Ng'oa kabisa amri ya split! Soma Base64 ghafi mnyofu kuzuia crash ya koma
             const maBlobYote = vipandeVyaMaandishi.map(base64Str => {
                 const byteCharacters = atob(base64Str); 
                 const byteNumbers = new Array(byteCharacters.length);
@@ -98,15 +104,16 @@
             
             if (playerStep2) {
                 playerStep2.src = URL.createObjectURL(videoKamiliBlob);
-                playerStep2.load();
+                
+                // 🔥 FIX 3: Washa video kwa usalama bila kulazimisha load ya dharura inayocrash memory
                 playerStep2.play().catch(function() {
-                    console.log("Autoplay imezuiwa na kivinjari.");
+                    console.log("Autoplay ilizuiliwa na kivinjari kisa ukosefu wa mguso.");
                 });
-                console.log("🏆 Ushindi! Video ipo kioni sasa hivi Hatua ya Pili.");
+                console.log("🏆 Ushindi: Video ya Step 2 imelupuka kioni salama!");
             }
 
         } catch (err) {
-            console.error("Mkwamo wa kuunganisha vipande Step 2:", err);
+            console.error("❌ Mkwamo wa kuunganisha vipande Step 2:", err);
             alert("Hitilafu ya kumbukumbu. Tafadhali jaribu tena.");
             window.location.href = "./upload-step1.html"; 
         }
@@ -123,7 +130,6 @@
 
         if (kadiChallenge && kadiFreestyle) {
             
-            // Mtumiaji akigusa Kadi ya Challenge
             kadiChallenge.addEventListener("click", () => {
                 haliYaVideoIliyochaguliwa = "challenge";
                 if (radioChallenge) radioChallenge.checked = true;
@@ -138,7 +144,6 @@
                 if (kadiFreestyle.querySelector("i")) kadiFreestyle.querySelector("i").style.color = "#888";
             });
 
-            // Mtumiaji akigusa Kadi ya Freestyle
             kadiFreestyle.addEventListener("click", () => {
                 haliYaVideoIliyochaguliwa = "freestyle";
                 if (radioFreestyle) radioFreestyle.checked = true;
@@ -156,7 +161,7 @@
     }
 
     // ==========================================================================
-    // 5. INJINI YA KITUFE CHA INAYOFUATA (KUKUSANYA DATA NA KUVUKA STEP 3) - FIXED 🛡️
+    // 5. INJINI YA KITUFE CHA INAYOFUATA (KUKUSANYA DATA NA KUVUKA STEP 3)
     // ==========================================================================
     function washaKitufeChaKuvukaHatuaYaPili() {
         const btnNextStep3 = document.getElementById("jumanne-to-step3");
@@ -167,7 +172,6 @@
         btnNextStep3.addEventListener("click", function (event) {
             event.preventDefault();
 
-            // Mtego wa robot (Honeypot)
             const botInput = document.getElementById("jumanne-video-bot-input-step2");
             if (botInput && botInput.value.length > 0) {
                 sessionStorage.clear();
@@ -175,18 +179,15 @@
                 return;
             }
 
-            // Kagua kama amechagua aina ya kipaji
             if (selectKipaji && selectKipaji.value === "") {
                 alert("Tafadhali chagua aina ya Kipaji chako kwanza mkuu!");
                 selectKipaji.focus();
                 return;
             }
 
-            // Badilisha muonekano wa kitufe kuonyesha kazi inafanyika
             btnNextStep3.disabled = true;
             btnNextStep3.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inasonga mbele...';
 
-            // DAKA NA KUTUNZA TAARIFA ZOTE KWENYE SESSIONSTORAGE KWA AJILI YA STEP 3
             const dataZaHatuaYaPili = {
                 ainaYaKipaji: selectKipaji ? selectKipaji.value : "",
                 utaratibuWaVideo: haliYaVideoIliyochaguliwa,
@@ -194,18 +195,15 @@
             };
 
             sessionStorage.setItem("jumannetok_step2_data", JSON.stringify(dataZaHatuaYaPili));
-            console.log("💾 Data za Step 2 zimehifadhiwa salama:", dataZaHatuaYaPili);
 
-            // 🔥 PIGO LA USHINDI: Funga database hapa hapa ili isilete lock kule Step 3!
-            if (typeof dbIndexedAkiba !== "undefined" && dbIndexedAkiba !== null) {
+            if (dbIndexedAkiba) {
                 dbIndexedAkiba.close();
                 console.log("🛡️ Database imefungwa salama Step 2 ili kuruhusu Step 3 kusoma.");
             }
 
-            // 🔥 FIXED: Weka ./ kuzuia asipotee njia GitHub Pages!
             window.location.href = "./upload-step3.html";
         });
     }
 
 })();
-        
+                    
