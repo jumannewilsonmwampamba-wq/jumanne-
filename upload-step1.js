@@ -1,4 +1,4 @@
-// upload-step1.js - Zero-Friction Auto-Advance Ingestion Engine (XHR Keep-Alive Core)
+// upload-step1.js - Advanced Stream-on-Select Ingestion Engine & Keep-Alive Loop (Production Fix)
 
 (function () {
     "use strict";
@@ -10,9 +10,8 @@
     let videoUuidMtaani = "";
     let asilimiaYaSasa = 0;
     let urushajiUmekamilikaSeva = false;
-    let mtamboWaAutoAdvanceUmeshawaka = false;
 
-    // Uzalishaji wa UUID ya siri kwa ajili ya session ya upload hewani
+    // Uzalishaji wa UUID ya siri kwa ajili ya kutofautisha session ya upload hewani
     function tengenezaVideoUuid() {
         return 'jumanne_vid_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now();
     }
@@ -28,7 +27,6 @@
         targetElement.style.color = rangiUkingo;
         targetElement.style.display = "block";
         targetElement.style.opacity = "1";
-        targetElement.style.fontWeight = "bold";
 
         // Baada ya sekunde 4.5 anza kuyeyusha, sekunde 5 inapotea mazima kioone!
         setTimeout(() => { targetElement.style.opacity = "0"; }, 4500);
@@ -36,22 +34,24 @@
     }
 
     // ==========================================================================
-    // 🔥 INJINI YA KIVITA 1: XHR PING & CHUNK STREAMING SYSTEM (TIKTOK STYLE)
+    // 🔥 INJINI YA KIJASUSI: STREAM CHUNKS VIA XHR TO NODE.JS ON SELECT (0% RAM)
     // ==========================================================================
-    function kaguaSevaNaAnzaUrushaji(faili) {
+    function anzaKurushaVipandeMnyofuHewani(faili) {
         videoUuidMtaani = tengenezaVideoUuid();
-        urushajiUmekamilikaSeva = false;
-        mtamboWaAutoAdvanceUmeshawaka = false;
+        let nafasiYaSasa = 0;
+        let nambaYaKipande = 0;
+        const jumlaYaVipande = Math.ceil(faili.size / UKUBWA_WA_KIPANDE);
+        urushajiUmekamilikaSeva = false; 
 
-        // Piga hodi ya haraka mlangoni pa seva kuona kama imewashwa au imezimwa
+        // Piga kete ya kwanza ya piga hodi (Ping Request) hewani
         const pingXhr = new XMLHttpRequest();
         pingXhr.open("GET", `${urlYaSevaMaster}/ping`, true);
         
         pingXhr.onload = function () {
             if (pingXhr.status === 200) {
-                // 🟢 SEVA IPO LIVE: Lupusha ujumbe na uwashe mtambo wa mchwa nyuma ya pazia
+                // Seva Ikiwaka: Andika ujumbe na uwashe mtambo wa mchwa nyuma ya pazia
                 onyeshaUjumbeWaMuda("jumanne-caption-error-toast", "🎉 Seva Imewashwa! Mdundo wako unaanza kusafiri...", "#00e676");
-                anzaKusagaNaKurushaVipande(faili);
+                rushaKipandeKinachofuata();
             } else {
                 lupushaHitilafuSevaImezimwa();
             }
@@ -62,38 +62,15 @@
         };
 
         pingXhr.send();
-    }
-
-    function lupushaHitilafuSevaImezimwa() {
-        urushajiUmekamilikaSeva = false;
-        mtamboWaAutoAdvanceUmeshawaka = false;
-
-        // 🚨 TOAST YA NYEKUNDU INAPOTEA SEKUNDE 5: Seva ikizimwa mteja anapewa onyo instantly
-        onyeshaUjumbeWaMuda("jumanne-caption-error-toast", "❌ Hitilafu: Seva Imezimwa kwa Sasa!", "#ff5252");
-        
-        // Lock ya Kitufe cha Chini: Badilisha maandishi kutoa taarifa ya kudumu asiguse gusa
-        const btnNext = document.getElementById("jumanne-btn-force-next-step2");
-        if (btnNext) {
-            btnNext.disabled = true;
-            btnNext.style.background = "#222";
-            btnNext.style.color = "#555";
-            btnNext.innerHTML = '❌ Seva Imezimwa (Mdundo Umesitishwa)';
-        }
-    }
-
-    function anzaKusagaNaKurushaVipande(faili) {
-        let nafasiYaSasa = 0;
-        let nambaYaKipande = 0;
-        const jumlaYaVipande = Math.ceil(faili.size / UKUBWA_WA_KIPANDE);
 
         function rushaKipandeKinachofuata() {
             if (nafasiYaSasa >= faili.size) {
-                console.log("🏆 Chunks zote zimetua salama seva kuu ya Node.js!");
+                console.log("🏆 Chunks zote zimetua mlangoni pa Seva Kuu!");
                 sessionStorage.setItem("jumannetok_total_chunks", nambaYaKipande);
-                urushajiUmekamilikaSeva = true;
+                urushajiUmekamilikaSeva = true; 
                 
-                // 🔥 AMSHA ROUTER YA ZEROCLICK: Chunks zikitimia vyote, piga advance kiotomatiki!
-                pigaMtamboWaAutoAdvanceKalamu();
+                // Urushaji ukikamilika kwa 100%, amsha ufungaji na uhamisho
+                kaguaUshindiNaUhamisheKurasa();
                 return;
             }
 
@@ -115,13 +92,11 @@
                 xhr.onload = function () {
                     if (xhr.status === 200) {
                         asilimiaYaSasa = Math.round(((nambaYaKipande + 1) / jumlaYaVipande) * 100);
-                        
-                        // Tunamwaga log ya background lakini kioo machoni kinabaki safi bila namba!
                         console.log(`Video inasafiri kimya kimya nyuma ya pazia: ${asilimiaYaSasa}%`);
 
                         nafasiYaSasa += UKUBWA_WA_KIPANDE;
                         nambaYaKipande++;
-                        rushaKipandeKinachofuata();
+                        rushaKipandeKinachofuata(); // Kimbiza kipande kinachofuata bila lag
                     } else {
                         lupushaHitilafuSevaImezimwa();
                     }
@@ -137,30 +112,46 @@
             msomaji.readAsDataURL(kipandeGhafi);
         }
 
-        rushaKipandeKinachofuata();
+        function lupushaHitilafuSevaImezimwa() {
+            urushajiUmekamilikaSeva = false; 
+            
+            const btnNext = document.getElementById("jumanne-btn-force-next-step2");
+            if (btnNext) {
+                btnNext.disabled = true;
+                btnNext.style.background = "#222";
+                btnNext.style.color = "#555";
+                btnNext.innerHTML = '❌ Seva Imezimwa (Mdundo Umesitishwa)';
+            }
+
+            // 🚨 TOAST YA NYEKUNDU INAPOTEA SEKUNDE 5: Seva ikizimwa mteja anapewa onyo instantly!
+            onyeshaUjumbeWaMuda("jumanne-caption-error-toast", "❌ Hitilafu: Seva Imezimwa kwa Sasa!", "#ff5252");
+            console.error("❌ Critical Network Crash: Seva ya Render haipatikani.");
+        }
     }
 
     // ==========================================================================
     // 🔥 INJINI YA KIVITA 2: ZERO-CLICK AUTO-ADVANCE DRIVER (THE AUTO-ROUTER)
     // ==========================================================================
-    function pigaMtamboWaAutoAdvanceKalamu() {
-        if (!urushajiUmekamilikaSeva || mtamboWaAutoAdvanceUmeshawaka) return;
-        mtamboWaAutoAdvanceUmeshawaka = true;
-
-        // 🟢 TOAST YA KIJANI INAPOTEA SEKUNDE 5: Lupusha ujumbe kioone mteja afurahie ushindi!
-        onyeshaUjumbeWaMuda("jumanne-caption-error-toast", "🎉 Data Inserted Successfully! Mdundo Umetua Seva Kuu.", "#00e676");
-
+    function kaguaUshindiNaUhamisheKurasa() {
         const btnNext = document.getElementById("jumanne-btn-force-next-step2");
-        if (btnNext) {
-            btnNext.disabled = true;
-            btnNext.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inafungua Ukurasa...';
-        }
+        
+        if (urushajiUmekamilikaSeva) {
+            if (btnNext) {
+                btnNext.disabled = true;
+                btnNext.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Inafungua Ukurasa...';
+            }
 
-        // 🛡️ SULUHISHO LA TIKTOK: Mpe sekunde 5 kamili acheki video na asome ujumbe, kisha mvute mbele kiotomatiki!
-        setTimeout(() => {
-            console.log("✈️ Zero-Click Navigation Triggered: Ukurasa unajifungua wenyewe kuelekea Step 2!");
-            window.location.href = "./upload-step2.html"; // Relative Path salama kwa GitHub Pages
-        }, 5000); // Sekunde 5 kamili bila sekunde kupungua!
+            // 🟢 TOAST YA KIJANI INAPOTEA SEKUNDE 5: Lupusha ujumbe mteja afurahie ushindi!
+            onyeshaUjumbeWaMuda("jumanne-caption-error-toast", "🎉 Data Inserted Successfully! Mdundo Umetua Seva Kuu.", "#00e676");
+            const toastKioo = document.getElementById("jumanne-caption-error-toast");
+            if (toastKioo) toastKioo.style.fontWeight = "bold";
+
+            // 🛡️ SULUHISHO: Mpe sekunde 5 kamili acheki video na asome ujumbe, kisha mvute mbele kiotomatiki!
+            setTimeout(() => {
+                console.log("✈️ Zero-Click Navigation Triggered: Ukurasa unajifungua wenyewe kuelekea Step 2!");
+                window.location.href = "./upload-step2.html"; // Relative Path salama kwa GitHub Pages
+            }, 5000); 
+        }
     }
 
     function washaPreviewYaMudaKioni(faili) {
@@ -172,6 +163,7 @@
 
         if (localPlayer && previewContainer) {
             const localUrl = URL.createObjectURL(faili);
+            
             sessionStorage.setItem("jumannetok_preview_stream_url", localUrl);
 
             localPlayer.src = localUrl;
@@ -192,13 +184,12 @@
     }
 
     // ==========================================================================
-    // 3. MASTER TIMING PROTOCOL DOM CONTENT LOADED
+    // 3. MASTER MASTER TIMING LOCK (DOM CONTENT LOADED DRIVER)
     // ==========================================================================
     document.addEventListener("DOMContentLoaded", function () {
         const videoInput = document.getElementById("jumanne-video-file-input");
         const btnNext = document.getElementById("jumanne-btn-force-next-step2");
 
-        // Ficha au zima kitufe cha mlangoni kwanza kiasili ili kisione wenge
         if (btnNext) {
             btnNext.innerHTML = '⚙️ Mfumo Unajiongoza Kiotomatiki';
             btnNext.disabled = true;
@@ -208,6 +199,8 @@
         if (videoInput) {
             videoInput.addEventListener("change", function (e) {
                 if (!e.target.files || e.target.files.length === 0) return;
+                
+                // 🔥 SULUHISHO: Daka index ya kwanza ya faili halisi la video kuzuia object crash!
                 const failiSafi = e.target.files[0];
 
                 const kikomoChaMb45 = 45 * 1024 * 1024;
@@ -217,14 +210,14 @@
                     return;
                 }
 
-                                failiLaVideoGhafi = failiSafi;
+                failiLaVideoGhafi = failiSafi;
                 sessionStorage.setItem("jumannetok_video_name", failiSafi.name);
                 
                 // 1. Washa preview ya kioo ya loop instantly hapo hapo kioni
-                washaPreviewYaMudaKioni(failiSafi);
+                                washaPreviewYaMudaKioni(failiSafi);
                 
                 // 2. 🚀 RUKSA: Amsha ukaguzi wa seva na urushaji wa siri sekunde hiyo hiyo!
-                kaguaSevaNaAnzaUrushaji(failiSafi);
+                anzaKurushaVipandeMnyofuHewani(failiSafi);
             });
         }
     });
@@ -240,4 +233,5 @@
 
 })();
 
-    
+
+                                   
