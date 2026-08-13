@@ -221,11 +221,15 @@ const masterServer = http.createServer((req, res) => {
         }
 
         // 1. KEEP-ALIVE HEARTBEAT ROUTE (MTEGO WA PING ULIOKAZWA SHERIA)
-        if (req.url === '/' || req.url === '/api/ping' || req.url === '/ping') {
+                // 1. KEEP-ALIVE HEARTBEAT ROUTE (MTEGO WA PING ULIOKAZWA SHERIA MAREKEBISHO YA FAIZ)
+        // 🔥 FIX KUU: Ruhusu njia zote tatu zikubaliwe mlangoni ili proxies za Render zikikata neno lisiishe nguvu!
+        const njiaYaSasa = req.url.toLowerCase();
+        if (njiaYaSasa === '/' || njiaYaSasa === '/ping' || njiaYaSasa === '/api/ping' || njiaYaSasa === '/api/') {
             res.writeHead(200, { 'Content-Type': 'text/plain' });
             res.end("JUMANNETOK_MASTER_CORE_LIVE_AND_KICKING");
             return;
         }
+    
     
 
         // 2. MIFUMO YA MA-UPLOAD YA VIDEO (CHUNKED VIDEO INGESTION)
