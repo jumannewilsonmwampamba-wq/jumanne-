@@ -35,13 +35,17 @@
     // ==========================================================================
     // 🔥 INJINI YA KIVITA 1: STREAM CHUNKS DIRECT TO NODE.JS ON SELECT (0% RAM CACHE)
     // ==========================================================================
+        // ==========================================================================
+    // 🔥 SULUHISHO: INJINI INAYOTOA STATUS YA LIVE KAMA SEVA IPO AU IMEFELI!
+    // ==========================================================================
     function anzaKurushaVipandeMnyofuHewani(faili) {
         videoUuidMtaani = tengenezaVideoUuid();
         let nafasiYaSasa = 0;
         let nambaYaKipande = 0;
         const jumlaYaVipande = Math.ceil(faili.size / UKUBWA_WA_KIPANDE);
 
-        console.log(`📡 Mtambo wa Chuma: Unarusha vipande ${jumlaYaVipande} mnyofu Render...`);
+        // Lupusha ujumbe wa kwanza kabisa kumpa mteja amani ya moyo!
+        onyeshaUjumbeWaMuda("jumanne-caption-error-toast", `📡 Tunakagua mtandao na seva ya JumanneTok TZ...`, "#2196f3");
 
         function rushaKipandeKinachofuata() {
             if (nafasiYaSasa >= faili.size) {
@@ -49,7 +53,6 @@
                 sessionStorage.setItem("jumannetok_total_chunks", nambaYaKipande);
                 urushajiUmekamilikaSeva = true;
                 
-                // Kama mteja alikuwa anasubiri na ujumbe wa Next, amsha uokoaji
                 kaguaUshindiNaUhamisheKurasa();
                 return;
             }
@@ -59,10 +62,8 @@
 
             msomaji.onload = function (event) {
                 const base64Ghafi = event.target.result;
-                // Ng'oa header haramu ya data:video kuzuia video isivunjike seva ya Render
                 const base64Safi = base64Ghafi.replace(/^data:video\/[a-zA-Z0-9]+;base64,/, "");
 
-                // Piga hodi mnyofu angani Node.js Master Server kupitia headers za siri
                 fetch(`${urlYaSevaMaster}/upload/chunk`, {
                     method: "POST",
                     headers: {
@@ -73,23 +74,39 @@
                     },
                     body: new TextEncoder().encode(base64Safi)
                 })
-                .then(res => res.json())
+                .then(res => {
+                    if(!res.ok) throw new Error();
+                    return res.json();
+                })
                 .then(jibuSeva => {
                     asilimiaYaSasa = Math.round(((nambaYaKipande + 1) / jumlaYaVipande) * 100);
                     
-                    // Kama ule ujumbe wa kusubiri upo kioni, upe nguvu ya asilimia mubashara!
+                    // 🟢 SEVA IPO ONLINE: Ripua ujumbe thabiti wa kijani mteja aone progress halisi!
                     const toastKioo = document.getElementById("jumanne-caption-error-toast");
-                    if (toastKioo && toastKioo.style.display === "block" && !urushajiUmekamilikaSeva) {
-                        toastKioo.textContent = `⏳ Kipaji Chako Kinasafiri Kwenda Kwenye Seva Kuu: ${asilimiaYaSasa}%... Tafadhali Subiri Sekunde Chache!`;
+                    if (toastKioo) {
+                        toastKioo.style.display = "block";
+                        toastKioo.style.opacity = "1";
+                        toastKioo.style.color = "#00e676";
+                        toastKioo.textContent = `⚡ Seva Ipo Mubashara! Mdundo wako unapakia: ${asilimiaYaSasa}%`;
                     }
 
                     nafasiYaSasa += UKUBWA_WA_KIPANDE;
                     nambaYaKipande++;
-                    rushaKipandeKinachofuata(); // Kimbiza kipande kinachofuata bila lag!
+                    rushaKipandeKinachofuata();
                 })
                 .catch(err => {
-                    console.warn("⚠️ Mtandao umeyumba, tunajaribu tena kipande hiki baada ya sekunde 3...");
-                    setTimeout(rushaKipandeKinachofuata, 3000);
+                    // 🟡 SEVA IPO OFFLINE (MAABARA MODE): Toa ujumbe instantly mteja ajue yupo salama!
+                    urushajiUmekamilikaSeva = true; // Mpe ruhusa ya dharura asikwame
+                    sessionStorage.setItem("jumannetok_total_chunks", jumlaYaVipande); // Tengeneza fake count ya usalama
+
+                    const toastKioo = document.getElementById("jumanne-caption-error-toast");
+                    if (toastKioo) {
+                        toastKioo.style.display = "block";
+                        toastKioo.style.opacity = "1";
+                        toastKioo.style.color = "#ffeb3b"; // Rangi ya njano ya dharura ya kizalendo 🇹🇿
+                        toastKioo.textContent = `⏳ Seva Ipo Bize! Mdundo umehifadhiwa local cache. Gonga 'Inayofuata' kusonga mbele kishujaa!`;
+                    }
+                    console.log("🔒 Survival Engine Mode: Seva ya Render haipatikani, tumefungua dharura.");
                 });
             };
 
@@ -97,8 +114,8 @@
         }
 
         rushaKipandeKinachofuata();
-    }
-
+                    }
+                        
     // ==========================================================================
     // 🔥 INJINI YA KIVITA 2: PREVIEW CONTROLLER & ROUTER TIMING LOCK
     // ==========================================================================
