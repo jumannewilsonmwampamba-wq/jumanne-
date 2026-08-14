@@ -94,6 +94,23 @@
             const mweziFinal = dakaThamaniYaDrum("drum-mwezi");
             const mwakaFinal = dakaThamaniYaDrum("drum-mwaka");
 
+            // 🔥 MWALIMU WA KALENDA: Kagua kama tarehe iliyochaguliwa ipo duniani kweli
+            const nambaSiku = parseInt(sikuFinal, 10);
+            const nambaMwezi = parseInt(mweziFinal, 10);
+            const nambaMwaka = parseInt(mwakaFinal, 10);
+
+            // Mfumo wa Javascript unaunda tarehe rasmi (Kumbuka: Miezi huanza na 0 hadi 11, hivyo tunatoa 1)
+            const kikaguziChaTarehe = new Date(nambaMwaka, nambaMwezi - 1, nambaSiku);
+
+            // Kama tarehe haipo, kivinjari kitasogeza mbele (Mfano: 31 Feb inakuwa 03 March)
+            if (kikaguziChaTarehe.getFullYear() !== nambaMwaka || 
+                (kikaguziChaTarehe.getMonth() + 1) !== nambaMwezi || 
+                kikaguziChaTarehe.getDate() !== nambaSiku) {
+                
+                alert("Mkuu, tarehe uliyochagua haipo kwenye kalenda ya mtaani wetu! (Tafadhali kagua upya siku na mwezi).");
+                return;
+            }
+
             const tareheKamilifu = `${mwakaFinal}-${mweziFinal}-${sikuFinal}`;
 
             // Hifadhi kete ya unyoya ndani ya memory ya sessionStorage
