@@ -121,7 +121,7 @@
             const firstNameClean = safishaMaandishiGhafi(firstNameBox.value);
             const lastNameClean = safishaMaandishiGhafi(lastNameBox.value);
 
-            if (firstNameClean.length > 8 || lastNameClean.length > 8) {
+            if (firstNameClean.length > 30 || lastNameClean.length > 30) {
                 alert("Makosa: Majina hayajatakiwa kuzidi herufi 8 kuzuia lag mtaani!");
                 return;
             }
