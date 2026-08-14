@@ -67,10 +67,9 @@
     // 3. MCHUJO KALI WA NAMBA TU PALE USER ANAPOANDIKA (STRICT NUMERIC FILTER)
     if (phoneInput && phoneColorBox) {
         phoneInput.addEventListener("input", (e) => {
-            // Pingu ya ki-hardware: Ondoa herufi zote, bakiza namba tupu pekee!
             let nambaGhafi = e.target.value.replace(/[^0-9]/g, "");
             
-            // Ukomo wa Namba za Simu TZ ni tarakimu 10 pekee kuzuia lag
+            // Ukomo wa Namba za Simu (Tanzania na Kenya zote ni tarakimu 10)
             if (nambaGhafi.length > 10) {
                 nambaGhafi = nambaGhafi.slice(0, 10);
             }
@@ -114,10 +113,10 @@
             const nambaSimu = phoneInput.value.trim();
             const baruaPepe = emailInput.value.trim();
 
-            // 🔥 UKUTA WA ULINZI 1: Uhakiki mkali wa namba ya simu ya Tanzania (Strict Regex)
-            const mtegoNambaTz = /^(07|06)[0-9]{8}$/;
-            if (!mtegoNambaTz.test(nambaSimu)) {
-                alert("Makosa: Namba ya simu haieleweki! Lazima iwe na tarakimu 10 kamili na ianze na 07 au 06!");
+            // 🔥 UKUTA WA ULINZI 1 ULIOREKEBISHWA: Inaruhusu 07 na 06 (TZ), 077 (Zanzibar), na 01 (Kenya/Mitandao mipya)
+            const mtegoNambaKimataifa = /^(07|06|01)[0-9]{8}$/;
+            if (!mtegoNambaKimataifa.test(nambaSimu)) {
+                alert("Makosa: Namba ya simu haieleweki! Lazima iwe na tarakimu 10 kamili na ianze na 07, 06, au 01!");
                 return;
             }
 
@@ -144,3 +143,4 @@
         });
     }
 })();
+                    
