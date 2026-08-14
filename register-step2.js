@@ -1,12 +1,12 @@
 // ==========================================================================
-// JUMANNETOK TZ - CORE REGISTER CONTROLLER (STEP 2: FIXED SCOPE AND AUTO-FILL)
+// JUMANNETOK TZ - CORE REGISTER CONTROLLER (STEP 2: AUTO-FILL WITH 10 LIMIT)
 // ==========================================================================
 
 (function () {
     "use strict";
 
     // 1. INJINI YA SAA YA ULINZI (THE 3-MINUTE SECURE COUNTDOWN TIMER)
-    let mudaUliobaki = 3 * 60; // Dakika 3 kamili (Sekunde 180 za chuma)
+    let mudaUliobaki = 3 * 60; // Dakika 3 kamili
     const kiooSaa = document.getElementById("jumanne-countdown-clock");
 
     const mtamboWaSaa = setInterval(() => {
@@ -25,16 +25,37 @@
         }
     }, 1000);
 
-    // ORODHA YA MA-KATA NA WILAYA ZA TANZANIA NZIMA (ARRAY OF OBJECTS)
-    // Weka orodha yako yote hapa chini kitalamu mkuu wangu!
+    // ORODHA YA MA-KATA NA WILAYA (UNAWEZA KUENDELEA KUONGEZA KWA MKONO HAPA MKUU)
     const orodhaYaKataKitaifa = [
         { jina: "chwele sokoni kati tatu", wilaya: "Bungoma County" },
         { jina: "idiwili", wilaya: "Mbozi" },
         { jina: "vwawa", wilaya: "Mbozi" },
         { jina: "kariakoo", wilaya: "Ilala" },
         { jina: "kinondoni", wilaya: "Kinondoni" },
-        
-        { jina: "Kizota", wilaya: "Dodoma Mjini" },
+        { jina: "kizota", wilaya: "Dodoma Mjini" },
+        { jina: "chidafen", wilaya: "Dodoma Mjini" },
+        { jina: "mkonze", wilaya: "Dodoma Mjini" },
+        { jina: "ipala", wilaya: "Dodoma Mjini" },
+        { jina: "nzuguni", wilaya: "Dodoma Mjini" },
+        { jina: "chumbageni", wilaya: "Tanga Mjini" },
+        { jina: "ngamiani kuu", wilaya: "Tanga Mjini" },
+        { jina: "nguvumali", wilaya: "Tanga Mjini" },
+        { jina: "majani mapana", wilaya: "Tanga Mjini" },
+        { jina: "muheza mjini", wilaya: "Muheza" },
+        { jina: "majengo", wilaya: "Dodoma Mjini" }, 
+        { jina: "tambukareli", wilaya: "Dodoma Mjini" }, 
+        { jina: "makole", wilaya: "Dodoma Mjini" }, 
+        { jina: "kondoa mjini", wilaya: "Kondoa" }, 
+        { jina: "hazina", wilaya: "Dodoma Mjini" },
+        { jina: "soweto", wilaya: "Arusha Mjini" }, 
+        { jina: "kijenge", wilaya: "Arusha Mjini" }, 
+        { jina: "kaloleni", wilaya: "Arusha Mjini" }, 
+        { jina: "sekei", wilaya: "Arusha Mjini" }, 
+        { jina: "moshi mjini", wilaya: "Moshi Mjini" }, 
+        { jina: "bomambuzi", wilaya: "Moshi Mjini" }, 
+        { jina: "unguja ukuu", wilaya: "Kusini Zanzibar" }, 
+     { jina: "chake chake", wilaya: "Pemba" },
+    { jina: "Kizota", wilaya: "Dodoma Mjini" },
 { jina: "Chidafen", wilaya: "Dodoma Mjini" },
 { jina: "Mkonze", wilaya: "Dodoma Mjini" },
 { jina: "Ipala", wilaya: "Dodoma Mjini" },
@@ -8930,7 +8951,7 @@
                 { jina: "Unguja Ukuu", wilaya: "Kusini Zanzibar" }, { jina: "Chake Chake", wilaya: "Pemba" }
     ];
 
-    // Rangi nche rasmi za Bendera ya Tanzania: Kijani, Njano, Nyeusi/Nyeupe, na Bluu
+    // Rangi nne rasmi za Bendera ya Tanzania
     const rangiTanzania = ["#1EB960", "#FCD116", "#FFFFFF", "#00A3DD"];
 
     // FUNCTION YA KUCHORA MAANDISHI KWA RANGI NNE ZA TAIFA
@@ -8947,7 +8968,7 @@
         return herufiMchanganyiko;
     }
 
-    // 2. INJINI YA KUAKISI HERUFI NA KUZIPAKA RANGI NNE MNDANI YA BOKSI LA INPUT
+    // 2. INJINI YA KUTENGENEZA VISANDUKU VYA RANGI NYUMA YA INPUT
     function amshaRangiMndaniYaBoksi(inputElement, colorBoxId) {
         if (!inputElement) return null;
 
@@ -8964,12 +8985,19 @@
         return colorBox;
     }
 
-    // 🔥 PIGO LA USHINDI: Variable zote zimeundwa HAPA KWANZA kabisa ili zionekane kote!
+    // Viashiria vya Maboksi
     const wilayaInput = document.getElementById("jumanne-wilaya");
     const mtaaInput = document.getElementById("jumanne-mtaa");
 
     const wilayaColorBox = amshaRangiMndaniYaBoksi(wilayaInput, "jumanne-wilaya-color-box");
     const mtaaColorBox = amshaRangiMndaniYaBoksi(mtaaInput, "jumanne-mtaa-color-box");
+
+    // Kutengeneza Kijisanduku cha Droo ya Matokeo (Dropdown List) chini ya Kata/Mtaa
+    let drooYaMatokeo = document.createElement("div");
+    drooYaMatokeo.style.cssText = "position:absolute; width:100%; max-height:200px; overflow-y:auto; background:#111; border:1px solid #333; border-radius:6px; z-index:99; display:none; box-sizing:border-box; margin-top:5px;";
+    if (mtaaInput) {
+        mtaaInput.parentElement.appendChild(drooYaMatokeo);
+    }
 
     // 3. LOGIC YA LISENI YA KIOO CHA WILAYA
     if (wilayaInput && wilayaColorBox) {
@@ -8980,7 +9008,7 @@
         });
     }
 
-    // 4. KAMTAMBO KA REAL-TIME KANAKOSEARCH KWENYE ARRAY NA KUJAZA WILAYA KIOTOMATIKI
+    // 4. 🔥 KAMTAMBO KIPYA CHA KUCHUJA KATA 10 TU (THE 10-LIMIT AUTOFILL ENGINE)
     if (mtaaInput && mtaaColorBox) {
         mtaaInput.addEventListener("input", (e) => {
             let safi = e.target.value.replace(/[^a-zA-Z\s]/g, "");
@@ -8989,26 +9017,59 @@
             mtaaColorBox.innerHTML = pigaChapaRangi(safi);
 
             const nenoChujio = safi.trim().toLowerCase();
-            if (nenoChujio.length < 2) return;
+            
+            // Kama hajachapa kitu, funga droo ya matokeo
+            if (nenoChujio.length < 2) {
+                drooYaMatokeo.style.display = "none";
+                return;
+            }
 
-            // CHUJIO LA ARRAY (Array Find Operator): Kagua na kulinganisha herufi ndogo
-            const eneoLilizopatikana = orodhaYaKataKitaifa.find(item => 
-                item.jina.trim().toLowerCase() === nenoChujio
+            // CHUJIO JALIDI: Inatafuta kata zote zinazoanza na herufi hizo (.startsWith)
+            const kataZilizopatikana = orodhaYaKataKitaifa.filter(item => 
+                item.jina.toLowerCase().startsWith(nenoChujio)
             );
 
-            if (eneoLilizopatikana) {
-                const wilayaInayotakiwa = eneoLilizopatikana.wilaya;
-                
-                if (wilayaInput && wilayaColorBox) {
-                    wilayaInput.value = wilayaInayotakiwa;
-                    wilayaColorBox.innerHTML = pigaChapaRangi(wilayaInayotakiwa);
-                    console.log(`[JumanneTok Array] 🗺️ Auto-fill imefanya kazi: Kata ya '${safi}' imejaza Wilaya ya '${wilayaInayotakiwa}'`);
-                }
+            // 🌟 PINGU YA HARDWARE: Kata 10 tu za kwanza ndio zinachukuliwa (.slice)
+            const kataKumiTu = kataZilizopatikana.slice(0, 10);
+
+            if (kataKumiTu.length > 0) {
+                drooYaMatokeo.innerHTML = "";
+                drooYaMatokeo.style.display = "block";
+
+                kataKumiTu.forEach(eneo => {
+                    let kitufeKadi = document.createElement("div");
+                    kitufeKadi.style.cssText = "padding:12px; cursor:pointer; color:#fff; border-bottom:1px solid #222; font-size:14px; font-weight:bold;";
+                    kitufeKadi.innerHTML = pigaChapaRangi(eneo.jina) + ` <span style="color:#666; font-size:12px;">(${eneo.wilaya})</span>`;
+                    
+                    // Mtumiaji akigusa kata kwenye list
+                    kitufeKadi.addEventListener("click", () => {
+                        mtaaInput.value = eneo.jina;
+                        mtaaColorBox.innerHTML = pigaChapaRangi(eneo.jina);
+                        
+                        if (wilayaInput && wilayaColorBox) {
+                            wilayaInput.value = eneo.wilaya;
+                            wilayaColorBox.innerHTML = pigaChapaRangi(eneo.wilaya);
+                        }
+                        
+                        drooYaMatokeo.style.display = "none";
+                    });
+                    
+                    drooYaMatokeo.appendChild(kitufeKadi);
+                });
+            } else {
+                drooYaMatokeo.style.display = "none";
+            }
+        });
+
+        // Funga droo mtumiaji akibonyeza kando yoyote ya skrini
+        document.addEventListener("click", (evt) => {
+            if (evt.target !== mtaaInput) {
+                drooYaMatokeo.style.display = "none";
             }
         });
     }
 
-    // 5. INJINI YA KUVUKA GOLI NA KURUDI NYUMA (THE ROUTING MANAGER)
+    // 5. INJINI YA ROUTING (VUKA GOLI NA KURUDI NYUMA)
     const btnBack = document.getElementById("jumanne-back-to-step1");
     const btnNext = document.getElementById("jumanne-btn-to-step3");
 
@@ -9035,7 +9096,6 @@
                 return;
             }
 
-            // SAFISHA NA KUSEVU DATA KWENDE MEMORY NDOGO (SESSIONSTORAGE SAVER)
             const keteYaEneo = {
                 wilaya: wilayaInput.value.trim(),
                 kataMtaa: mtaaInput.value.trim()
